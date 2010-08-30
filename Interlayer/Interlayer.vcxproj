@@ -1,0 +1,754 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{42291B8C-82A0-4C07-BB7C-5AD6698A26AE}</ProjectGuid>
+    <RootNamespace>Interlayer</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <SccProjectName>Svn</SccProjectName>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" />
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VCInstallDir)atlmfc\src\mfc;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0804</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0804</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="VFC\BigView.cpp" />
+    <ClCompile Include="3DLib\3DModelDoc.cpp" />
+    <ClCompile Include="3DLib\3DModelView.cpp" />
+    <ClCompile Include="3DLib\3DObjBar.cpp" />
+    <ClCompile Include="3DLib\3DObject.cpp" />
+    <ClCompile Include="3DLib\3DObjTreeCtrl.cpp" />
+    <ClCompile Include="3DLib\Array3d.cpp" />
+    <ClCompile Include="3DLib\AxisSystem.cpp" />
+    <ClCompile Include="3DLib\Background.cpp" />
+    <ClCompile Include="3DLib\BoundingBox.cpp" />
+    <ClCompile Include="3DLib\ClrFileDialog.cpp" />
+    <ClCompile Include="3DLib\Color.cpp" />
+    <ClCompile Include="3DLib\ColorLookUpTable.cpp" />
+    <ClCompile Include="3DLib\ColorTableList.cpp" />
+    <ClCompile Include="3DLib\Curve.cpp" />
+    <ClCompile Include="3DLib\Edge3D.cpp" />
+    <ClCompile Include="3DLib\FaceTriangles.cpp" />
+    <ClCompile Include="3DLib\Geometry.cpp" />
+    <ClCompile Include="3DLib\GeomException.cpp" />
+    <ClCompile Include="3DLib\GLDisplayContext.cpp" />
+    <ClCompile Include="3DLib\GLObject.cpp" />
+    <ClCompile Include="3DLib\GLText.cpp" />
+    <ClCompile Include="3DLib\GLTrihedron.cpp" />
+    <ClCompile Include="3DLib\GLView.cpp" />
+    <ClCompile Include="3DLib\Line3D.cpp" />
+    <ClCompile Include="3DLib\Material.cpp" />
+    <ClCompile Include="3DLib\Matrix33.cpp" />
+    <ClCompile Include="3DLib\MMath.cpp" />
+    <ClCompile Include="3DLib\OneAxis.cpp" />
+    <ClCompile Include="3DLib\Plane.cpp" />
+    <ClCompile Include="3DLib\Texture.cpp" />
+    <ClCompile Include="3DLib\Transform.cpp" />
+    <ClCompile Include="3DLib\Utils3d.cpp" />
+    <ClCompile Include="3DLib\Vector3d.cpp" />
+    <ClCompile Include="3DLib\Vertex3D.cpp" />
+    <ClCompile Include="2DModelDoc.cpp" />
+    <ClCompile Include="2DModelView.cpp" />
+    <ClCompile Include="Source\ArrowPicker.cpp" />
+    <ClCompile Include="Source\ArrowWnd.cpp" />
+    <ClCompile Include="3DLib\C3DDice.cpp" />
+    <ClCompile Include="3DLib\C3DSlice.cpp" />
+    <ClCompile Include="ChildFrm.cpp" />
+    <ClCompile Include="ClientCapture.cpp" />
+    <ClCompile Include="Command\CmdActiveLayer.cpp" />
+    <ClCompile Include="Command\CmdDraw.cpp" />
+    <ClCompile Include="GeoMap\CmdGeoDrawObj.cpp" />
+    <ClCompile Include="Command\CmdMoveLayerBack.cpp" />
+    <ClCompile Include="Command\CmdMoveLayerForward.cpp" />
+    <ClCompile Include="Command\CmdNoActiveLayer.cpp" />
+    <ClCompile Include="CntrItem.cpp" />
+    <ClCompile Include="Source\ColourPicker.cpp" />
+    <ClCompile Include="Source\ColourPickerPopup.cpp" />
+    <ClCompile Include="Source\ComboFill.cpp" />
+    <ClCompile Include="Source\ComboLine.cpp" />
+    <ClCompile Include="Source\ComboLineStyle.cpp" />
+    <ClCompile Include="GeoMap\CommonStruct.cpp" />
+    <ClCompile Include="CoordTrans.cpp" />
+    <ClCompile Include="DlgAddCtrlPoint.cpp" />
+    <ClCompile Include="DlgColorTableSet.cpp" />
+    <ClCompile Include="GeoMap\DlgExportPicture.cpp" />
+    <ClCompile Include="DlgGridPropSetup.cpp" />
+    <ClCompile Include="DlgImportModel.cpp" />
+    <ClCompile Include="DlgImportWellInfo.cpp" />
+    <ClCompile Include="DlgLayerParamSet.cpp" />
+    <ClCompile Include="DlgLayerSet.cpp" />
+    <ClCompile Include="GeoMap\DlgLineSet.cpp" />
+    <ClCompile Include="DlgMaterial.cpp" />
+    <ClCompile Include="GeoMap\DlgPageSet.cpp" />
+    <ClCompile Include="GeoMap\DlgRectSet.cpp" />
+    <ClCompile Include="DlgRuler.cpp" />
+    <ClCompile Include="GeoMap\DlgScaleRulerSet.cpp" />
+    <ClCompile Include="GeoMap\DlgSetPoly.cpp" />
+    <ClCompile Include="GeoMap\DlgWellSet.cpp" />
+    <ClCompile Include="DlgWithGraph.cpp" />
+    <ClCompile Include="DlgXYSlice.cpp" />
+    <ClCompile Include="DlgZSlice.cpp" />
+    <ClCompile Include="GeoMap\DrawItem.cpp" />
+    <ClCompile Include="GeoMap\DrawLayer.cpp" />
+    <ClCompile Include="GeoMap\DrawPage.cpp" />
+    <ClCompile Include="GeoMap\EditEx.cpp" />
+    <ClCompile Include="FieldCell.cpp" />
+    <ClCompile Include="FileDatDoc.cpp" />
+    <ClCompile Include="FileDatView.cpp" />
+    <ClCompile Include="FileView.cpp" />
+    <ClCompile Include="FormatBar.cpp" />
+    <ClCompile Include="FormGenerateLayer.cpp" />
+    <ClCompile Include="GenerateLayerDoc.cpp" />
+    <ClCompile Include="GeoMap\GeoDrawCombine.cpp" />
+    <ClCompile Include="GeoMap\GeoDrawObj.cpp" />
+    <ClCompile Include="GeoMap\GeoDrawOleObj.cpp" />
+    <ClCompile Include="GeoMap\GeoJionPolyObj.cpp" />
+    <ClCompile Include="GeoMap\GeoLineObj.cpp" />
+    <ClCompile Include="GeoMap\GeoMapDoc.cpp" />
+    <ClCompile Include="GeoMap\GeoMapView.cpp" />
+    <ClCompile Include="GeoMap\GeoPictrueObj.cpp" />
+    <ClCompile Include="GeoMap\GeoPointObj.cpp" />
+    <ClCompile Include="GeoMap\GeoPolyObj.cpp" />
+    <ClCompile Include="GeoMap\GeoRectObj.cpp" />
+    <ClCompile Include="GeoMap\GeoScaleObj.cpp" />
+    <ClCompile Include="GeoMap\GeoTextObj.cpp" />
+    <ClCompile Include="GeoMap\GeoWellObj.cpp" />
+    <ClCompile Include="GraphView.cpp" />
+    <ClCompile Include="GridModel.cpp" />
+    <ClCompile Include="GridModelDoc.cpp" />
+    <ClCompile Include="3DLib\GridObject.cpp" />
+    <ClCompile Include="HiliteEditView.cpp" />
+    <ClCompile Include="Interlayer.cpp" />
+    <ClCompile Include="GeoMap\LayerBar.cpp" />
+    <ClCompile Include="GeoMap\LayerListCtrl.cpp" />
+    <ClCompile Include="LayerModel.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="ModelView.cpp" />
+    <ClCompile Include="MyEditDoc.cpp" />
+    <ClCompile Include="MyEditView.cpp" />
+    <ClCompile Include="MyRichEditDoc.cpp" />
+    <ClCompile Include="MyRichEditView.cpp" />
+    <ClCompile Include="OutputWnd.cpp" />
+    <ClCompile Include="Source\patternpage.cpp" />
+    <ClCompile Include="Source\PatternPreviewWnd.cpp" />
+    <ClCompile Include="Source\PatternSheet.cpp" />
+    <ClCompile Include="PictrueDoc.cpp" />
+    <ClCompile Include="PictrueView.cpp" />
+    <ClCompile Include="3DLib\PipeLine.cpp" />
+    <ClCompile Include="3DLib\PlaneReader.cpp" />
+    <ClCompile Include="ProjectDoc.cpp" />
+    <ClCompile Include="ProjectView.cpp" />
+    <ClCompile Include="PropertiesWnd.cpp" />
+    <ClCompile Include="3DLib\PsRenderer.cpp" />
+    <ClCompile Include="3DLib\Reader.cpp" />
+    <ClCompile Include="GeoMap\RgnClipping.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="3DLib\StLReader.cpp" />
+    <ClCompile Include="GeoMap\ToolAttriBush.cpp" />
+    <ClCompile Include="GeoMap\ToolBase.cpp" />
+    <ClCompile Include="GeoMap\ToolClip.cpp" />
+    <ClCompile Include="GeoMap\ToolDivideLine.cpp" />
+    <ClCompile Include="GeoMap\ToolJionLine.cpp" />
+    <ClCompile Include="GeoMap\ToolPageMove.cpp" />
+    <ClCompile Include="GeoMap\ToolPoly.cpp" />
+    <ClCompile Include="GeoMap\ToolPolyPoint.cpp" />
+    <ClCompile Include="GeoMap\ToolRect.cpp" />
+    <ClCompile Include="GeoMap\ToolRegion.cpp" />
+    <ClCompile Include="GeoMap\ToolScaleRuler.cpp" />
+    <ClCompile Include="GeoMap\ToolSelect.cpp" />
+    <ClCompile Include="GeoMap\ToolText.cpp" />
+    <ClCompile Include="UndoBar.cpp" />
+    <ClCompile Include="UndoListBox.cpp" />
+    <ClCompile Include="ViewTree.cpp" />
+    <ClCompile Include="WellInfoDoc.cpp" />
+    <ClCompile Include="WellInfoView.cpp" />
+    <ClCompile Include="WellLoggingInfoDoc.cpp" />
+    <ClCompile Include="WellLoggingInfoView.cpp" />
+    <ClCompile Include="WellPathDoc.cpp" />
+    <ClCompile Include="WellPathInfoDoc.cpp" />
+    <ClCompile Include="WellPathInfoView.cpp" />
+    <ClCompile Include="WellPathView.cpp" />
+    <ClCompile Include="WndGraph.cpp" />
+    <ClCompile Include="3DLib\WrlReader.cpp" />
+    <ClCompile Include="Vertical_Model\coords.cpp" />
+    <ClCompile Include="Vertical_Model\f2doff.cpp" />
+    <ClCompile Include="Vertical_Model\gen_prop_dlgs.cpp" />
+    <ClCompile Include="Vertical_Model\graph_general.cpp" />
+    <ClCompile Include="Vertical_Model\graph_props.cpp" />
+    <ClCompile Include="Vertical_Model\graphcombobox.cpp" />
+    <ClCompile Include="Vertical_Model\GraphContainer.cpp" />
+    <ClCompile Include="Vertical_Model\GraphFrame.cpp" />
+    <ClCompile Include="Vertical_Model\graphpanel.cpp" />
+    <ClCompile Include="Vertical_Model\GraphWnd.cpp" />
+    <ClCompile Include="Vertical_Model\gruler.cpp" />
+    <ClCompile Include="Vertical_Model\points.cpp" />
+    <ClCompile Include="Vertical_Model\pviewbar.cpp" />
+    <ClCompile Include="Vertical_Model\sizecbar.cpp" />
+    <ClCompile Include="Vertical_Model\VertModelDoc.cpp" />
+    <ClCompile Include="Vertical_Model\VertModelView.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VFC\BigView.h" />
+    <ClInclude Include="3DLib\3DModelDoc.h" />
+    <ClInclude Include="3DLib\3DModelView.h" />
+    <ClInclude Include="3DLib\3DObjBar.h" />
+    <ClInclude Include="3DLib\3DObject.h" />
+    <ClInclude Include="3DLib\3DObjTreeCtrl.h" />
+    <ClInclude Include="3DLib\Array3d.h" />
+    <ClInclude Include="3DLib\AxisSystem.h" />
+    <ClInclude Include="3DLib\Background.h" />
+    <ClInclude Include="3DLib\BoundingBox.h" />
+    <ClInclude Include="3DLib\ClrFileDialog.h" />
+    <ClInclude Include="3DLib\Color.h" />
+    <ClInclude Include="3DLib\ColorLookUpTable.h" />
+    <ClInclude Include="3DLib\ColorTableList.h" />
+    <ClInclude Include="3DLib\Curve.h" />
+    <ClInclude Include="3DLib\Edge3D.h" />
+    <ClInclude Include="3DLib\FaceTriangles.h" />
+    <ClInclude Include="3DLib\Geometry.h" />
+    <ClInclude Include="3DLib\GeomException.h" />
+    <ClInclude Include="3DLib\GLDisplayContext.h" />
+    <ClInclude Include="3DLib\GLMaterials.h" />
+    <ClInclude Include="3DLib\GLObject.h" />
+    <ClInclude Include="3DLib\GLText.h" />
+    <ClInclude Include="3DLib\GLTrihedron.h" />
+    <ClInclude Include="3DLib\GLTypeEnums.h" />
+    <ClInclude Include="3DLib\GLView.h" />
+    <ClInclude Include="3DLib\Line3D.h" />
+    <ClInclude Include="3DLib\Material.h" />
+    <ClInclude Include="3DLib\Matrix33.h" />
+    <ClInclude Include="3DLib\MMath.h" />
+    <ClInclude Include="3DLib\OneAxis.h" />
+    <ClInclude Include="3DLib\Plane.h" />
+    <ClInclude Include="3DLib\Texture.h" />
+    <ClInclude Include="3DLib\Transform.h" />
+    <ClInclude Include="3DLib\Utils3d.h" />
+    <ClInclude Include="3DLib\Vector3d.h" />
+    <ClInclude Include="3DLib\Vertex3D.h" />
+    <ClInclude Include="2DModelDoc.h" />
+    <ClInclude Include="2DModelView.h" />
+    <ClInclude Include="Source\ArrowPicker.h" />
+    <ClInclude Include="Source\ArrowWnd.h" />
+    <ClInclude Include="3DLib\C3DDice.h" />
+    <ClInclude Include="3DLib\C3DSlice.h" />
+    <ClInclude Include="ChildFrm.h" />
+    <ClInclude Include="ClientCapture.h" />
+    <ClInclude Include="Command\CmdActiveLayer.h" />
+    <ClInclude Include="Command\CmdDraw.h" />
+    <ClInclude Include="GeoMap\CmdGeoDrawObj.h" />
+    <ClInclude Include="Command\CmdMoveLayerBack.h" />
+    <ClInclude Include="Command\CmdMoveLayerForward.h" />
+    <ClInclude Include="Command\CmdNoActiveLayer.h" />
+    <ClInclude Include="CntrItem.h" />
+    <ClInclude Include="Source\ColourPicker.h" />
+    <ClInclude Include="Source\ColourPickerPopup.h" />
+    <ClInclude Include="Source\ComboFill.h" />
+    <ClInclude Include="Source\ComboLine.h" />
+    <ClInclude Include="Source\ComboLineStyle.h" />
+    <ClInclude Include="GeoMap\CommonStruct.h" />
+    <ClInclude Include="CoordTrans.h" />
+    <ClInclude Include="DlgAddCtrlPoint.h" />
+    <ClInclude Include="DlgColorTableSet.h" />
+    <ClInclude Include="GeoMap\DlgExportPicture.h" />
+    <ClInclude Include="DlgGridPropSetup.h" />
+    <ClInclude Include="DlgImportModel.h" />
+    <ClInclude Include="DlgImportWellInfo.h" />
+    <ClInclude Include="DlgLayerParamSet.h" />
+    <ClInclude Include="DlgLayerSet.h" />
+    <ClInclude Include="GeoMap\DlgLineSet.h" />
+    <ClInclude Include="DlgMaterial.h" />
+    <ClInclude Include="GeoMap\DlgPageSet.h" />
+    <ClInclude Include="GeoMap\DlgRectSet.h" />
+    <ClInclude Include="DlgRuler.h" />
+    <ClInclude Include="GeoMap\DlgScaleRulerSet.h" />
+    <ClInclude Include="GeoMap\DlgSetPoly.h" />
+    <ClInclude Include="GeoMap\DlgWellSet.h" />
+    <ClInclude Include="DlgWithGraph.h" />
+    <ClInclude Include="DlgXYSlice.h" />
+    <ClInclude Include="DlgZSlice.h" />
+    <ClInclude Include="GeoMap\DrawItem.h" />
+    <ClInclude Include="GeoMap\DrawLayer.h" />
+    <ClInclude Include="GeoMap\DrawPage.h" />
+    <ClInclude Include="GeoMap\EditEx.h" />
+    <ClInclude Include="FieldCell.h" />
+    <ClInclude Include="FileDatDoc.h" />
+    <ClInclude Include="FileDatView.h" />
+    <ClInclude Include="FileView.h" />
+    <ClInclude Include="FormatBar.h" />
+    <ClInclude Include="FormGenerateLayer.h" />
+    <ClInclude Include="GenerateLayerDoc.h" />
+    <ClInclude Include="GeoMap\GeoDrawCombine.h" />
+    <ClInclude Include="GeoMap\GeoDrawObj.h" />
+    <ClInclude Include="GeoMap\GeoDrawOleObj.h" />
+    <ClInclude Include="GeoMap\GeoJionPolyObj.h" />
+    <ClInclude Include="GeoMap\GeoLineObj.h" />
+    <ClInclude Include="GeoMap\GeoMapDoc.h" />
+    <ClInclude Include="GeoMap\GeoMapView.h" />
+    <ClInclude Include="GeoMap\GeoPictrueObj.h" />
+    <ClInclude Include="GeoMap\GeoPointObj.h" />
+    <ClInclude Include="GeoMap\GeoPolyObj.h" />
+    <ClInclude Include="GeoMap\GeoRectObj.h" />
+    <ClInclude Include="GeoMap\GeoScaleObj.h" />
+    <ClInclude Include="GeoMap\GeoTextObj.h" />
+    <ClInclude Include="GeoMap\GeoWellObj.h" />
+    <ClInclude Include="GraphView.h" />
+    <ClInclude Include="GridModel.h" />
+    <ClInclude Include="GridModelDoc.h" />
+    <ClInclude Include="3DLib\GridObject.h" />
+    <ClInclude Include="HiliteEditView.h" />
+    <ClInclude Include="Interlayer.h" />
+    <ClInclude Include="GeoMap\LayerBar.h" />
+    <ClInclude Include="GeoMap\LayerListCtrl.h" />
+    <ClInclude Include="LayerModel.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="ModelView.h" />
+    <ClInclude Include="MyEditDoc.h" />
+    <ClInclude Include="MyEditView.h" />
+    <ClInclude Include="MyRichEditDoc.h" />
+    <ClInclude Include="MyRichEditView.h" />
+    <ClInclude Include="OutputWnd.h" />
+    <ClInclude Include="Source\patternpage.h" />
+    <ClInclude Include="Source\PatternPreviewWnd.h" />
+    <ClInclude Include="Source\PatternSheet.h" />
+    <ClInclude Include="PictrueDoc.h" />
+    <ClInclude Include="PictrueView.h" />
+    <ClInclude Include="3DLib\PipeLine.h" />
+    <ClInclude Include="3DLib\PlaneReader.h" />
+    <ClInclude Include="ProjectDoc.h" />
+    <ClInclude Include="ProjectView.h" />
+    <ClInclude Include="PropertiesWnd.h" />
+    <ClInclude Include="3DLib\PsRenderer.h" />
+    <ClInclude Include="3DLib\Reader.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="RgnClipping.h" />
+    <ClInclude Include="GeoMap\RgnClipping.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="3DLib\StLReader.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="GeoMap\ToolAttriBush.h" />
+    <ClInclude Include="GeoMap\ToolBase.h" />
+    <ClInclude Include="GeoMap\ToolClip.h" />
+    <ClInclude Include="GeoMap\ToolDivideLine.h" />
+    <ClInclude Include="GeoMap\ToolJionLine.h" />
+    <ClInclude Include="GeoMap\ToolPageMove.h" />
+    <ClInclude Include="GeoMap\ToolPoly.h" />
+    <ClInclude Include="GeoMap\ToolPolyPoint.h" />
+    <ClInclude Include="GeoMap\ToolRect.h" />
+    <ClInclude Include="GeoMap\ToolRegion.h" />
+    <ClInclude Include="GeoMap\ToolScaleRuler.h" />
+    <ClInclude Include="GeoMap\ToolSelect.h" />
+    <ClInclude Include="GeoMap\ToolText.h" />
+    <ClInclude Include="UndoBar.h" />
+    <ClInclude Include="UndoListBox.h" />
+    <ClInclude Include="ViewTree.h" />
+    <ClInclude Include="WellInfoDoc.h" />
+    <ClInclude Include="WellInfoView.h" />
+    <ClInclude Include="WellLoggingInfoDoc.h" />
+    <ClInclude Include="WellLoggingInfoView.h" />
+    <ClInclude Include="WellPathDoc.h" />
+    <ClInclude Include="WellPathInfoDoc.h" />
+    <ClInclude Include="WellPathInfoView.h" />
+    <ClInclude Include="WellPathView.h" />
+    <ClInclude Include="WndGraph.h" />
+    <ClInclude Include="3DLib\WrlReader.h" />
+    <ClInclude Include="Vertical_Model\coords.h" />
+    <ClInclude Include="Vertical_Model\f2doff.h" />
+    <ClInclude Include="Vertical_Model\gen_prop_dlgs.h" />
+    <ClInclude Include="Vertical_Model\graph_general.h" />
+    <ClInclude Include="Vertical_Model\graph_props.h" />
+    <ClInclude Include="Vertical_Model\graphcombobox.h" />
+    <ClInclude Include="Vertical_Model\GraphContainer.h" />
+    <ClInclude Include="Vertical_Model\GraphFrame.h" />
+    <ClInclude Include="Vertical_Model\graphpanel.h" />
+    <ClInclude Include="Vertical_Model\GraphWnd.h" />
+    <ClInclude Include="Vertical_Model\gruler.h" />
+    <ClInclude Include="Vertical_Model\points.h" />
+    <ClInclude Include="Vertical_Model\pviewbar.h" />
+    <ClInclude Include="Vertical_Model\sizecbar.h" />
+    <ClInclude Include="Vertical_Model\VertModelDoc.h" />
+    <ClInclude Include="Vertical_Model\VertModelView.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\bitmap1.bmp" />
+    <None Include="res\bitmap10.bmp" />
+    <None Include="res\bitmap11.bmp" />
+    <None Include="res\bitmap12.bmp" />
+    <None Include="res\bitmap13.bmp" />
+    <None Include="res\bitmap14.bmp" />
+    <None Include="res\bitmap15.bmp" />
+    <None Include="res\bitmap16.bmp" />
+    <None Include="res\bitmap17.bmp" />
+    <None Include="res\bitmap18.bmp" />
+    <None Include="res\bitmap19.bmp" />
+    <None Include="res\bitmap2.bmp" />
+    <None Include="res\bitmap20.bmp" />
+    <None Include="res\bitmap21.bmp" />
+    <None Include="res\bitmap22.bmp" />
+    <None Include="res\bitmap23.bmp" />
+    <None Include="res\bitmap24.bmp" />
+    <None Include="res\bitmap25.bmp" />
+    <None Include="res\bitmap26.bmp" />
+    <None Include="res\bitmap27.bmp" />
+    <None Include="res\bitmap28.bmp" />
+    <None Include="res\bitmap29.bmp" />
+    <None Include="res\bitmap3.bmp" />
+    <None Include="res\bitmap30.bmp" />
+    <None Include="res\bitmap4.bmp" />
+    <None Include="res\bitmap5.bmp" />
+    <None Include="res\bitmap6.bmp" />
+    <None Include="res\bitmap7.bmp" />
+    <None Include="res\bitmap8.bmp" />
+    <None Include="res\bitmap9.bmp" />
+    <None Include="res\bitmap_1.bmp" />
+    <None Include="res\bitmap_2.bmp" />
+    <None Include="res\bitmap_3.bmp" />
+    <None Include="res\bitmap_4.bmp" />
+    <None Include="res\bitmap_5.bmp" />
+    <None Include="res\bitmap_6.bmp" />
+    <None Include="res\bitmap_7.bmp" />
+    <None Include="res\bitmap_8.bmp" />
+    <None Include="res\bitmap_9.bmp" />
+    <None Include="res\bmp00001.bmp" />
+    <None Include="res\bmp00002.bmp" />
+    <None Include="res\bmp00003.bmp" />
+    <None Include="res\bmp00004.bmp" />
+    <None Include="res\bmp00005.bmp" />
+    <None Include="res\bmp00006.bmp" />
+    <None Include="res\bmp00007.bmp" />
+    <None Include="res\bmp00008.bmp" />
+    <None Include="res\bmp00009.bmp" />
+    <None Include="res\bmp00010.bmp" />
+    <None Include="res\bmp00011.bmp" />
+    <None Include="res\bmp00012.bmp" />
+    <None Include="res\bmp00013.bmp" />
+    <None Include="res\bmp00014.bmp" />
+    <None Include="res\bmp00015.bmp" />
+    <None Include="res\bmp00016.bmp" />
+    <None Include="res\bmp00017.bmp" />
+    <None Include="res\bmp00018.bmp" />
+    <None Include="res\bmp00019.bmp" />
+    <None Include="res\bmp00020.bmp" />
+    <None Include="res\bmp00021.bmp" />
+    <None Include="res\bmp00022.bmp" />
+    <None Include="res\bmp00023.bmp" />
+    <None Include="res\bmp00024.bmp" />
+    <None Include="res\bmp00025.bmp" />
+    <None Include="res\bmp00026.bmp" />
+    <None Include="res\bmp00027.bmp" />
+    <None Include="res\bmp00028.bmp" />
+    <None Include="res\bmp00029.bmp" />
+    <None Include="res\bmp00030.bmp" />
+    <None Include="res\bmp00031.bmp" />
+    <None Include="res\bmp00032.bmp" />
+    <None Include="res\bmp00033.bmp" />
+    <None Include="res\bmp00034.bmp" />
+    <None Include="res\bmp00035.bmp" />
+    <None Include="res\bmp00036.bmp" />
+    <None Include="res\bmp00037.bmp" />
+    <None Include="res\bmp00038.bmp" />
+    <None Include="res\bmp00039.bmp" />
+    <None Include="res\bmp00040.bmp" />
+    <None Include="res\bmp00041.bmp" />
+    <None Include="res\bmp00042.bmp" />
+    <None Include="res\bmp00043.bmp" />
+    <None Include="res\bmp00044.bmp" />
+    <None Include="res\bmp00045.bmp" />
+    <None Include="res\bmp00046.bmp" />
+    <None Include="res\bmp00047.bmp" />
+    <None Include="res\bmp00048.bmp" />
+    <None Include="res\bmp00049.bmp" />
+    <None Include="res\bmp00050.bmp" />
+    <None Include="res\bmp00051.bmp" />
+    <None Include="res\bmp00052.bmp" />
+    <None Include="res\bmp00053.bmp" />
+    <None Include="res\bmp00054.bmp" />
+    <None Include="res\bmp00055.bmp" />
+    <None Include="res\bmp00056.bmp" />
+    <None Include="res\bmp00057.bmp" />
+    <None Include="res\bmp00058.bmp" />
+    <None Include="res\bmp00059.bmp" />
+    <None Include="res\bmp00060.bmp" />
+    <None Include="res\bmp00061.bmp" />
+    <None Include="res\bmp00062.bmp" />
+    <None Include="res\bmp00063.bmp" />
+    <None Include="res\bmp00064.bmp" />
+    <None Include="res\bmp00065.bmp" />
+    <None Include="res\bmp00066.bmp" />
+    <None Include="res\bmp_scal.bmp" />
+    <None Include="res\class_view.ico" />
+    <None Include="res\class_view_hc.ico" />
+    <None Include="res\classview.bmp" />
+    <None Include="res\classview_hc.bmp" />
+    <None Include="res\cur00001.cur" />
+    <None Include="res\cur00002.cur" />
+    <None Include="res\cur00003.cur" />
+    <None Include="res\cur00004.cur" />
+    <None Include="res\cur00005.cur" />
+    <None Include="res\cur00006.cur" />
+    <None Include="res\cur00007.cur" />
+    <None Include="res\cur00008.cur" />
+    <None Include="res\cur00009.cur" />
+    <None Include="res\cur00010.cur" />
+    <None Include="res\cur00011.cur" />
+    <None Include="res\cur00012.cur" />
+    <None Include="res\cur00013.cur" />
+    <None Include="res\cur00014.cur" />
+    <None Include="res\cur00015.cur" />
+    <None Include="res\cur00016.cur" />
+    <None Include="res\cur00017.cur" />
+    <None Include="res\cur00018.cur" />
+    <None Include="res\cur00019.cur" />
+    <None Include="res\cur00020.cur" />
+    <None Include="res\cur00021.cur" />
+    <None Include="res\cur00022.cur" />
+    <None Include="res\cur00023.cur" />
+    <None Include="res\cur00024.cur" />
+    <None Include="res\cursor1.cur" />
+    <None Include="res\cursor2.cur" />
+    <None Include="res\explorer.bmp" />
+    <None Include="res\explorer_hc.bmp" />
+    <None Include="res\file_vie.bmp" />
+    <None Include="res\file_vie.ico" />
+    <None Include="res\file_view.ico" />
+    <None Include="res\file_view_hc.ico" />
+    <None Include="res\fileview.bmp" />
+    <None Include="res\fileview_hc.bmp" />
+    <None Include="res\ico00001.ico" />
+    <None Include="res\ico00002.ico" />
+    <None Include="res\ico00003.ico" />
+    <None Include="res\ico00004.ico" />
+    <None Include="res\ico00005.ico" />
+    <None Include="res\ico00006.ico" />
+    <None Include="res\ico00007.ico" />
+    <None Include="res\ico00008.ico" />
+    <None Include="res\ico00009.ico" />
+    <None Include="res\ico00010.ico" />
+    <None Include="res\ico00011.ico" />
+    <None Include="res\ico00012.ico" />
+    <None Include="res\ico00013.ico" />
+    <None Include="res\ico00014.ico" />
+    <None Include="res\ico00015.ico" />
+    <None Include="res\ico00016.ico" />
+    <None Include="res\ico00017.ico" />
+    <None Include="res\ico00018.ico" />
+    <None Include="res\ico00019.ico" />
+    <None Include="res\ico00020.ico" />
+    <None Include="res\ico00021.ico" />
+    <None Include="res\ico00022.ico" />
+    <None Include="res\ico00023.ico" />
+    <None Include="res\ico00024.ico" />
+    <None Include="res\icon1.ico" />
+    <None Include="res\icon2.ico" />
+    <None Include="res\icon_fol.ico" />
+    <None Include="res\Interlayer.ico" />
+    <None Include="res\Interlayer.rc2" />
+    <None Include="res\InterlayerDoc.ico" />
+    <None Include="res\menuimages.bmp" />
+    <None Include="res\menuimages_hc.bmp" />
+    <None Include="res\output_wnd.ico" />
+    <None Include="res\output_wnd_hc.ico" />
+    <None Include="res\properties.bmp" />
+    <None Include="res\properties_hc.bmp" />
+    <None Include="res\properties_wnd.ico" />
+    <None Include="res\properties_wnd_hc.ico" />
+    <None Include="res\sort.bmp" />
+    <None Include="res\sort_hc.bmp" />
+    <None Include="res\Toolbar.bmp" />
+    <None Include="res\toolbar1.bmp" />
+    <None Include="res\Toolbar256.bmp" />
+    <None Include="res\toolbar_.bmp" />
+    <None Include="UserImages.bmp" />
+    <None Include="res\html1.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Interlayer.reg" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Interlayer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="AdoX\AdoX.vcxproj">
+      <Project>{33b47808-cabb-4a96-99c1-6a3f42a48e59}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="AFC\AFC.vcxproj">
+      <Project>{7fc9f6da-7f7a-4287-aac3-64a81c453163}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="cximage599c\CxImage\CxImageDLL\cximagemfcdll.vcxproj">
+      <Project>{a31dd05d-259a-47a6-8089-5320707c21e5}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="cximage599c\j2k\j2k.vcxproj">
+      <Project>{168b919f-f88e-4b15-8b89-5e48db8cebfa}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="cximage599c\jasper\jasper.vcxproj">
+      <Project>{51b7252f-7838-469f-8e86-f5efbf6dc00e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="cximage599c\jbig\jbig.vcxproj">
+      <Project>{b5d29f16-6333-4889-a345-0a12871b5ae8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="cximage599c\jpeg\Jpeg.vcxproj">
+      <Project>{0ab9a3e9-2df3-4536-a099-f317db547e55}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="cximage599c\png\png.vcxproj">
+      <Project>{34ebc2fa-8dca-49b1-a5c0-4e6a7dc51e80}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="cximage599c\tiff\Tiff.vcxproj">
+      <Project>{aaeecf0f-72d6-49d2-b2d0-6f109eca9fc6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="cximage599c\zlib\zlib.vcxproj">
+      <Project>{ceaa3f10-edde-4744-85b7-fe98496482fa}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Delaunay\Delaunay.vcxproj">
+      <Project>{48a7a84d-a592-45d4-ac64-56703675df27}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="DispLogCurve\DispLogCurve.vcxproj">
+      <Project>{a57a27d5-192b-400f-a771-f3b613fdc4cf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="GridCtrl\Grid.vcxproj">
+      <Project>{82240d74-09a7-49f8-a8dc-ab5451ddc017}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="GridCtrl\MiniExcel\MiniExcel.vcxproj">
+      <Project>{c5c70700-dfa9-46ec-9a0e-2e41c3680df9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="ReadLogFile\ReadLogFile.vcxproj">
+      <Project>{828f726e-58a4-46f6-9810-5a120ba40d72}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="Interlayer.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

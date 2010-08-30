@@ -1,0 +1,729 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\DispLogCurve.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""l.chs\\afxres.rc""          // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "Comments", "测井曲线回放模块。"
+            VALUE "CompanyName", "大庆拓普石油科技开发有限公司"
+            VALUE "FileDescription", "DispLogCurve DLL"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "DispLogCurve"
+            VALUE "LegalCopyright", "版权所有 (C) 2006"
+            VALUE "OriginalFilename", "DispLogCurve.DLL"
+            VALUE "ProductName", "DispLogCurve Dynamic Link Library"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DLG_ADD_CURVE DIALOGEX 0, 0, 266, 214
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "添加曲线"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,209,7,50,14
+    PUSHBUTTON      "取消",IDCANCEL,209,24,50,14
+    LTEXT           "测井曲线数据",IDC_STATIC,7,7,53,8
+    LTEXT           "曲线公式",IDC_STATIC,144,119,35,8
+    LTEXT           "曲线名称",IDC_STATIC,144,157,33,8
+    EDITTEXT        IDC_EDIT_CURVE_FORMULA,144,133,115,14,ES_LOWERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_CURVE_NAME,144,169,115,14,ES_AUTOHSCROLL
+    CONTROL         "List1",IDC_LIST_LOG_NAME,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,7,21,128,162
+    CONTROL         "自定义曲线",IDC_CHECK_CUSTOM_CURVER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,144,95,56,10
+    PUSHBUTTON      "全选",IDC_BTN_ALL_SELECTED,7,190,50,14
+    PUSHBUTTON      "反向选择",IDC_BTN_RES_SELECTED,85,190,50,14
+END
+
+IDD_DLG_CURVE_SET DIALOGEX 0, 0, 292, 232
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "曲线属性"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,235,191,50,14
+    PUSHBUTTON      "取消",IDCANCEL,235,211,50,14
+    LTEXT           "颜色",IDC_STATIC,11,34,17,8
+    PUSHBUTTON      "Button1",IDC_BTN_LINECOLOR,34,30,64,14
+    COMBOBOX        IDC_CBLINESTYLE,34,49,64,30,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "线型",IDC_STATIC,11,53,17,8
+    LTEXT           "线宽",IDC_STATIC,11,71,17,8
+    EDITTEXT        IDC_LINESIZE,34,69,33,14,ES_AUTOHSCROLL
+    LTEXT           "主刻度等分",IDC_STATIC,13,158,41,8
+    GROUPBOX        "范围",IDC_STATIC,124,7,161,78
+    LTEXT           "最小值",IDC_STATIC,179,24,25,8
+    LTEXT           "最大值",IDC_STATIC,234,24,25,8
+    LTEXT           "数据",IDC_STATIC,146,41,17,8
+    LTEXT           "坐标轴",IDC_STATIC,138,64,25,8
+    GROUPBOX        "填充",IDC_STATIC,7,93,278,55
+    CONTROL         "填充",IDC_CBFILL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,24,107,32,10
+    LTEXT           "颜色",IDC_STATIC,76,108,17,8
+    CONTROL         "",IDC_BSSTYLE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,19,128,8,8
+    CONTROL         "",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,57,128,8,8
+    CONTROL         "",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,95,128,8,8
+    CONTROL         "",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,133,128,8,8
+    CONTROL         "",IDC_RADIO5,"Button",BS_AUTORADIOBUTTON,171,128,8,8
+    CONTROL         "",IDC_RADIO6,"Button",BS_AUTORADIOBUTTON,209,128,8,8
+    CONTROL         "",IDC_RADIO7,"Button",BS_AUTORADIOBUTTON,247,128,8,8
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKRECT | SS_SUNKEN,259,126,11,11
+    CONTROL         411,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,31,126,12,12
+    CONTROL         412,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,69,126,12,12
+    CONTROL         413,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,107,126,12,12
+    CONTROL         414,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,145,126,12,12
+    CONTROL         415,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,183,126,12,12
+    CONTROL         416,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,221,126,12,12
+    EDITTEXT        IDC_EDIT_MIN,175,37,40,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_MAX,230,37,40,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_CMIN,175,61,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_CMAX,230,61,40,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Button2",IDC_FILLCOLOR,99,105,56,14
+    EDITTEXT        IDC_EDIT_STEPS,60,155,40,14,ES_AUTOHSCROLL
+    LTEXT           "次刻度等分",IDC_STATIC,121,158,41,8
+    EDITTEXT        IDC_EDIT_MSTEPS,167,155,40,14,ES_AUTOHSCROLL
+    CONTROL         "坐标反向",IDC_CHECK_DIR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,179,48,10
+    CONTROL         "对数坐标",IDC_CHECK_LOGCOORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,84,179,48,10
+    CONTROL         "同一此道坐标",IDC_CHECK_SAMECOORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,147,179,64,10
+    LTEXT           "名称",IDC_STATIC,11,15,17,8
+    EDITTEXT        IDC_EDIT_CURVE_NAME,34,11,84,14,ES_AUTOHSCROLL
+    LTEXT           "井深变换:(DEPTH)",IDC_STATIC,7,199,65,8
+    LTEXT           "曲线数据变换:(VAR)",IDC_STATIC,122,199,73,8
+    EDITTEXT        IDC_EDIT_DEPTH,7,211,92,14,ES_LOWERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_VAR,122,211,92,14,ES_LOWERCASE | ES_AUTOHSCROLL
+END
+
+IDD_DLG_DISPDEPTH_SET DIALOG  0, 0, 187, 103
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "显示井段设置"
+FONT 9, "宋体"
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,130,7,50,14
+    PUSHBUTTON      "取消",IDCANCEL,130,24,50,14
+    GROUPBOX        "数据最大井段",IDC_STATIC,7,7,116,40
+    GROUPBOX        "显示井段",IDC_STATIC,7,59,116,40
+    EDITTEXT        IDC_EDIT_MINVAL,17,25,40,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_MAXVAL,75,25,40,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_MINDEPTH,17,75,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_MAXDEPTH,75,75,40,14,ES_AUTOHSCROLL
+    LTEXT           "至",IDC_STATIC,63,27,9,8
+    LTEXT           "至",IDC_STATIC,63,77,9,8
+END
+
+IDD_DLG_LANE_ADD DIALOG  0, 0, 321, 197
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "增加泳道"
+FONT 9, "宋体"
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,264,7,50,14
+    PUSHBUTTON      "取消",IDCANCEL,264,24,50,14
+    GROUPBOX        "请选择道类型",IDC_STATIC,7,7,247,183
+    CONTROL         "List1",IDC_LIST_LANE,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,7,23,247,167
+END
+
+IDD_DLG_LANE_SET DIALOGEX 0, 0, 250, 137
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "属性"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,133,116,50,14
+    PUSHBUTTON      "取消",IDCANCEL,193,116,50,14
+    LTEXT           "颜色",IDC_STATIC,160,11,17,8
+    PUSHBUTTON      "Button1",IDC_BTN_FILLCOLOR,182,7,61,14
+    CONTROL         "填充",IDC_CHECK_FILL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,119,10,32,10
+    CONTROL         "边框",IDC_CHECK_BORDER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,68,32,10
+    CONTROL         "横刻度线",IDC_CHECK_HORZ,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,182,70,48,10
+    CONTROL         "竖刻度线",IDC_CHECK_VERT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,182,84,48,10
+    GROUPBOX        "网格线",IDC_STATIC,161,53,82,50
+    LTEXT           "宽度",IDC_STATIC,67,71,17,8
+    EDITTEXT        IDC_EDIT_WIDTH,91,67,38,14,ES_AUTOHSCROLL
+    LTEXT           "厘米",IDC_STATIC,133,71,17,8
+    CONTROL         "应用于所有道(除宽度外)",IDC_CHECK_APPLY_ALL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,90,104,10
+    LTEXT           "标题:",IDC_STATIC,7,11,21,8
+    EDITTEXT        IDC_EDIT_TITLE,31,7,77,48,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
+END
+
+IDD_LOGTEMPLPAGE0 DIALOG  0, 0, 363, 214
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "步骤1"
+FONT 9, "宋体"
+BEGIN
+    CONTROL         "分隔符号 - 用分隔字符，如逗号或制表符分隔每个字段。",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,27,39,220,10
+    CONTROL         "固定宽度 - 每列字段加空格对齐。",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,27,56,140,10
+    EDITTEXT        IDC_EDIT_TITLEROW,52,84,40,14,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN1,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | WS_GROUP,95,84,10,14
+    EDITTEXT        IDC_EDIT_FIRSTROW,180,84,40,14,ES_AUTOHSCROLL
+    CONTROL         "Spin2",IDC_SPIN2,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | WS_GROUP,225,84,10,14
+    EDITTEXT        IDC_EDIT_DEPTH_COL,287,84,40,14,ES_AUTOHSCROLL
+    CONTROL         "Spin3",IDC_SPIN3,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,333,83,10,14
+    CONTROL         "List2",IDC_LIST_DATA,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_NOCOLUMNHEADER | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,2,121,357,91
+    GROUPBOX        "原始数据类型",IDC_STATIC,2,7,357,68
+    LTEXT           "请选择最合适的文件类型:",IDC_STATIC,19,25,126,10
+    LTEXT           "数据内容起始行:",IDC_STATIC,116,87,61,8
+    LTEXT           "预览文件:",IDC_STATIC,17,104,37,8
+    EDITTEXT        IDC_EDIT_PATH,60,104,299,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER
+    LTEXT           "标题行:",IDC_STATIC,18,87,29,8
+    LTEXT           "井深列:",IDC_STATIC,253,87,29,8
+END
+
+IDD_LOGTEMPLPAGE1 DIALOG  0, 0, 363, 214
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "步骤2"
+FONT 9, "宋体"
+BEGIN
+    CONTROL         "空格",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,25,36,31,10
+    CONTROL         "逗号",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,74,36,31,10
+    CONTROL         "制表符",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,123,36,38,10
+    CONTROL         "分号",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,179,36,31,10
+    CONTROL         "其它",IDC_RADIO5,"Button",BS_AUTORADIOBUTTON,228,36,31,10
+    GROUPBOX        "分隔符",IDC_STATIC_1,10,21,344,57
+    EDITTEXT        IDC_EDIT_CHAR,267,33,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PATH,49,86,314,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER
+    LTEXT           "数据预览：",IDC_STATIC,5,86,42,8
+    LTEXT           "请设置分列数据所包含的分隔符号或指定固定宽度。在预览窗口内可看到分列的效果。",IDC_STATIC,7,7,305,8
+    EDITTEXT        IDC_EDIT_TITLEWIDTH,94,57,155,14,ES_AUTOHSCROLL
+    LTEXT           "标题行每列宽度:",IDC_STATIC_TITLE,27,59,61,8
+    PUSHBUTTON      "应用",IDC_BTN_APPLY,268,57,50,14
+    PUSHBUTTON      "...",IDC_BTN_WIDTH,250,57,14,14
+    CONTROL         "",IDC_GRID,"Static",SS_BLACKFRAME,0,100,363,113
+END
+
+IDD_LOGTEMPLPAGE2 DIALOG  0, 0, 363, 214
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "步骤3"
+FONT 9, "宋体"
+BEGIN
+    GROUPBOX        "数据预览",IDC_STATIC,7,7,349,199
+    CONTROL         "",IDC_GRID,"Static",SS_BLACKFRAME,7,23,349,183
+END
+
+IDD_DLG_SETWIDTH DIALOG  0, 0, 394, 195
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "设置字段宽度"
+FONT 9, "宋体"
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,273,174,50,14
+    PUSHBUTTON      "取消",IDCANCEL,337,174,50,14
+    CONTROL         "",IDC_STATIC_1,"Static",SS_BLACKFRAME,7,7,380,155
+END
+
+IDD_DLG_EDIT_TEMPL DIALOGEX 0, 0, 169, 178
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "编辑回放显示模板"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "保存",IDOK,7,157,37,14
+    PUSHBUTTON      "关闭",IDCANCEL,112,157,50,14
+    LTEXT           "模板名称:",IDC_STATIC,7,7,37,8
+    PUSHBUTTON      "删除",IDC_BTN_DEL,56,157,37,14
+    COMBOBOX        IDC_COMBO_TEMPL,7,22,155,125,CBS_SIMPLE | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DLG_SELECT_TEMPL DIALOG  0, 0, 241, 169
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "选择回放显示模板"
+FONT 9, "宋体"
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,184,18,50,14
+    PUSHBUTTON      "取消",IDCANCEL,184,39,50,14
+    LTEXT           "当前选择模板名称:",IDC_STATIC,7,7,69,8
+    COMBOBOX        IDC_COMBO_TEMPL,7,18,165,144,CBS_SIMPLE | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DLG_LANE_TEMPL DIALOG  0, 0, 157, 112
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "泳道设置"
+FONT 9, "宋体"
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,100,74,50,14
+    PUSHBUTTON      "取消",IDCANCEL,100,91,50,14
+    LTEXT           "颜色",IDC_STATIC,67,11,17,8
+    PUSHBUTTON      "Button1",IDC_BTN_FILLCOLOR,89,7,61,14
+    CONTROL         "填充",IDC_CHECK_FILL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,9,32,10
+    CONTROL         "边框",IDC_CHECK_BORDER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,27,32,10
+    CONTROL         "横刻度线",IDC_CHECK_HORZ,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,28,72,48,10
+    CONTROL         "竖刻度线",IDC_CHECK_VERT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,28,86,48,10
+    GROUPBOX        "网格线",IDC_STATIC,7,55,82,50
+    LTEXT           "宽度",IDC_STATIC,67,30,17,8
+    EDITTEXT        IDC_EDIT_WIDTH,91,26,38,14,ES_AUTOHSCROLL
+    LTEXT           "厘米",IDC_STATIC,133,30,17,8
+END
+
+IDD_DLG_LOGING_TEMPL DIALOG  0, 0, 355, 178
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "测井曲线设置"
+FONT 9, "宋体"
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,298,7,50,14
+    PUSHBUTTON      "取消",IDCANCEL,298,24,50,14
+    LTEXT           "颜色",IDC_STATIC,11,34,17,8
+    PUSHBUTTON      "Button1",IDC_BTN_LINECOLOR,34,30,64,14
+    COMBOBOX        IDC_CBLINESTYLE,34,49,64,30,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "线型",IDC_STATIC,11,53,17,8
+    LTEXT           "线宽",IDC_STATIC,11,71,17,8
+    EDITTEXT        IDC_LINESIZE,34,69,33,14,ES_AUTOHSCROLL
+    LTEXT           "主刻度等分",IDC_STATIC,82,73,41,8
+    GROUPBOX        "范围",IDC_STATIC,124,7,161,52
+    LTEXT           "最小值",IDC_STATIC,179,24,25,8
+    LTEXT           "最大值",IDC_STATIC,234,24,25,8
+    LTEXT           "坐标轴",IDC_STATIC,138,39,25,8
+    GROUPBOX        "填充",IDC_STATIC,7,93,278,55
+    CONTROL         "填充",IDC_CBFILL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,24,107,32,10
+    LTEXT           "颜色",IDC_STATIC,76,108,17,8
+    CONTROL         "",IDC_BSSTYLE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,19,128,8,8
+    CONTROL         "",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,57,128,8,8
+    CONTROL         "",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,95,128,8,8
+    CONTROL         "",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,133,128,8,8
+    CONTROL         "",IDC_RADIO5,"Button",BS_AUTORADIOBUTTON,171,128,8,8
+    CONTROL         "",IDC_RADIO6,"Button",BS_AUTORADIOBUTTON,209,128,8,8
+    CONTROL         "",IDC_RADIO7,"Button",BS_AUTORADIOBUTTON,247,128,8,8
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKRECT | SS_SUNKEN,259,126,11,11
+    CONTROL         411,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,31,126,12,12
+    CONTROL         412,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,69,126,12,12
+    CONTROL         413,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,107,126,12,12
+    CONTROL         414,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,145,126,12,12
+    CONTROL         415,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,183,126,12,12
+    CONTROL         416,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,221,126,12,12
+    EDITTEXT        IDC_EDIT_CMIN,175,36,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_CMAX,230,36,40,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Button2",IDC_FILLCOLOR,99,105,56,14
+    EDITTEXT        IDC_EDIT_STEPS,129,70,40,14,ES_AUTOHSCROLL
+    LTEXT           "次刻度等分",IDC_STATIC,190,73,41,8
+    EDITTEXT        IDC_EDIT_MSTEPS,236,70,40,14,ES_AUTOHSCROLL
+    CONTROL         "坐标反向",IDC_CHECK_DIR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,156,48,10
+    CONTROL         "对数坐标",IDC_CHECK_LOGCOORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,84,156,48,10
+    CONTROL         "同一此道坐标",IDC_CHECK_SAMECOORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,147,156,64,10
+    LTEXT           "名称",IDC_STATIC,11,15,17,8
+    EDITTEXT        IDC_EDIT_CURVE_NAME,34,11,84,14,ES_AUTOHSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BS0                 BITMAP                  "res\\bs0.bmp"
+IDB_BS1                 BITMAP                  "res\\bs1.bmp"
+IDB_BS2                 BITMAP                  "res\\bs2.bmp"
+IDB_BS3                 BITMAP                  "res\\bs3.bmp"
+IDB_BS4                 BITMAP                  "res\\bs4.bmp"
+IDB_BS5                 BITMAP                  "res\\bs5.bmp"
+IDR_DISPLOGCURVE_TOOLBAR BITMAP                  "res\\toolbar1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_DISPLOGCURVETYPE    ICON                    "res\\ico00002.ico"
+IDI_ICONCURVE           ICON                    "res\\icon1.ico"
+IDI_LOG                 ICON                    "res\\log.ico"
+IDI_DEPTH               ICON                    "res\\ico00001.ico"
+IDI_INTERLAYER          ICON                    "res\\ico00003.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+CG_IDR_POPUP_DISP_LOG_CURVE_VIEW MENU 
+BEGIN
+    POPUP "_曲线道_"
+    BEGIN
+        MENUITEM "插入泳道",                        ID_INSERT_LANE
+        MENUITEM "添加泳道",                        ID_APPEND_LANE
+        MENUITEM SEPARATOR
+        MENUITEM "删除泳道",                        ID_DEL_LANE
+        MENUITEM SEPARATOR
+        MENUITEM "添加曲线",                        ID_ADD_CURVE
+        MENUITEM "删除曲线",                        33230
+        MENUITEM SEPARATOR
+        MENUITEM "剪切(&T)\tCtrl+X",              ID_EDIT_CUT
+        MENUITEM "复制(&C)\tCtrl+C",              ID_EDIT_COPY
+        MENUITEM "粘贴(&P)\tCtrl+V",              ID_EDIT_PASTE
+        MENUITEM SEPARATOR
+        POPUP "夹层"
+        BEGIN
+            MENUITEM "剪切",                          33231
+            MENUITEM "复制",                          33232
+            MENUITEM "粘贴",                          33233
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "属性",                          ID_VIEW_LANE_PROP
+    END
+END
+
+IDR_POPUP_DISPLOGCURVE MENU 
+BEGIN
+    POPUP "DUMMY"
+    BEGIN
+        MENUITEM "数据采集",                        ID_VIEW_WATCH
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_DISPLOGCURVE_TOOLBAR TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_IMPORT_DAT
+    SEPARATOR
+    BUTTON      ID_ZOOM_IN
+    BUTTON      ID_ZOOM_11
+    BUTTON      ID_ZOOM_OUT
+    SEPARATOR
+    BUTTON      ID_VIEW_DISPCAPTION
+    SEPARATOR
+    BUTTON      ID_VIEW_SCALE
+    SEPARATOR
+    BUTTON      ID_DEPTH_SEGMENT
+    SEPARATOR
+    BUTTON      ID_INSERT_LANE
+    BUTTON      ID_APPEND_LANE
+    BUTTON      ID_DEL_LANE
+    SEPARATOR
+    BUTTON      ID_DEL_CURVE
+    BUTTON      ID_ADD_CURVE
+    SEPARATOR
+    BUTTON      ID_DISP_TEMPL
+    SEPARATOR
+    BUTTON      ID_EDIT_DISP_TEMPL
+    SEPARATOR
+    BUTTON      ID_EXPORT_DISPLOGCURVE
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DLG_ADD_CURVE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 259
+        VERTGUIDE, 135
+        VERTGUIDE, 144
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 204
+        HORZGUIDE, 183
+    END
+
+    IDD_DLG_CURVE_SET, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 285
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 225
+    END
+
+    IDD_DLG_DISPDEPTH_SET, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 100
+    END
+
+    IDD_DLG_LANE_ADD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 314
+        VERTGUIDE, 254
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 190
+    END
+
+    IDD_DLG_LANE_SET, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 243
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 130
+    END
+
+    IDD_LOGTEMPLPAGE0, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 359
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 212
+    END
+
+    IDD_LOGTEMPLPAGE1, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 213
+    END
+
+    IDD_LOGTEMPLPAGE2, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 356
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 206
+    END
+
+    IDD_DLG_SETWIDTH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 387
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 188
+    END
+
+    IDD_DLG_EDIT_TEMPL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 162
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 171
+    END
+
+    IDD_DLG_SELECT_TEMPL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 234
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 162
+    END
+
+    IDD_DLG_LANE_TEMPL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 150
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 105
+    END
+
+    IDD_DLG_LOGING_TEMPL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 348
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 171
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    ID_ZOOM_IN              "放大图形\n放大"
+    ID_ZOOM_11              "\n还原"
+    ID_ZOOM_OUT             "缩小图形\n缩小"
+    ID_DEPTH_SEGMENT        "设置回放井段\n设置回放井段"
+    ID_VIEW_SCALE           "设置回放曲线显示比例\n显示比例"
+    ID_VIEW_LOGCURVEBAR     "显隐曲线回放工具栏\n曲线回放工具栏"
+    ID_IMPORT_DAT           "导入测井曲线数据\n导入数据"
+    ID_IMPORT_DAT_DB        "从数据库中导入数据\n导入数据"
+    ID_EXPORT_DISPLOGCURVE  "导出曲线图形或数据\n导出图形或数据"
+    ID_VIEW_DISPCAPTION     "显隐测井曲线图标题\n图标题"
+    ID_VIEW_DISPCOMMENT     "显隐测井曲线图信息\n图信息"
+    ID_VIEW_DISPLEGEND      "显隐测井曲线图例\n图例"
+    ID_VIEW_LANE_PROP       "设置泳道显示属性\n泳道属性"
+    ID_INSERT_LANE          "在此道前面插入泳道\n插入泳道"
+    ID_APPEND_LANE          "在此道后面添加泳道\n添加泳道"
+    ID_ADD_CURVE            "在此道中添加曲线\n添加曲线"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_DEL_LANE             "删除当前选中的泳道\n删除泳道"
+    ID_DISP_TEMPL           "用显示模板应用于当前井的显示\n应用显示模板"
+    ID_EDIT_DISP_TEMPL      "编辑显示模板\n编辑显示模板"
+    ID_CALC_PA              "计算砂层物性参数\n计算砂层物性参数"
+    ID_VIEW_WATCH           "显隐数据采集窗口\n数据采集"
+    ID_DEL_CURVE            "在此道中删除选择的曲线\n删除曲线"
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_DISPLOGCURVETYPE    "\nLogCurve\n综合柱状图\n综合柱状图文件(*.LCV)\n.lcv\nLogCurve.Document\nLogCurve Document"
+    IDS_PROPSHT_CAPTION     "选项"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_FULLSCREEN      "全屏显示\n全屏显示"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_RE_LOGIN             "连接数据库\n连接数据库"
+    ID_DB_PW                "修改当前连接的数据库用户口令\n修改口令"
+    ID_TOOLS_ENTRY          "<用户定制工具>\n<用户定制工具>"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_NEW             "建立新文档\n新建"
+    ID_FILE_OPEN            "打开一个现有文档\n打开"
+    ID_FILE_CLOSE           "关闭活动文档\n关闭"
+    ID_FILE_SAVE            "保存活动文档\n保存"
+    ID_FILE_SAVE_AS         "将活动文档以一个新文件名保存\n另存为"
+    ID_FILE_PAGE_SETUP      "改变打印选项\n页面设置"
+    ID_FILE_PRINT_SETUP     "改变打印机及打印选项\n打印设置"
+    ID_FILE_PRINT           "打印活动文档\n打印"
+    ID_FILE_PRINT_PREVIEW   "显示整页\n打印预览"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_PROPSHT_CAPTION1    "Wizard"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_STATUS_BAR      "显示或隐藏状态栏\n显隐状态栏"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_SAVE_ALL        "保存所有打开文档\n保存所有"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_PRJ1        "打开方案"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "打开该文档"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_EXIT             "退出应用程序；提示保存文档\n退出"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_APPLOOK_2003    "Activate Office 2003 application look\nOffice 2003 Look"
+END
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE 4, 2
+#pragma code_page(936)
+#endif //_WIN32
+#include "res\DispLogCurve.rc2"  // non-Microsoft Visual C++ edited resources
+#include "l.chs\afxres.rc"          // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

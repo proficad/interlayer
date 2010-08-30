@@ -1,0 +1,1687 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="VFC">
+      <UniqueIdentifier>{199b39bf-a980-4064-80d9-40e67af9b497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VFC\源文件">
+      <UniqueIdentifier>{e7938402-a1cf-4e92-919c-db04f9b9bb18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VFC\头文件">
+      <UniqueIdentifier>{9ab4746c-9452-48a6-ab65-4233e08d0213}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="3DLib">
+      <UniqueIdentifier>{b89fa5d3-cdd8-4d0b-8413-205470d7ca34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DLib\头文件">
+      <UniqueIdentifier>{b906a6c9-6ca8-4c09-ba3e-817c194581cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DLib\源文件">
+      <UniqueIdentifier>{63338253-f080-48a5-b96c-c86addc5b492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{8004abde-1b9c-4b02-b734-535e7f8592e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Main\源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Vertical_Model">
+      <UniqueIdentifier>{57abed9f-cde3-4847-8e6d-ffe3e08783ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vertical_Model\头文件">
+      <UniqueIdentifier>{d4086454-d144-412a-90f6-2744fc9b2652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vertical_Model\源文件">
+      <UniqueIdentifier>{347c33c9-5447-4d62-a6c4-eda9a786a8f0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="VFC\BigView.cpp">
+      <Filter>VFC\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\3DModelDoc.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\3DModelView.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\3DObjBar.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\3DObject.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\3DObjTreeCtrl.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Array3d.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\AxisSystem.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Background.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\BoundingBox.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\ClrFileDialog.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Color.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\ColorLookUpTable.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\ColorTableList.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Curve.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Edge3D.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\FaceTriangles.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Geometry.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\GeomException.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\GLDisplayContext.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\GLObject.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\GLText.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\GLTrihedron.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\GLView.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Line3D.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Material.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Matrix33.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\MMath.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\OneAxis.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Plane.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Texture.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Transform.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Utils3d.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Vector3d.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Vertex3D.cpp">
+      <Filter>3DLib\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="2DModelDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="2DModelView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ArrowPicker.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ArrowWnd.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\C3DDice.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\C3DSlice.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ChildFrm.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientCapture.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\CmdActiveLayer.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\CmdDraw.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\CmdGeoDrawObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\CmdMoveLayerBack.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\CmdMoveLayerForward.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\CmdNoActiveLayer.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CntrItem.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ColourPicker.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ColourPickerPopup.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComboFill.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComboLine.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ComboLineStyle.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\CommonStruct.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CoordTrans.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgAddCtrlPoint.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgColorTableSet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DlgExportPicture.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgGridPropSetup.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgImportModel.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgImportWellInfo.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgLayerParamSet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgLayerSet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DlgLineSet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgMaterial.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DlgPageSet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DlgRectSet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgRuler.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DlgScaleRulerSet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DlgSetPoly.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DlgWellSet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgWithGraph.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgXYSlice.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgZSlice.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DrawItem.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DrawLayer.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\DrawPage.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\EditEx.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldCell.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FileDatDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FileDatView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FileView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FormatBar.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FormGenerateLayer.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateLayerDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoDrawCombine.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoDrawObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoDrawOleObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoJionPolyObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoLineObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoMapDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoMapView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoPictrueObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoPointObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoPolyObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoRectObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoScaleObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoTextObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\GeoWellObj.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GridModel.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GridModelDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\GridObject.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HiliteEditView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Interlayer.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\LayerBar.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\LayerListCtrl.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LayerModel.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEditDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEditView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRichEditDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRichEditView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWnd.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\patternpage.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PatternPreviewWnd.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PatternSheet.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PictrueDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PictrueView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\PipeLine.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\PlaneReader.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertiesWnd.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\PsRenderer.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\Reader.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\RgnClipping.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\StLReader.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolAttriBush.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolBase.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolClip.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolDivideLine.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolJionLine.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolPageMove.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolPoly.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolPolyPoint.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolRect.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolRegion.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolScaleRuler.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolSelect.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoMap\ToolText.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoBar.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoListBox.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewTree.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WellInfoDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WellInfoView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WellLoggingInfoDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WellLoggingInfoView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WellPathDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WellPathInfoDoc.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WellPathInfoView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WellPathView.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WndGraph.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3DLib\WrlReader.cpp">
+      <Filter>Main\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\coords.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\f2doff.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\gen_prop_dlgs.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\graph_general.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\graph_props.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\graphcombobox.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\GraphContainer.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\GraphFrame.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\graphpanel.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\GraphWnd.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\gruler.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\points.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\pviewbar.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\sizecbar.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\VertModelDoc.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertical_Model\VertModelView.cpp">
+      <Filter>Vertical_Model\源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VFC\BigView.h">
+      <Filter>VFC\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\3DModelDoc.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\3DModelView.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\3DObjBar.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\3DObject.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\3DObjTreeCtrl.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Array3d.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\AxisSystem.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Background.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\BoundingBox.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\ClrFileDialog.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Color.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\ColorLookUpTable.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\ColorTableList.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Curve.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Edge3D.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\FaceTriangles.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Geometry.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GeomException.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GLDisplayContext.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GLMaterials.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GLObject.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GLText.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GLTrihedron.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GLTypeEnums.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GLView.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Line3D.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Material.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Matrix33.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\MMath.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\OneAxis.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Plane.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Texture.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Transform.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Utils3d.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Vector3d.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Vertex3D.h">
+      <Filter>3DLib\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="2DModelDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="2DModelView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ArrowPicker.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ArrowWnd.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\C3DDice.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\C3DSlice.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ChildFrm.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientCapture.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CmdActiveLayer.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CmdDraw.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\CmdGeoDrawObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CmdMoveLayerBack.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CmdMoveLayerForward.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CmdNoActiveLayer.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CntrItem.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ColourPicker.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ColourPickerPopup.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ComboFill.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ComboLine.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ComboLineStyle.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\CommonStruct.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CoordTrans.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgAddCtrlPoint.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgColorTableSet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DlgExportPicture.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgGridPropSetup.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgImportModel.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgImportWellInfo.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgLayerParamSet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgLayerSet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DlgLineSet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgMaterial.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DlgPageSet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DlgRectSet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgRuler.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DlgScaleRulerSet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DlgSetPoly.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DlgWellSet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgWithGraph.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgXYSlice.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgZSlice.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DrawItem.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DrawLayer.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\DrawPage.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\EditEx.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldCell.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FileDatDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FileDatView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FileView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FormatBar.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FormGenerateLayer.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateLayerDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoDrawCombine.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoDrawObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoDrawOleObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoJionPolyObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoLineObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoMapDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoMapView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoPictrueObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoPointObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoPolyObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoRectObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoScaleObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoTextObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\GeoWellObj.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GridModel.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GridModelDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\GridObject.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="HiliteEditView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Interlayer.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\LayerBar.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\LayerListCtrl.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LayerModel.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEditDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEditView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRichEditDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRichEditView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWnd.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\patternpage.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PatternPreviewWnd.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PatternSheet.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PictrueDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PictrueView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\PipeLine.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\PlaneReader.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertiesWnd.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\PsRenderer.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\Reader.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RgnClipping.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\RgnClipping.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\StLReader.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolAttriBush.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolBase.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolClip.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolDivideLine.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolJionLine.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolPageMove.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolPoly.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolPolyPoint.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolRect.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolRegion.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolScaleRuler.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolSelect.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoMap\ToolText.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UndoBar.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UndoListBox.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewTree.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WellInfoDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WellInfoView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WellLoggingInfoDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WellLoggingInfoView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WellPathDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WellPathInfoDoc.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WellPathInfoView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WellPathView.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WndGraph.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3DLib\WrlReader.h">
+      <Filter>Main\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\coords.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\f2doff.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\gen_prop_dlgs.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\graph_general.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\graph_props.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\graphcombobox.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\GraphContainer.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\GraphFrame.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\graphpanel.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\GraphWnd.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\gruler.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\points.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\pviewbar.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\sizecbar.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\VertModelDoc.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertical_Model\VertModelView.h">
+      <Filter>Vertical_Model\头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\bitmap1.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap10.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap11.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap12.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap13.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap14.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap15.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap16.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap17.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap18.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap19.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap2.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap20.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap21.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap22.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap23.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap24.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap25.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap26.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap27.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap28.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap29.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap3.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap30.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap4.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap5.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap6.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap7.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap8.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap9.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_1.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_2.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_3.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_4.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_5.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_6.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_7.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_8.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap_9.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00001.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00002.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00003.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00004.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00005.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00006.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00007.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00008.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00009.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00010.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00011.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00012.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00013.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00014.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00015.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00016.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00017.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00018.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00019.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00020.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00021.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00022.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00023.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00024.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00025.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00026.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00027.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00028.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00029.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00030.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00031.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00032.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00033.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00034.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00035.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00036.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00037.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00038.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00039.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00040.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00041.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00042.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00043.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00044.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00045.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00046.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00047.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00048.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00049.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00050.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00051.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00052.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00053.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00054.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00055.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00056.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00057.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00058.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00059.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00060.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00061.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00062.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00063.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00064.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00065.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp00066.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bmp_scal.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\class_view.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\class_view_hc.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\classview.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\classview_hc.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00001.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00002.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00003.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00004.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00005.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00006.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00007.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00008.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00009.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00010.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00011.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00012.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00013.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00014.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00015.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00016.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00017.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00018.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00019.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00020.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00021.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00022.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00023.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cur00024.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cursor1.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\cursor2.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\explorer.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\explorer_hc.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\file_vie.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\file_vie.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\file_view.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\file_view_hc.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\fileview.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\fileview_hc.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00001.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00002.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00003.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00004.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00005.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00006.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00007.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00008.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00009.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00010.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00011.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00012.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00013.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00014.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00015.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00016.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00017.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00018.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00019.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00020.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00021.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00022.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00023.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ico00024.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\icon1.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\icon2.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\icon_fol.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Interlayer.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Interlayer.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\InterlayerDoc.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\menuimages.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\menuimages_hc.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\output_wnd.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\output_wnd_hc.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\properties.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\properties_hc.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\properties_wnd.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\properties_wnd_hc.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\sort.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\sort_hc.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Toolbar.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\toolbar1.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Toolbar256.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\toolbar_.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="UserImages.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\html1.htm" />
+    <None Include="Interlayer.reg" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Interlayer.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

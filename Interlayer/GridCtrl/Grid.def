@@ -1,0 +1,6 @@
+; Grid.def : Declares the module parameters for the DLL.
+
+LIBRARY      "Grid"
+
+EXPORTS
+    ;此处可以是显式导出

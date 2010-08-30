@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AFC.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\Command.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\CommandHistory.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Convert.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CSVFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\CustomCommandHistory.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DashLine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DFVCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DFVDocTemplate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DFVFrameWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Ini.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParseToken.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Point2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Point3D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RectEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\RefObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizableDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizableFormView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizableGrip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizableLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizableMinMax.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizablePage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizablePageEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizableSheet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizableSheetEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizableLib\ResizableState.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spline.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spline3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SplitPath.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AFC.def">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="res\AFC.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Command\Command.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CommandHistory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Convert.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CSVFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CustomCommandHistory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DashLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DFVCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DFVDocTemplate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DFVFrameWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ini.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParseToken.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Point2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Point3D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RectEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\RefObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizableDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizableFormView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizableGrip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizableLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizableMinMax.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizablePage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizablePageEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizableSheet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizableSheetEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizableLib\ResizableState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spline3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SplitPath.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AFC.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

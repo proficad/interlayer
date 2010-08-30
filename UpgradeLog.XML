@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Interlayer">
+</Property><Property Name="解决方案文件" Value="D:\软件产品\Interlayer\Interlayer.sln">
+</Property><Property Name="用户选项文件" Value="D:\软件产品\Interlayer\Interlayer.suo">
+</Property><Property Name="Date" Value="2010年7月23日">
+</Property><Property Name="Time" Value="15:19">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="Interlayer.sln" Description="文件已成功备份为 D:\软件产品\Interlayer\Interlayer.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="Interlayer.suo" Description="文件已成功备份为 D:\软件产品\Interlayer\Interlayer.suo.old">
+</Event><Event ErrorLevel="3" Project="Interlayer" Source="Interlayer\Interlayer.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="Grid" Source="Interlayer\GridCtrl\Grid.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="MiniExcel" Source="Interlayer\GridCtrl\MiniExcel\MiniExcel.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="AFC" Source="Interlayer\AFC\AFC.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="AdoX" Source="Interlayer\AdoX\AdoX.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="cximagemfcdll" Source="Interlayer\cximage599c\CxImage\CxImageDLL\cximagemfcdll.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="j2k" Source="Interlayer\cximage599c\j2k\j2k.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="jasper" Source="Interlayer\cximage599c\jasper\jasper.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="jbig" Source="Interlayer\cximage599c\jbig\jbig.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="Jpeg" Source="Interlayer\cximage599c\jpeg\Jpeg.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="png" Source="Interlayer\cximage599c\png\png.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="Tiff" Source="Interlayer\cximage599c\tiff\Tiff.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="zlib" Source="Interlayer\cximage599c\zlib\zlib.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="Delaunay" Source="Interlayer\Delaunay\Delaunay.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="DispLogCurve" Source="Interlayer\DispLogCurve\DispLogCurve.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="3" Project="ReadLogFile" Source="Interlayer\ReadLogFile\ReadLogFile.vcproj" Description="无需转换">
+</Event><Event ErrorLevel="0" Project="" Source="Interlayer.sln" Description="成功转换解决方案">
+</Event><Event ErrorLevel="3" Project="" Source="Interlayer.sln" Description="Converted">
+</Event></UpgradeLog>

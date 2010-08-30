@@ -1,0 +1,9 @@
+SCC = This is a Source Code Control file
+
+[DispLogCurve.dsp]
+SCC_Aux_Path = "E:\项目管理\采油七厂\GeoTool"
+SCC_Project_Name = "$/源代码/DispLogCurve", PFAAAAAA
+
+[DispLogCurve.vcproj]
+SCC_Aux_Path = "D:\软件项目\GeoTool"
+SCC_Project_Name = "$/源代码/GeoTool.root/GeoTool/DispLogCurve", XSAAAAAA
