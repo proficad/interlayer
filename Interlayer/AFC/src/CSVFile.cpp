@@ -25,7 +25,8 @@ bool CCSVFile::ReadData(CStringArray &arr, const TCHAR cSeq)
 	CString sLine;
 	if (!ReadString(sLine))
 		return false;
-
+	if(sLine.Find(char(9))!=-1)
+		sLine.Replace((char)9,(char)32);
 	LPCTSTR p = sLine;
 	int nValue = 0;
 
@@ -67,8 +68,13 @@ bool CCSVFile::ReadData(CStringArray &arr, const TCHAR cSeq)
 				s.AppendChar(*p++);
 			}
 			// Advance to next character (if not already end of string)
-			if (*p != '\0')
-				p++;
+			while(*p == cSeq)
+			{
+				if (*p != '\0')
+					p++;
+				else
+					break;
+			}
 		}
 		// Add this string to value array
 		if (nValue < arr.GetCount())

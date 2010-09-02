@@ -65,6 +65,22 @@ END_MESSAGE_MAP()
 
 // CDlgImportWellInfo 消息处理程序
 
+void ProsscessUTF(CString& stringLine)
+{
+	const char * tmpLine = stringLine.GetString();
+	//UTF-16 的BOM 头 0xFF, 0xFE
+	//UTF-8   的BOM 头 0xEF, 0xBB, 0xBF
+	ASSERT(stringLine.GetLength()>=3);
+	if( ((char)0xFF==tmpLine[0])&&((char)0xFE==tmpLine[1]) )
+	{
+		stringLine.Delete(0,2);
+	}
+	if(((char)0xEF==tmpLine[0])&&((char)0xBB==tmpLine[1])&&((char)0xBF==tmpLine[2]))
+	{
+		stringLine.Delete(0,3);
+	}
+}
+
 BOOL CDlgImportWellInfo::OnInitDialog()
 {
 	CDialog::OnInitDialog();
@@ -189,7 +205,6 @@ void CDlgImportWellInfo::OnBnClickedBtnFile()
 	UpdateData(FALSE);
 	if( m_iFileType == 0)
 	{
-		m_strText = "";
 		CStdioFile file;
 		if( file.Open(m_strLoadFileName, CFile::modeRead | CFile::typeText))
 		{
@@ -197,6 +212,18 @@ void CDlgImportWellInfo::OnBnClickedBtnFile()
 			int i = 0;
 			while( file.ReadString(strTmp) )
 			{
+				if(0==i)
+				{
+					ProsscessUTF(strTmp);
+				}
+				strTmp.Replace(char(9),char(32));
+				int spaceIndex = strTmp.Find("  ");
+				while(spaceIndex!=-1)
+				{
+					strTmp.Replace("  "," ");
+					spaceIndex = strTmp.Find("  ");
+				}
+				strTmp.Replace(char(32),char(9));
 				m_strText += strTmp;
 				m_strText += "\r\n";				
 				i++;
@@ -593,6 +620,18 @@ void CDlgImportWellInfo::Init()
 				int i = 0;
 				while( file.ReadString(strTmp) )
 				{
+					if(0==i)
+					{
+						ProsscessUTF(strTmp);
+					}
+					strTmp.Replace(char(9),char(32));
+					int spaceIndex = strTmp.Find("  ");
+					while(spaceIndex!=-1)
+					{
+						strTmp.Replace("  "," ");
+						spaceIndex = strTmp.Find("  ");
+					}
+					strTmp.Replace((char)32,(char)9);
 					m_strText += strTmp;
 					m_strText += "\r\n";
 					i++;
@@ -1049,6 +1088,10 @@ void CDlgImportWellInfo::OnBnClickedOk()
 				if( txtFile.ReadData(arr, m_strSeq[0]) )
 				{
 					int size = arr.GetSize();
+					if(size>0)
+					{
+						ProsscessUTF(arr[0]);
+					}
 					CString strTmp;
 					for(int i=0; i<size; i++)
 					{
