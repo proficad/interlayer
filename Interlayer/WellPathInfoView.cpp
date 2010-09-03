@@ -99,7 +99,7 @@ void CWellPathInfoView::OnInitialUpdate()
 			m_wndGrid.SetItemText(i, j, pDoc->m_arWellPathInfo[(i)*pDoc->m_nCols+j-1]);			
 		}
 	}
-	m_wndGrid.SetColumnWidth(0,15);
+	m_wndGrid.SetColumnWidth(0, 15);
 
 	m_wndGrid.SetColumnWidth(2, 350);
 

@@ -185,6 +185,7 @@ void CWellInfoView::OnBtnAddRow()
 	GetDlgItem(IDC_BTN_DEL_ROW)->EnableWindow(TRUE);
 	CWellInfoDoc *pDoc = GetDocument();
 	pDoc->SetModifiedFlag(TRUE);
+	pDoc->DoFileSave();
 }
 
 void CWellInfoView::OnBtnDelRow() 
@@ -212,6 +213,7 @@ void CWellInfoView::OnBtnDelRow()
 
 	CWellInfoDoc *pDoc = GetDocument();
 	pDoc->SetModifiedFlag(TRUE);
+	pDoc->DoFileSave();
 }
 
 void CWellInfoView::OnBtnImport() 

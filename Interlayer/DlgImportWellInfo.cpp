@@ -116,6 +116,7 @@ BOOL CDlgImportWellInfo::OnInitDialog()
 
 	for (int i=1;i<8;i++)
 	{
+		//m_wndGridFields.SetItemState(i, 2, m_wndGridFields.GetItemState(i, 2) | GVNI_READONLY);
 		m_wndGridFields.SetItemState(i, 1, m_wndGridFields.GetItemState(i, 1) | GVNI_READONLY);
 	}
 
@@ -396,7 +397,7 @@ void CDlgImportWellInfo::OnRadioSeq()
 		m_strSeq = _T(",");
 		break;
 	case 1:			// tab
-		m_strSeq = _T("	");
+		m_strSeq = _T(";");
 		break;
 	case 2:			// " "
 		m_strSeq = _T(" ");
@@ -624,6 +625,7 @@ void CDlgImportWellInfo::Init()
 					{
 						ProsscessUTF(strTmp);
 					}
+					//把空格和tab替换为tab
 					strTmp.Replace(char(9),char(32));
 					int spaceIndex = strTmp.Find("  ");
 					while(spaceIndex!=-1)
@@ -659,18 +661,20 @@ void CDlgImportWellInfo::Init()
 				{
 					int size = arr.GetSize();
 					CString strTmp;
+					
 					for(int i=0; i<size; i++)
 					{
 						strTmp.Format(_T("Col %d"), i+1);
 						options.Add(strTmp);
 					}
+					options.Add("");
 				}
 			}
 			txtFile.Close();
 		}
 
-		if( options.GetSize() < 1)
-			options.Add("");
+		//if( options.GetSize() < 1)
+		//	options.Add("");
 
 		int nRow = m_wndGridFields.GetRowCount();
 
@@ -703,6 +707,16 @@ void CDlgImportWellInfo::OnBnClickedOk()
 		CWellInfoDoc *pDoc = m_pView->GetDocument();
 		pDoc->SetModifiedFlag(TRUE);
 		m_wndGridFields.EndEditing();
+
+		if(MessageBox("是否保留原有记录","",MB_YESNO )==IDNO)
+		{
+			//m_strSeq.Empty();
+			for(int i=m_pView->m_wndGrid.GetRowCount();i>0;i--)
+			{
+				m_pView->m_wndGrid.DeleteRow(i);
+			}
+			m_pView->m_wndGrid.Invalidate();
+		}
 		if( m_iFileType == 3 ) // 从Access数据库中加载
 		{
 			CString strTable;
@@ -1119,7 +1133,18 @@ void CDlgImportWellInfo::OnBnClickedOk()
 						}
 					}
 
-										
+					if((indexs[0]==-1)||(indexs[1]==-1)||(indexs[2]==-1))
+					{
+						if(indexs[0]==-1)
+							MessageBox("井名字段不能为空");
+						if(indexs[1]==-1)
+							MessageBox("x坐标字段不能为空");
+						if(indexs[2]==-1)
+							MessageBox("y坐标字段不能为空");
+						return;
+					}
+
+					pDoc->SetModifiedFlag(TRUE);
 					do{
 						int index = m_pView->m_wndGrid.InsertRow("");
 						int size = arr.GetSize();
