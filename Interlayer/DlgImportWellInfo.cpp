@@ -708,6 +708,7 @@ void CDlgImportWellInfo::OnBnClickedOk()
 		pDoc->SetModifiedFlag(TRUE);
 		m_wndGridFields.EndEditing();
 
+		if(m_pView->m_wndGrid.GetRowCount()>1)
 		if(MessageBox("是否保留原有记录","",MB_YESNO )==IDNO)
 		{
 			//m_strSeq.Empty();
