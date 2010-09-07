@@ -2335,7 +2335,7 @@ void CFormGenerateLayer::OnBnClickedBtnGenerateLayer()
 
 			StatusSetProgress(1,nLayers);
 
-			pMF->GetTreeFileView()->GetTreeCtrl()->Select(hItem, TVGN_CARET);
+			//pMF->GetTreeFileView()->GetTreeCtrl()->Select(hItem, TVGN_CARET);
 		}
 	}
 	
