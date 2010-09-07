@@ -109,7 +109,7 @@ BOOL CGridModelDoc::ExportGridModel(LPCTSTR lpszGridFileName)
 			{
 				for (int i=0;i<m_gridModel.m_nGridX+1; i++)
 				{
-					CVertex3D point = m_gridModel.m_coordGrid[j*(m_gridModel.m_nGridX+1)*2+2*i];
+					CPoint3D point = m_gridModel.m_coordGrid[j*(m_gridModel.m_nGridX+1)*2+2*i];
 					strTmp.Format("%lf %lf %lf",point.GetX(), point.GetY(), point.GetZ());
 					file.WriteString(strTmp);
 					point = m_gridModel.m_coordGrid[j*2*(m_gridModel.m_nGridX+1)+2*i+1];

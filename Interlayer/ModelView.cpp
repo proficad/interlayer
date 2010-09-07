@@ -1074,7 +1074,7 @@ bool CModelView::ReadPBRSModel(LPCSTR lpszFileName, LPCSTR lpszModelFileName)
 			{
 				for (int m=0;m<8;m++)
 				{
-					CVertex3D point = gridModel.GetCornerPoint(k,j,i,m);
+					CPoint3D point = gridModel.GetCornerPoint(k,j,i,m);
 
 					if( point.x > gridModel.m_dMaxX )
 						gridModel.m_dMaxX = point.x;
@@ -1149,7 +1149,7 @@ bool CModelView::ReadEclipseModel(LPCSTR lpszFileName, LPCSTR lpszModelFileName)
 	std::vector<double> zValues;
 	std::vector<double> depthLayer;
 
-	std::vector<CVertex3D> coordGrid;	// 坐标线 (m_nGridX+1)*(m_nGridY+1)
+	std::vector<CPoint3D> coordGrid;	// 坐标线 (m_nGridX+1)*(m_nGridY+1)
 	std::vector<double> zcornGrid;	// 角点深度 m_nGridX*m_nGridY*m_gridDZ*8
 
 
@@ -1162,7 +1162,7 @@ bool CModelView::ReadEclipseModel(LPCSTR lpszFileName, LPCSTR lpszModelFileName)
 
 	int nCount = 0;
 	BOOL bcorner = FALSE;
-	CVertex3D point;
+	CPoint3D point;
 	int nX, nY, nZ;
 
 	do{
@@ -1435,7 +1435,7 @@ bool CModelView::ReadEclipseModel(LPCSTR lpszFileName, LPCSTR lpszModelFileName)
 			{
 				for (int m=0;m<8;m++)
 				{
-					CVertex3D point = gridModel.GetCornerPoint(k,j,i,m);					
+					CPoint3D point = gridModel.GetCornerPoint(k,j,i,m);					
 
 					if( point.x > gridModel.m_dMaxX )
 						gridModel.m_dMaxX = point.x;

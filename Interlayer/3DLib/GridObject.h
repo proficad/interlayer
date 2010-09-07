@@ -92,7 +92,7 @@ public:
 	CArray<CPhyPara, CPhyPara&>	m_vecPhyPara;
 	//CArray<CVertex3D,CVertex3D&> m_pointList;
 
-	std::vector<CVertex3D> m_pointList;
+	std::vector<CPoint3D> m_pointList;
 
 	//CList<CVertex3D,CVertex3D&> m_pointList;
 
