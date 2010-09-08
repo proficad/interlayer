@@ -266,7 +266,7 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 			{
 				for (int m= 0; m < 8; m++)
 				{
-					CPoint3D vert = gridModel.GetCornerPoint(i,j,k,m);
+					CVertex3D vert = gridModel.GetCornerPoint(i,j,k,m);
 					vert.z *= -1;
 
 					//pGridObj->m_pointList[nn] = vert;

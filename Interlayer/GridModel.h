@@ -16,7 +16,7 @@ namespace GridModel
 
 	{
 	public:
-		CPoint3D m_cornerPoint[8]; // 八个顶点数据
+		CVertex3D m_cornerPoint[8]; // 八个顶点数据
 		tagGridModelCell()
 		{
 		};
@@ -51,7 +51,7 @@ namespace GridModel
 
 		BOOL operator==(const tagGridModelCell& test)
 		{
-			CPoint3D pt;
+			CVertex3D pt;
 			for (int i = 0; i < 8; i++)
 			{
 				pt = test.m_cornerPoint[i];
@@ -64,7 +64,7 @@ namespace GridModel
 
 		BOOL operator!=(const tagGridModelCell& test)
 		{
-			CPoint3D pt;
+			CVertex3D pt;
 			for (int i = 0; i < 8; i++)
 			{
 				pt = test.m_cornerPoint[i];
@@ -100,7 +100,7 @@ namespace GridModel
 		~CGridModel(void);
 		virtual void Serialize(CArchive& ar);
 		tagGridModelCell GetGridCell(int nX, int nY, int nZ);
-		CPoint3D GetCornerPoint(int nX, int nY, int nZ, int nIndex);
+		CVertex3D GetCornerPoint(int nX, int nY, int nZ, int nIndex);
 		BOOL OpenFile(LPCTSTR lpFileName);
 		BOOL SaveFile(LPCTSTR lpFileName);
 		void InitGrid(int nX = 0, int nY = 0, int nZ = 0, BOOL bCorner = TRUE);
@@ -132,7 +132,10 @@ namespace GridModel
 		vector<double> m_gridTops;		// m_nGridX*m_nGridY 顶面中心深度
 
 		// 角点网格
-		vector<CPoint3D> m_coordGrid;	// 坐标线 (m_nGridX+1)*(m_nGridY+1)
+		vector<CVertex3D> m_coordGrid;	// 坐标线 (m_nGridX+1)*(m_nGridY+1)
 		vector<double> m_zcornGrid;		// 角点深度 m_nGridX*m_nGridY*m_gridDZ*8
+		vector<int>		  m_subMeshX;		// x方向网格细分数 m_nGridX*m_nGridY*m_gridD
+		vector<int>		  m_subMeshY;		// y方向网格细分数 m_nGridX*m_nGridY*m_gridD
+		vector<int>		  m_subMeshZ;		// y方向网格细分数 m_nGridX*m_nGridY*m_gridD
 	};
 }

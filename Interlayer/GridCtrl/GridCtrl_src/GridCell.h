@@ -31,7 +31,7 @@ public:
 public:
     void operator=( CGridCell& cell);
 
-    virtual void  SetText(LPCTSTR szText)        { m_strText = szText;  MessageBox("1111111");}                       
+    virtual void  SetText(LPCTSTR szText)        { m_strText = szText;  }                       
     virtual void  SetImage(int nImage)           { m_nImage = nImage;   }                        
     virtual void  SetData(LPARAM lParam)         { m_lParam = lParam;   }      
     virtual void  SetGrid(CGridCtrl* pGrid)      { m_pGrid = pGrid;     }                          
@@ -57,7 +57,7 @@ public:
     virtual CFont*      GetFontObject() const;
     virtual UINT        GetMargin() const;
 
-    virtual BOOL        IsEditing() const           { MessageBox("1111111");return m_bEditing; }
+    virtual BOOL        IsEditing() const           { return m_bEditing; }
     virtual BOOL        IsDefaultFont() const       { return (m_plfFont == NULL); }
     virtual void        Reset();
 

@@ -65,7 +65,7 @@ void CGridModel::InitGrid(int nX/* = 0*/, int nY/* = 0*/, int nZ/* = 0*/, BOOL b
 		{
 			for (int i = 0; i < (m_nGridX + 1) * (m_nGridY + 1) * 2; i++)
 			{
-				CPoint3D pt;
+				CVertex3D pt;
 				m_coordGrid.push_back(pt);
 			}
 
@@ -248,12 +248,12 @@ void CGridModel::Serialize(CArchive& ar)
    |/   				 |/
 [7]*---------------------*[6]
 */
-CPoint3D CGridModel::GetCornerPoint(int nX, int nY, int nZ, int nIndex)
+CVertex3D CGridModel::GetCornerPoint(int nX, int nY, int nZ, int nIndex)
 {
-	CPoint3D point;
+	CVertex3D point;
 	if (m_bCornerPointGrid) // 是角点网格
 	{
-		CPoint3D p1, p2;
+		CVertex3D p1, p2;
 
 		// 直线过两点:(x1, y1, z1)及(x2, y2, z2)，则
 		//

@@ -21,13 +21,6 @@ public:
 	CPoint3D();
 	CPoint3D(double initX, double initY, double initZ, double dValue = 0.0);
 	const CPoint3D& operator=(const CPoint3D& ptSrc);
-	double	GetX(){return x;}
-	double GetY(){return y;}
-	double GetZ(){return z;}
-	void		SetX(double x){this->x=x;}
-	void		SetY(double y){this->y=y;}
-	void		SetZ(double z){this->z=z;}
-	void		SetParam(double x, double y, double z){this->x=x;this->y=y;this->z=z;}
 private:
 	friend CArchive& AFXAPI operator<<(CArchive& ar, const CPoint3D& pt)
 	{
@@ -52,11 +45,6 @@ private:
 	friend BOOL AFXAPI operator==(const CPoint3D& s1, const CPoint3D& s2)
 	{
 		return (s1.x == s2.x && s1.y == s2.y && s1.z == s2.z); 
-	}
-
-	friend BOOL AFXAPI operator!=(const CPoint3D& s1, const CPoint3D& s2)
-	{
-		return (s1.x != s2.x || s1.y != s2.y || s1.z != s2.z); 
 	}
 };
 
