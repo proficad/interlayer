@@ -132,6 +132,9 @@ void CGridModel::Serialize(CArchive& ar)
 			{
 				ar << m_zcornGrid[i];
 			}
+
+			//读取加密信息
+			//size = m_nGridY* m_nGridX* m_nGridZ；
 		}
 		else
 		{
