@@ -64,6 +64,7 @@
 #include "afc/Command/RefObject.h"
 #include "afc/Convert.h"
 #include "cximage599c/CxImage/ximage.h"
+#include "octree/octree.h"
 
 #include "AdoX/ado2.h"
 #include <afxhtml.h>

@@ -91,6 +91,20 @@ namespace GridModel
 	};
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	struct tagGridModelCellNew : public tagGridModelCell
+	{
+	public:
+		tagGridModelCellNew();
+		bool	m_bIsGridRefinement;
+		int	_x,_y,_z;
+	};
+
+	typedef vector< tagGridModelCellNew > VECTOR_ARRAY;
+	typedef VECTOR_ARRAY::iterator VECTOR_ARRAY_ITERATOR;
+	typedef vector< VECTOR_ARRAY > VECTOR_ARRAY2D;
+	typedef VECTOR_ARRAY2D::iterator VECTOR_ARRAY2D_ITERATOR;
+	typedef vector<VECTOR_ARRAY2D > VECTOR_ARRAY3D;
+	typedef VECTOR_ARRAY3D::iterator VECTOR_ARRAY3D_ITERATOR;
 
 	class CGridModel : public CObject
 	{
@@ -111,6 +125,8 @@ namespace GridModel
 		void SaveBack(CStdioFile& file);
 		void SaveLeft(CStdioFile& file);
 		void SaveRight(CStdioFile& file);
+
+		void ReleaseGrid();
 	public:
 		// 网格系统 nx * ny * nz
 		BOOL m_bCornerPointGrid;			// 是否库角点网格
@@ -137,5 +153,7 @@ namespace GridModel
 		vector<int>		  m_subMeshX;		// x方向网格细分数 m_nGridX*m_nGridY*m_gridD
 		vector<int>		  m_subMeshY;		// y方向网格细分数 m_nGridX*m_nGridY*m_gridD
 		vector<int>		  m_subMeshZ;		// y方向网格细分数 m_nGridX*m_nGridY*m_gridD
+
+		VECTOR_ARRAY3D m_gridCells;		//保存网格单元格信息
 	};
 }

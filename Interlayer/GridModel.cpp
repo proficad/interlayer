@@ -34,6 +34,7 @@ CGridModel::CGridModel()
 
 CGridModel::~CGridModel()
 {
+	ReleaseGrid();
 }
 
 void CGridModel::InitGrid(int nX/* = 0*/, int nY/* = 0*/, int nZ/* = 0*/, BOOL bCorner/* = TRUE*/)
@@ -1122,4 +1123,22 @@ BOOL CGridModel::SaveFile2Wrl(LPCTSTR lpFileName)
 		AfxMessageBox(_T("无法预料的错误!"));
 		return FALSE;
 	}
+}
+
+void GridModel::CGridModel::ReleaseGrid()
+{
+	for(VECTOR_ARRAY3D_ITERATOR it3d=m_gridCells.begin(); it3d!=m_gridCells.end(); ++it3d)
+	{
+		for(VECTOR_ARRAY2D_ITERATOR it2d=(*it3d).begin(); it2d!=(*it3d).end(); ++it2d)
+		{
+			(*it2d).clear();
+		}
+		(*it3d).clear();
+	}
+	m_gridCells.clear();
+}
+
+GridModel::tagGridModelCellNew::tagGridModelCellNew()
+:tagGridModelCell(),m_bIsGridRefinement(false),_x(0),_y(0),_z(0)
+{
 }
