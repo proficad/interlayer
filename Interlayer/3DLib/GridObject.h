@@ -5,7 +5,7 @@
 #include "Material.h"
 #include "Texture.h"
 #include "Vertex3D.h"
-#include <vector>
+#include "../GridModelCell.h"
 
 class CPhyPara			// 物性参数 
 {
@@ -88,11 +88,15 @@ public:
 	virtual bool BuildList();
 	void ComputeBoundLimits();
 
+	void ComputePoints();	
+
 	//std::vector<CVertex3D>* GetPointList() { return m_pointList; }
 	CArray<CPhyPara, CPhyPara&>	m_vecPhyPara;
 	//CArray<CVertex3D,CVertex3D&> m_pointList;
 
 	std::vector<CVertex3D> m_pointList;
+
+	VECTOR_ARRAY3D		 m_gridCells;
 
 	//CList<CVertex3D,CVertex3D&> m_pointList;
 
@@ -109,5 +113,6 @@ public:
 private:
 	void DrawWired();
 	void DrawShaded();
-	void ComputePoints();	
+	void DrawShaded2();
+
 };

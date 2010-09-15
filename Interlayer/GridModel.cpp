@@ -230,6 +230,7 @@ void CGridModel::Serialize(CArchive& ar)
 		default:
 			break;
 		}
+		FillGridCells();
 	}
 }
 
@@ -1138,7 +1139,37 @@ void GridModel::CGridModel::ReleaseGrid()
 	m_gridCells.clear();
 }
 
-GridModel::tagGridModelCellNew::tagGridModelCellNew()
-:tagGridModelCell(),m_bIsGridRefinement(false),_x(0),_y(0),_z(0)
+void GridModel::CGridModel::FillGridCells()
 {
+	for(int i=0; i<m_nGridX; i++)
+	{
+		VECTOR_ARRAY2D gridPlane;
+		for(int j=0; j<m_nGridY; j++)
+		{
+			VECTOR_ARRAY gridline;
+			for(int k=0; k<m_nGridZ; k++)
+			{
+				tagGridModelCellNew cell;
+				cell.m_cornerPoint[0] = GetCornerPoint(i, j, k, 0);
+				cell.m_cornerPoint[1] = GetCornerPoint(i, j, k, 1);
+				cell.m_cornerPoint[2] = GetCornerPoint(i, j, k, 2);
+				cell.m_cornerPoint[3] = GetCornerPoint(i, j, k, 3);
+
+				cell.m_cornerPoint[4] = GetCornerPoint(i, j, k, 4);
+				cell.m_cornerPoint[5] = GetCornerPoint(i, j, k, 5);
+				cell.m_cornerPoint[6] = GetCornerPoint(i, j, k, 6);
+				cell.m_cornerPoint[7] = GetCornerPoint(i, j, k, 7);
+				
+				cell.CalcNormals();
+				
+				//m_gridCells[i][j][k]._x = i;
+				//m_gridCells[i][j][k]._y = j;
+				//m_gridCells[i][j][k]._z = k;
+				gridline.push_back(cell);
+			}
+			gridPlane.push_back(gridline);
+		}
+		m_gridCells.push_back(gridPlane);
+	}
 }
+

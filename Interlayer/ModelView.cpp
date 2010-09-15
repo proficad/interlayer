@@ -563,13 +563,13 @@ void CModelView::OnImportModel()
 
 		switch( dlg.m_nFileType )
 		{
-		case 0:			// PBRS文件格式
+		case 2:			// PBRS文件格式
 		case 1:
 			if( !ReadPBRSModel(strSourcePathName, strTargePathName) )
 				return;
 			else
 				break;
-		case 2:
+		case 0:
 			if( !ReadEclipseModel(strSourcePathName, strTargePathName) )
 				return;
 			else

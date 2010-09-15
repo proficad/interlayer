@@ -1244,6 +1244,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CridModelCell.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\DlgAddCtrlPoint.h"
 					>
 				</File>
@@ -1428,6 +1432,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\GridModelCell.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GridModelDoc.h"
 					>
 				</File>
@@ -1536,11 +1544,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\RgnClipping.h"
+					RelativePath=".\GeoMap\RgnClipping.h"
 					>
 				</File>
 				<File
-					RelativePath=".\GeoMap\RgnClipping.h"
+					RelativePath=".\RgnClipping.h"
 					>
 				</File>
 				<File

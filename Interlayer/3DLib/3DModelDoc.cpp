@@ -252,30 +252,33 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 	pGridObj->I = gridModel.m_nGridX;
 	pGridObj->J = gridModel.m_nGridY;
 	pGridObj->K = gridModel.m_nGridZ;
-	//pGridObj->K = 2;
-	//pGridObj->m_pointList.SetSize(pGridObj->I*pGridObj->J*pGridObj->K*8);
-	if( pGridObj->m_pointList.capacity()<pGridObj->I*pGridObj->J*pGridObj->K*8 )
-		pGridObj->m_pointList.reserve(pGridObj->I*pGridObj->J*pGridObj->K*8);
-	int nn = 0;
-	for (int k = 0; k<gridModel.m_nGridZ; k ++)
-	//for (int k = 0; k<2; k ++)
-	{
-		for(int j=0;j<gridModel.m_nGridY;j++)
-		{
-			for (int i=0;i<gridModel.m_nGridX;i++)
-			{
-				for (int m= 0; m < 8; m++)
-				{
-					CVertex3D vert = gridModel.GetCornerPoint(i,j,k,m);
-					vert.z *= -1;
 
-					//pGridObj->m_pointList[nn] = vert;
-					pGridObj->m_pointList.push_back(vert);
-					nn++;
-				}
-			}
-		}
-	}
+	pGridObj->m_gridCells = gridModel.m_gridCells;
+
+	////pGridObj->K = 2;
+	////pGridObj->m_pointList.SetSize(pGridObj->I*pGridObj->J*pGridObj->K*8);
+	//if( pGridObj->m_pointList.capacity()<pGridObj->I*pGridObj->J*pGridObj->K*8 )
+	//	pGridObj->m_pointList.reserve(pGridObj->I*pGridObj->J*pGridObj->K*8);
+	//int nn = 0;
+	//for (int k = 0; k<gridModel.m_nGridZ; k ++)
+	////for (int k = 0; k<2; k ++)
+	//{
+	//	for(int j=0;j<gridModel.m_nGridY;j++)
+	//	{
+	//		for (int i=0;i<gridModel.m_nGridX;i++)
+	//		{
+	//			for (int m= 0; m < 8; m++)
+	//			{
+	//				CVertex3D vert = gridModel.GetCornerPoint(i,j,k,m);
+	//				vert.z *= -1;
+
+	//				//pGridObj->m_pointList[nn] = vert;
+	//				pGridObj->m_pointList.push_back(vert);
+	//				nn++;
+	//			}
+	//		}
+	//	}
+	//}
 
 	for (int i=0;i<gridModel.m_nGridX;i++)
 		pGridObj->m_bShowI.Add(FALSE);
@@ -318,6 +321,7 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 	//pGridObj->SetMaterial(White);
 	
 	pGridObj->ComputeBoundLimits();
+	pGridObj->ComputePoints();
 	m_pDisplayContext->AddGLObj(pGridObj);
 	
 	//delete pGridObj;
