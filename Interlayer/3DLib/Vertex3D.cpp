@@ -221,6 +221,14 @@ void CVertex3D::Translate(const CVertex3D& P1, const CVertex3D& P2)
 	Translate(V);
 }
 
+void CVertex3D::Translate( const CVector3DF& VDir)
+{
+	CVector3DF V = VDir;
+	x += V.GetX();
+	y += V.GetY();
+	z += V.GetZ();
+}
+
 void CVertex3D::Rotate(const COneAxis& Ax, double ang)
 {
 	COneAxis ax = Ax;

@@ -12,6 +12,7 @@
 #endif // _MSC_VER > 1000
 
 #include "Geometry.h"
+#include "../Vector3df.h"
 
 class CVertex3D;
 class CMatrix33;
@@ -22,6 +23,7 @@ class CVector3D : public CGeometry  // œÚ¡ø
 {
 public:
 	CVector3D();
+	CVector3D(CVector3DF);
 	CVector3D(double x, double y, double z);
 	CVector3D(const CVertex3D&);
 	CVector3D(const CVector3D&, const CVector3D&);

@@ -15,6 +15,7 @@
 #include "Color.h"
 #include "Array3d.h"
 #include "Vector3d.h"
+#include "../Vector3df.h"
 
 class COneAxis;
 class CAxisSystem;
@@ -159,6 +160,7 @@ public:
 	virtual void Translate(const COneAxis&, const double&);		// ×ª»»
 	virtual void Translate(double dx, double dy, double dz);
 	virtual void Translate(const CVector3D&);
+	virtual void Translate(const CVector3DF&);
 	virtual void Translate(const CVertex3D&, const CVertex3D&);
 	virtual void Rotate(const COneAxis&, double);
 	virtual void Scale(const CVertex3D&, double);

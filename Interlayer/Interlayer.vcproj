@@ -1002,6 +1002,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Vector3df.h"
+					>
+				</File>
+				<File
 					RelativePath=".\3DLib\Vertex3D.h"
 					>
 				</File>
@@ -1139,6 +1143,10 @@
 				</File>
 				<File
 					RelativePath=".\3DLib\Vector3d.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Vector3df.cpp"
 					>
 				</File>
 				<File

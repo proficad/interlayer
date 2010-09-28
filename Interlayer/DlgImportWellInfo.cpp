@@ -151,7 +151,7 @@ void CDlgImportWellInfo::OnBnClickedBtnFile()
 	switch(m_iFileType)
 	{
 	case 0: // 文本文件
-		szFilter = _T("逗号分隔符文件 (*.csv)|*.CSV|文本文件 (*.txt)|*.TXT|所有文件 (*.*)|*.*||");
+		szFilter = _T("文本文件 (*.txt)|*.TXT|逗号分隔符文件 (*.csv)|*.CSV|所有文件 (*.*)|*.*||");
 		GetDlgItem(IDC_COMBO_SHEET)->EnableWindow(FALSE);
 		GetDlgItem(IDC_CHECK_FIRST_LINE)->EnableWindow(TRUE);
 

@@ -50,6 +50,7 @@ BOOL CDlgImportModel::OnInitDialog()
 	m_ofn.hInstance = AfxGetInstanceHandle();
 	
 	m_wndFileType.AddString("ECLIPSE格式文件");
+	m_wndFileType.AddString("ECLIPSE格式文件");
 	m_wndFileType.AddString("PBRS格式文件");
 	m_wndFileType.AddString("VIP格式文件");
 

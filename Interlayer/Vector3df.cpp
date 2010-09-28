@@ -1,14 +1,14 @@
-// Vector3d.cpp: implementation of the CVector3d class.
+// Vector3d.cpp: implementation of the CVector3DF class.
 //
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "Vector3d.h"
-#include "Vector3d.h"
-#include "Matrix33.h"
-#include "OneAxis.h"
-#include "Plane.h"
-#include "MMath.h"
+#include "Vector3df.h"
+#include "3DLib/Vertex3D.h"
+#include "3DLib/Matrix33.h"
+#include "3DLib/OneAxis.h"
+#include "3DLib/Plane.h"
+#include "3DLib/MMath.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -21,215 +21,202 @@ static char THIS_FILE[] = __FILE__;
 //////////////////////////////////////////////////////////////////////
 
 //Implementation of class vector
-CVector3D::CVector3D()
+CVector3DF::CVector3DF()
 {
-	m_x = 0;
-	m_y = 0;
-	m_z = 0;
-	m_geomType = GEO_VECTOR;
+	x = 0;
+	y = 0;
+	z = 0;
 }
 
-CVector3D::CVector3D(double x, double y, double z)
+CVector3DF::CVector3DF(double x, double y, double z)
 {
-	m_x = x;
-	m_y = y;
-	m_z = z;
-	m_geomType = GEO_VECTOR;
+	this->x = x;
+	this->y = y;
+	this->z = z;
 }
 
-CVector3D::CVector3D(const CVertex3D& P)
+CVector3DF::CVector3DF(const CVertex3D& P)
 {
-	m_x = P.GetX();
-	m_y = P.GetY();
-	m_z = P.GetZ();
-	m_geomType = GEO_VECTOR;
+	this->x = P.GetX();
+	this->y = P.GetY();
+	this->z = P.GetZ();
 }
 
-CVector3D::CVector3D(const CVector3D& V1, const CVector3D& V2)
+CVector3DF::CVector3DF(const CVector3DF& V1, const CVector3DF& V2)
 {
-	CVector3D VC1, VC2, VC3;
+	CVector3DF VC1, VC2, VC3;
 	VC1 = V1;
 	VC2 = V2;
 	VC3 = VC2 - VC1;
-	m_x = VC3.GetX();
-	m_y = VC3.GetY();
-	m_z = VC3.GetZ();
-	m_geomType = GEO_VECTOR;
+	this->x = VC3.GetX();
+	this->y = VC3.GetY();
+	this->z = VC3.GetZ();
 }
 
-CVector3D::CVector3D(const CVertex3D& V1, const CVertex3D& V2)
+CVector3DF::CVector3DF(const CVertex3D& V1, const CVertex3D& V2)
 {
 	CVertex3D VC1, VC2;
 	VC1 = V1;
 	VC2 = V2;
-	m_x = VC2.GetX() - VC1.GetX();
-	m_y = VC2.GetY() - VC1.GetY();
-	m_z = VC2.GetZ() - VC1.GetZ();
-	m_geomType = GEO_VECTOR;
+	this->x = VC2.GetX() - VC1.GetX();
+	this->y = VC2.GetY() - VC1.GetY();
+	this->z = VC2.GetZ() - VC1.GetZ();
 }
 
-CVector3D::CVector3D(CVertex3D* pVertex1, CVertex3D* pVertex2)
+CVector3DF::CVector3DF(CVertex3D* pVertex1, CVertex3D* pVertex2)
 {
-	m_x = pVertex2->GetX() - pVertex1->GetX();
-	m_y = pVertex2->GetY() - pVertex1->GetY();
-	m_z = pVertex2->GetZ() - pVertex1->GetZ();
-	m_geomType = GEO_VECTOR;
+	this->x = pVertex2->GetX() - pVertex1->GetX();
+	this->y = pVertex2->GetY() - pVertex1->GetY();
+	this->z = pVertex2->GetZ() - pVertex1->GetZ();
 }
 
-CVector3D::CVector3D( CVector3DF P)
-{
-	m_x = P.x;
-	m_y = P.y;
-	m_z = P.z;
-}
-
-CVector3D::~CVector3D()
+CVector3DF::~CVector3DF()
 {
 }
 
-double CVector3D::Dot(const CVector3D& V1) const
+double CVector3DF::Dot(const CVector3DF& V1) const
 {
 	double result;
 	result = V1.GetX() * GetX() + V1.GetY() * GetY() + V1.GetZ() * GetZ();
 	return result;
 }
 
-double CVector3D::DotCross(const CVector3D& V1, const CVector3D& V2)
+double CVector3DF::DotCross(const CVector3DF& V1, const CVector3DF& V2)
 {
-	CVector3D A = (*this), B = V1, C = V2;
-	CVector3D cross = B.Crossed(C);
+	CVector3DF A = (*this), B = V1, C = V2;
+	CVector3DF cross = B.Crossed(C);
 	double Res = A.Dot(cross);
 	return Res;
 }
 
-void CVector3D::Cross(const CVector3D& V1)
+void CVector3DF::Cross(const CVector3DF& V1)
 {
 	SetX(GetY() * V1.GetZ() - GetZ() * V1.GetY());
 	SetY(GetZ() * V1.GetX() - GetX() * V1.GetZ());
 	SetZ(GetX() * V1.GetY() - GetY() * V1.GetX());
 }
 
-CVector3D CVector3D::Crossed(const CVector3D& V1) const
+CVector3DF CVector3DF::Crossed(const CVector3DF& V1) const
 {
-	CVector3D result;
+	CVector3DF result;
 	result.SetX(GetY() * V1.GetZ() - GetZ() * V1.GetY());
 	result.SetY(GetZ() * V1.GetX() - GetX() * V1.GetZ());
 	result.SetZ(GetX() * V1.GetY() - GetY() * V1.GetX());
 	return result;
 }
 
-void CVector3D::CrossCross(const CVector3D& V1, const CVector3D& V2)
+void CVector3DF::CrossCross(const CVector3DF& V1, const CVector3DF& V2)
 {
-	CVector3D A = (*this), B = V1, C = V2;
-	CVector3D Res = B*((C.Dot(A))) - C*(A.Dot(B));
+	CVector3DF A = (*this), B = V1, C = V2;
+	CVector3DF Res = B*((C.Dot(A))) - C*(A.Dot(B));
 	(*this) = Res;
 }
 
-CVector3D CVector3D::CrossCrossed(const CVector3D& V1, const CVector3D& V2)
+CVector3DF CVector3DF::CrossCrossed(const CVector3DF& V1, const CVector3DF& V2)
 {
-	CVector3D V = (*this);
+	CVector3DF V = (*this);
 	V.CrossCross(V1, V2);
 	return V;
 }
 
-void CVector3D::Reverse()
+void CVector3DF::Reverse()
 {
 	this->SetX(-GetX());
 	this->SetY(-GetY());
 	this->SetZ(-GetZ());
 }
 
-CVector3D CVector3D::Reversed()
+CVector3DF CVector3DF::Reversed()
 {
-	CVector3D result;
+	CVector3DF result;
 	result.Reverse();
 	return result;
 }
 
-CVector3D CVector3D::operator +(const CVector3D& V1)
+CVector3DF CVector3DF::operator +(const CVector3DF& V1)
 {
-	CVector3D result;
+	CVector3DF result;
 	result.SetX(GetX() + V1.GetX());
 	result.SetY(GetY() + V1.GetY());
 	result.SetZ(GetZ() + V1.GetZ());
 	return result;
 }
 
-CVector3D CVector3D::operator=(const CVector3D& V1)
+CVector3DF CVector3DF::operator=(const CVector3DF& V1)
 {
 	this->SetParam(V1);
 	return (*this);
-// 	CVector3D v;
+// 	CVector3DF v;
 // 	v.SetParam(V1);
 // 	return v;
 }
 
-void CVector3D::operator +=(const CVector3D& V1)
+void CVector3DF::operator +=(const CVector3DF& V1)
 {
 	SetX(GetX() + V1.GetX());
 	SetY(GetY() + V1.GetY());
 	SetZ(GetZ() + V1.GetZ());
 }
 
-void CVector3D::operator +=(CVector3D* pVector)
+void CVector3DF::operator +=(CVector3DF* pVector)
 {
-	m_x += pVector->GetX();
-	m_y += pVector->GetY();
-	m_z += pVector->GetZ();
+	this->x += pVector->GetX();
+	this->y += pVector->GetY();
+	this->z += pVector->GetZ();
 }
 
 
-CVector3D CVector3D::operator -(const CVector3D& V1)
+CVector3DF CVector3DF::operator -(const CVector3DF& V1)
 {
-	CVector3D result;
+	CVector3DF result;
 	result.SetX(GetX() - V1.GetX());
 	result.SetY(GetY() - V1.GetY());
 	result.SetZ(GetZ() - V1.GetZ());
 	return result;
 }
 
-void CVector3D::operator -=(const CVector3D& V1)
+void CVector3DF::operator -=(const CVector3DF& V1)
 {
 	SetX(GetX() - V1.GetX());
 	SetY(GetY() - V1.GetY());
 	SetZ(GetZ() - V1.GetZ());
 }
 
-CVector3D CVector3D::operator *(const double& scalar)
+CVector3DF CVector3DF::operator *(const double& scalar)
 {
-	CVector3D result;
+	CVector3DF result;
 	result.SetX(GetX() * scalar);
 	result.SetY(GetY() * scalar);
 	result.SetZ(GetZ() * scalar);
 	return result;
 }
 
-CVector3D CVector3D::operator *(const CMatrix33& M)
+CVector3DF CVector3DF::operator *(const CMatrix33& M)
 {
-	CVector3D V;
+	CVector3DF V;
 	V.SetX(M(0, 0) * GetX() + M(0, 1) * GetY() + M(0, 2) * GetZ());
 	V.SetY(M(1, 0) * GetX() + M(1, 1) * GetY() + M(1, 2) * GetZ());
 	V.SetZ(M(2, 0) * GetX() + M(2, 1) * GetY() + M(2, 2) * GetZ());
 	return V;
 }
 
-void CVector3D::operator *=(const double& scalar)
+void CVector3DF::operator *=(const double& scalar)
 {
 	SetX(GetX() * scalar);
 	SetY(GetY() * scalar);
 	SetZ(GetZ() * scalar);
 }
 
-void CVector3D::operator *=(const CMatrix33& M)
+void CVector3DF::operator *=(const CMatrix33& M)
 {
 	SetX(M(0, 0) * GetX() + M(0, 1) * GetY() + M(0, 2) * GetZ());
 	SetY(M(1, 0) * GetX() + M(1, 1) * GetY() + M(1, 2) * GetZ());
 	SetZ(M(2, 0) * GetX() + M(2, 1) * GetY() + M(2, 2) * GetZ());
 }
 
-CVector3D CVector3D::operator /(const double& scalar)
+CVector3DF CVector3DF::operator /(const double& scalar)
 {
-	CVector3D result;
+	CVector3DF result;
 	if (!IsNull())
 	{
 		result.SetX(GetX() / scalar);
@@ -245,7 +232,7 @@ CVector3D CVector3D::operator /(const double& scalar)
 	return result;
 }
 
-void CVector3D::operator /=(const double& scalar)
+void CVector3DF::operator /=(const double& scalar)
 {
 	if (!IsNull())
 	{
@@ -261,34 +248,34 @@ void CVector3D::operator /=(const double& scalar)
 	}
 }
 
-CVector3D CVector3D::operator ^(const CVector3D& V1)
+CVector3DF CVector3DF::operator ^(const CVector3DF& V1)
 {
 	return this->Crossed(V1);
 }
 
-void CVector3D::operator ^=(const CVector3D& V1)
+void CVector3DF::operator ^=(const CVector3DF& V1)
 {
 	this->Cross(V1);
 }
 
-bool CVector3D::operator ==(const CVector3D& V) const
+bool CVector3DF::operator ==(const CVector3DF& V) const
 {
-	return(m_x == V.GetX() && m_y == V.GetY() && m_z == V.GetZ());
+	return(this->x == V.GetX() && this->y == V.GetY() && this->z == V.GetZ());
 }
 
-bool CVector3D::operator !=(const CVector3D& V) const
+bool CVector3DF::operator !=(const CVector3DF& V) const
 {
-	return(m_x != V.GetX() || m_y != V.GetY() || m_z != V.GetZ());
+	return(this->x != V.GetX() || this->y != V.GetY() || this->z != V.GetZ());
 }
 
 
-CVector3D::operator CVertex3D()
+CVector3DF::operator CVertex3D()
 {
-	CVertex3D P(m_x, m_y, m_z);
+	CVertex3D P(this->x, this->y, this->z);
 	return P;
 }
 
-double CVector3D::Magnitude() const
+double CVector3DF::Magnitude() const
 {
 	if (!IsNull())
 	{
@@ -302,7 +289,7 @@ double CVector3D::Magnitude() const
 	}
 }
 
-double CVector3D::SqrMagnitude() const
+double CVector3DF::SqrMagnitude() const
 {
 	if (!IsNull())
 	{
@@ -314,12 +301,12 @@ double CVector3D::SqrMagnitude() const
 		return 0;
 }
 
-double CVector3D::CrossMagnitude(const CVector3D& V)
+double CVector3DF::CrossMagnitude(const CVector3DF& V)
 {
 	if (!IsNull() && !V.IsNull())
 	{
-		CVector3D V1 = (*this);
-		CVector3D V2 = V;
+		CVector3DF V1 = (*this);
+		CVector3DF V2 = V;
 		V1.Cross(V2);
 		double result;
 		result = sqrt(pow(V1.GetX(), 2) + pow(V1.GetY(), 2) + pow(V1.GetZ(), 2));
@@ -331,12 +318,12 @@ double CVector3D::CrossMagnitude(const CVector3D& V)
 	}
 }
 
-double CVector3D::CrossSqrMagnitude(const CVector3D& V)
+double CVector3DF::CrossSqrMagnitude(const CVector3DF& V)
 {
 	if (!IsNull() && !V.IsNull())
 	{
-		CVector3D V1 = (*this);
-		CVector3D V2 = V;
+		CVector3DF V1 = (*this);
+		CVector3DF V2 = V;
 		V1.Cross(V2);
 		double result;
 		result = pow(V1.GetX(), 2) + pow(V1.GetY(), 2) + pow(V1.GetZ(), 2);
@@ -348,14 +335,14 @@ double CVector3D::CrossSqrMagnitude(const CVector3D& V)
 	}
 }
 
-double CVector3D::Modulus()
+double CVector3DF::Modulus()
 {
-	return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+	return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
-CVector3D CVector3D::Unit()
+CVector3DF CVector3DF::Unit()
 {
-	CVector3D result;
+	CVector3DF result;
 	double x, y, z;
 	if (!IsNull())
 	{
@@ -371,17 +358,17 @@ CVector3D CVector3D::Unit()
 		return *this;
 }
 
-CVertex3D CVector3D::Point()
+CVertex3D CVector3DF::Point()
 {
 	CVertex3D aPnt;
 	aPnt.SetParam(GetX(), GetY(), GetZ());
 	return aPnt;
 }
 
-double CVector3D::Angle(const CVector3D& Other) const
+double CVector3DF::Angle(const CVector3DF& Other) const
 {
 	double theta, a, b, dot;
-	CVector3D tempV = Other;
+	CVector3DF tempV = Other;
 	if (!this->IsNull() && !tempV.IsNull())
 	{
 		dot = this->Dot(Other);
@@ -394,12 +381,12 @@ double CVector3D::Angle(const CVector3D& Other) const
 		return 0;
 }
 
-double CVector3D::Angle(const CVector3D& Other, const CVector3D& Dir) const
+double CVector3DF::Angle(const CVector3DF& Other, const CVector3DF& Dir) const
 {
 	double theta;
-	CVector3D tempV = Other;
-	CVector3D D = Dir;
-	CVector3D N = this->Crossed(tempV);
+	CVector3DF tempV = Other;
+	CVector3DF D = Dir;
+	CVector3DF N = this->Crossed(tempV);
 	if (!this->IsNull() && !tempV.IsNull())
 	{
 		theta = Angle(Other);
@@ -420,31 +407,31 @@ double CVector3D::Angle(const CVector3D& Other, const CVector3D& Dir) const
 		return 0;
 }
 
-bool CVector3D::IsNull() const
+bool CVector3DF::IsNull() const
 {
-	if (m_x == 0 && m_y == 0 && m_z == 0)
+	if (this->x == 0 && this->y == 0 && this->z == 0)
 		return true;
 	else
 		return false;
 }
 
-bool CVector3D::IsParallel(const CVector3D& V) const
+bool CVector3DF::IsParallel(const CVector3DF& V) const
 {
 	/*double ang=0;
-	CVector3D tempV = V;
+	CVector3DF tempV = V;
 	ang = this->Angle(tempV);
 	if(ang==0 || ang==2*PI)
 		return true;
 	else
 		return false;*/
-	CVector3D N = this->Crossed(V);
+	CVector3DF N = this->Crossed(V);
 	return (N.IsNull());
 }
 
-bool CVector3D::IsOpposite(const CVector3D& V) const
+bool CVector3DF::IsOpposite(const CVector3DF& V) const
 {
 	double ang = 0;
-	CVector3D tempV = V;
+	CVector3DF tempV = V;
 	ang = this->Angle(tempV);
 	if (fabs(ang - PI) <= 0.0001)
 		return true;
@@ -452,10 +439,10 @@ bool CVector3D::IsOpposite(const CVector3D& V) const
 		return false;
 }
 
-bool CVector3D::IsNormal(const CVector3D& V) const
+bool CVector3DF::IsNormal(const CVector3DF& V) const
 {
 	double ang = 0;
-	CVector3D tempV = V;
+	CVector3DF tempV = V;
 	ang = this->Angle(tempV);
 	if (fabs(ang - PI / 2) <= 0.0001)
 		return true;
@@ -463,7 +450,7 @@ bool CVector3D::IsNormal(const CVector3D& V) const
 		return false;
 }
 
-void CVector3D::Normalize()
+void CVector3DF::Normalize()
 {
 	double x, y, z;
 	if (!IsNull())
@@ -479,113 +466,113 @@ void CVector3D::Normalize()
 		return;
 }
 
-void CVector3D::Translate(const COneAxis& Ax, const double& amt)
+void CVector3DF::Translate(const COneAxis& Ax, const double& amt)
 {
-	CGeometry::Translate(Ax, amt);
+	//CGeometry::Translate(Ax, amt);
 }
 
-void CVector3D::Translate(double dx, double dy, double dz)
+void CVector3DF::Translate(double dx, double dy, double dz)
 {
 	CVertex3D P = (*this);
 	P.Translate(dx, dy, dz);
-	CVector3D V = P;
+	CVector3DF V = P;
 	(*this) = V;
 }
 
-void CVector3D::Translate(const CVector3D& dV)
+void CVector3DF::Translate(const CVector3DF& dV)
 {
 	CVertex3D P = (*this);
 	P.Translate(dV);
-	CVector3D V = P;
+	CVector3DF V = P;
 	(*this) = V;
 }
 
-void CVector3D::Translate(const CVertex3D& P1, const CVertex3D& P2)
+void CVector3DF::Translate(const CVertex3D& P1, const CVertex3D& P2)
 {
 	CVertex3D P = (*this);
 	P.Translate(P1, P2);
-	CVector3D V = P;
+	CVector3DF V = P;
 	(*this) = V;
 }
 
-void CVector3D::Rotate(const COneAxis& Ax, double ang)
+void CVector3DF::Rotate(const COneAxis& Ax, double ang)
 {
 	COneAxis ax = Ax;
-	CVector3D P1 = ax.GetOrigin();
-	CVector3D V = ax.GetDirection();
+	CVector3DF P1 = ax.GetOrigin();
+	CVector3DF V = ax.GetDirection();
 	V.Normalize();
-	CMatrix33 M; CVector3D PV(*this);
+	CMatrix33 M; CVector3DF PV(*this);
 	M.SetRotation(V, ang);
-	CVector3D RV = M*(PV - P1);
+	CVector3DF RV = M*(PV - P1);
 	RV = RV + P1;
 	*this = RV;
 }
 
-void CVector3D::Scale(const CVertex3D& P1, double fact)
+void CVector3DF::Scale(const CVertex3D& P1, double fact)
 {
 	CVertex3D P = (*this);
 	P.Scale(P1, fact);
-	CVector3D V = P;
+	CVector3DF V = P;
 	(*this) = V;
 }
 
-void CVector3D::Mirror(const CVertex3D& P1)
+void CVector3DF::Mirror(const CVertex3D& P1)
 {
 	CVertex3D P = (*this);
 	P.Mirror(P1);
-	CVector3D V = P;
+	CVector3DF V = P;
 	(*this) = V;
 }
 
-void CVector3D::Mirror(const COneAxis& Ax)
+void CVector3DF::Mirror(const COneAxis& Ax)
 {
 	CVertex3D P = (*this);
 	P.Mirror(Ax);
-	CVector3D V = P;
+	CVector3DF V = P;
 	(*this) = V;
 }
 
-void CVector3D::Mirror(const CPlane& Pln)
+void CVector3DF::Mirror(const CPlane& Pln)
 {
 	CVertex3D P = (*this);
 	P.Mirror(Pln);
-	CVector3D V = P;
+	CVector3DF V = P;
 	(*this) = V;
 }
 
-CVector3D CVector3D::Origin()
+CVector3DF CVector3DF::Origin()
 {
-	return CVector3D(0, 0, 0);
+	return CVector3DF(0, 0, 0);
 }
 
 
 //********************************************
 // Inner
 //********************************************
-void CVector3D::Inner(CVector3D& v)
+void CVector3DF::Inner(CVector3DF& v)
 {
-	double x = m_y* v.GetZ() - m_z* v.GetY();
-	double y = m_z* v.GetX() - m_x* v.GetZ();
-	double z = m_x* v.GetY() - m_y* v.GetX();
+	double x = this->y* v.GetZ() - this->z* v.GetY();
+	double y = this->z* v.GetX() - this->x* v.GetZ();
+	double z = this->x* v.GetY() - this->y* v.GetX();
 	SetParam(x, y, z);
 }
 
 //********************************************
 // Inner
 //********************************************
-CVector3D CVector3D::Inner(CVector3D* u, CVector3D* v)
+CVector3DF CVector3DF::Inner(CVector3DF* u, CVector3DF* v)
 {
 	// w = u ^ v
-	CVector3D w;
+	CVector3DF w;
 	w.SetParam(u->GetY() * v->GetZ() - u->GetZ() * v->GetY(), u->GetZ() * v->GetX() - u->GetX() * v->GetZ(), u->GetX() * v->GetY() - u->GetY() * v->GetX());
 
 	return w;
 }
 
-CVector3D CVector3D::Inner(const CVector3D& u, const CVector3D& v)
+CVector3DF CVector3DF::Inner(const CVector3DF& u, const CVector3DF& v)
 {
 	// w = u ^ v
-	CVector3D w;
+	CVector3DF w;
 	w.SetParam(u.GetY() * v.GetZ() - u.GetZ() * v.GetY(), u.GetZ() * v.GetX() - u.GetX() * v.GetZ(), u.GetX() * v.GetY() - u.GetY() * v.GetX());
 
 	return w;
@@ -602,14 +589,14 @@ CVector3D CVector3D::Inner(const CVector3D& u, const CVector3D& v)
 //********************************************
 // Normalize
 //********************************************
-void CVector3D::NormalizeL2(void)
+void CVector3DF::NormalizeL2(void)
 {
 	double norm = GetNormL2();
 	if (norm != 0.0f)
 	{
-		m_x = (m_x / norm);
-		m_y = (m_y / norm);
-		m_z = (m_z / norm);
+		this->x = (this->x / norm);
+		this->y = (this->y / norm);
+		this->z = (this->z / norm);
 	}
 	//TRACE("norm : %g\n",GetNormL2());
 }
@@ -617,14 +604,14 @@ void CVector3D::NormalizeL2(void)
 //********************************************
 // Normalize
 //********************************************
-void CVector3D::NormalizeL2(double v)
+void CVector3DF::NormalizeL2(double v)
 {
 	double norm = GetNormL2();
 	if (norm != 0.0f)
 	{
-		m_x *= (v / norm);
-		m_y *= (v / norm);
-		m_z *= (v / norm);
+		this->x *= (v / norm);
+		this->y *= (v / norm);
+		this->z *= (v / norm);
 	}
 	//TRACE("norm : %g (wanted : %g)\n",GetNormL2(),value);
 }
@@ -632,38 +619,49 @@ void CVector3D::NormalizeL2(double v)
 //********************************************
 // GetNormSquare
 //********************************************
-double CVector3D::GetNormL2Square(void) const
+double CVector3DF::GetNormL2Square(void) const
 {
-	return (m_x * m_x + m_y * m_y + m_z * m_z);
+	return (this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
 //********************************************
 // GetNorm
 //********************************************
-double CVector3D::GetNormL2(void) const
+double CVector3DF::GetNormL2(void) const
 {
-	return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+	return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
 //********************************************
 // Collinear
 //********************************************
-int CVector3D::Collinear(CVector3D* pVector)
+int CVector3DF::Collinear(CVector3DF* pVector)
 {
-	double x = pVector->GetX() / m_x;
-	double y = pVector->GetY() / m_y;
-	double z = pVector->GetZ() / m_z;
+	double x = pVector->GetX() / this->x;
+	double y = pVector->GetY() / this->y;
+	double z = pVector->GetZ() / this->z;
 	return ((x == y) && (y == z));
 }
 
 //********************************************
 // Collinear
 //********************************************
-int CVector3D::Collinear(CVector3D& v)
+int CVector3DF::Collinear(CVector3DF& v)
 {
-	double x = v.GetX() / m_x;
-	double y = v.GetY() / m_y;
-	double z = v.GetZ() / m_z;
+	double x = v.GetX() / this->x;
+	double y = v.GetY() / this->y;
+	double z = v.GetZ() / this->z;
 	return ((x == y) && (y == z));
 }
 
+istream& operator>>(istream& input, CVector3DF& p)
+{
+	input >> p.x >> p.y >> p.z;
+	return input;
+}
+
+ostream& operator<<(ostream& output, CVector3DF& p)
+{
+	output << p.x << p.y << p.z;
+	return output;
+}

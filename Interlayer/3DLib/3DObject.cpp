@@ -78,7 +78,7 @@ C3DObject::C3DObject(CReader* r)
 	SetMaterial(Jade);
 
 	ComputePoints(r);
-	ComputeBoundLimits();
+	//ComputeBoundLimits();
 }
 
 
@@ -113,7 +113,7 @@ CGLObject* C3DObject::Copy()
 	std::copy(m_indexs.begin(), m_indexs.end(), O->m_indexs.begin());
 	//------------------------------------------------------------------------
 
-	O->ComputeBoundLimits();
+	//O->ComputeBoundLimits();
 
 	// Vertices
 	int Nbvertex = NbVertex();
@@ -1921,7 +1921,19 @@ void C3DObject::Serialize(CArchive& ar)
 
 		for (int i=0; i<size; i++)
 			ar << m_indexs[i];
+		CFile file("F:\\work\\Interlayer\\test", CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+		CArchive art(&file, CArchive::store);
+		size = m_pointList.size();
+		art << size;
 
+		for (int i= 0; i < size; i++)
+			art << m_pointList[i];
+
+		size = m_indexs.size();
+		art << size;
+		for (int i=0; i<size; i++)
+			art << m_indexs[i];
+		art.Close();
 	}
 	else
 	{
@@ -1947,7 +1959,7 @@ void C3DObject::Serialize(CArchive& ar)
 			m_indexs.push_back(index);
 		}
 
-		ComputeBoundLimits();
+		//ComputeBoundLimits();
 
 
 		//------------------------------------------------------------------------
