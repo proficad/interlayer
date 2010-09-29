@@ -13,7 +13,6 @@
 
 #include "Geometry.h"
 #include "Vector3d.h"
-#include "Vector3d.h"
 
 class CMatrix33
 {
