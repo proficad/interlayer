@@ -85,10 +85,11 @@ public:
 	virtual void Display(const GLDisplayMode& = GLWIREFRAME, bool bForce = false);
 	virtual void DisplaySelected(const GLSelectedMode& = GLSELECTED);
 	virtual void Hilight(const GLSelectedMode&);
-	virtual bool BuildList();
+	virtual bool BuildList(); 
 	void ComputeBoundLimits();
 
-	void ComputePoints();	
+	void ComputePoints( const CBoundingBox& box );	
+	//void ComputrColors( const CBoundingBox& box );
 
 	//std::vector<CVertex3D>* GetPointList() { return m_pointList; }
 	CArray<CPhyPara, CPhyPara&>	m_vecPhyPara;
@@ -98,6 +99,7 @@ public:
 
 	VECTOR_ARRAY3D		 m_gridCells;
 
+	int								m_layerIndex;
 	//CList<CVertex3D,CVertex3D&> m_pointList;
 
 	// ±£´æ
@@ -113,6 +115,6 @@ public:
 private:
 	void DrawWired();
 	void DrawShaded();
-	void DrawShaded2();
-
+private:
+	bool	m_bColorComputed;
 };

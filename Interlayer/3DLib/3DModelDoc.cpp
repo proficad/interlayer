@@ -321,7 +321,7 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 	//pGridObj->SetMaterial(White);
 	
 	pGridObj->ComputeBoundLimits();
-	pGridObj->ComputePoints();
+	//pGridObj->ComputePoints();
 	m_pDisplayContext->AddGLObj(pGridObj);
 	
 	//delete pGridObj;

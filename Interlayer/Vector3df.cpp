@@ -28,7 +28,7 @@ CVector3DF::CVector3DF()
 	z = 0;
 }
 
-CVector3DF::CVector3DF(double x, double y, double z)
+CVector3DF::CVector3DF(float x, float y, float z)
 {
 	this->x = x;
 	this->y = y;
@@ -74,18 +74,18 @@ CVector3DF::~CVector3DF()
 {
 }
 
-double CVector3DF::Dot(const CVector3DF& V1) const
+float CVector3DF::Dot(const CVector3DF& V1) const
 {
-	double result;
+	float result;
 	result = V1.GetX() * GetX() + V1.GetY() * GetY() + V1.GetZ() * GetZ();
 	return result;
 }
 
-double CVector3DF::DotCross(const CVector3DF& V1, const CVector3DF& V2)
+float CVector3DF::DotCross(const CVector3DF& V1, const CVector3DF& V2)
 {
 	CVector3DF A = (*this), B = V1, C = V2;
 	CVector3DF cross = B.Crossed(C);
-	double Res = A.Dot(cross);
+	float Res = A.Dot(cross);
 	return Res;
 }
 
@@ -182,7 +182,7 @@ void CVector3DF::operator -=(const CVector3DF& V1)
 	SetZ(GetZ() - V1.GetZ());
 }
 
-CVector3DF CVector3DF::operator *(const double& scalar)
+CVector3DF CVector3DF::operator *(const float& scalar)
 {
 	CVector3DF result;
 	result.SetX(GetX() * scalar);
@@ -200,7 +200,7 @@ CVector3DF CVector3DF::operator *(const CMatrix33& M)
 	return V;
 }
 
-void CVector3DF::operator *=(const double& scalar)
+void CVector3DF::operator *=(const float& scalar)
 {
 	SetX(GetX() * scalar);
 	SetY(GetY() * scalar);
@@ -214,7 +214,7 @@ void CVector3DF::operator *=(const CMatrix33& M)
 	SetZ(M(2, 0) * GetX() + M(2, 1) * GetY() + M(2, 2) * GetZ());
 }
 
-CVector3DF CVector3DF::operator /(const double& scalar)
+CVector3DF CVector3DF::operator /(const float& scalar)
 {
 	CVector3DF result;
 	if (!IsNull())
@@ -232,7 +232,7 @@ CVector3DF CVector3DF::operator /(const double& scalar)
 	return result;
 }
 
-void CVector3DF::operator /=(const double& scalar)
+void CVector3DF::operator /=(const float& scalar)
 {
 	if (!IsNull())
 	{
@@ -275,11 +275,11 @@ CVector3DF::operator CVertex3D()
 	return P;
 }
 
-double CVector3DF::Magnitude() const
+float CVector3DF::Magnitude() const
 {
 	if (!IsNull())
 	{
-		double result;
+		float result;
 		result = sqrt(pow(GetX(), 2) + pow(GetY(), 2) + pow(GetZ(), 2));
 		return result;
 	}
@@ -289,11 +289,11 @@ double CVector3DF::Magnitude() const
 	}
 }
 
-double CVector3DF::SqrMagnitude() const
+float CVector3DF::SqrMagnitude() const
 {
 	if (!IsNull())
 	{
-		double result;
+		float result;
 		result = pow(GetX(), 2) + pow(GetY(), 2) + pow(GetZ(), 2);
 		return result;
 	}
@@ -301,14 +301,14 @@ double CVector3DF::SqrMagnitude() const
 		return 0;
 }
 
-double CVector3DF::CrossMagnitude(const CVector3DF& V)
+float CVector3DF::CrossMagnitude(const CVector3DF& V)
 {
 	if (!IsNull() && !V.IsNull())
 	{
 		CVector3DF V1 = (*this);
 		CVector3DF V2 = V;
 		V1.Cross(V2);
-		double result;
+		float result;
 		result = sqrt(pow(V1.GetX(), 2) + pow(V1.GetY(), 2) + pow(V1.GetZ(), 2));
 		return result;
 	}
@@ -318,14 +318,14 @@ double CVector3DF::CrossMagnitude(const CVector3DF& V)
 	}
 }
 
-double CVector3DF::CrossSqrMagnitude(const CVector3DF& V)
+float CVector3DF::CrossSqrMagnitude(const CVector3DF& V)
 {
 	if (!IsNull() && !V.IsNull())
 	{
 		CVector3DF V1 = (*this);
 		CVector3DF V2 = V;
 		V1.Cross(V2);
-		double result;
+		float result;
 		result = pow(V1.GetX(), 2) + pow(V1.GetY(), 2) + pow(V1.GetZ(), 2);
 		return result;
 	}
@@ -335,7 +335,7 @@ double CVector3DF::CrossSqrMagnitude(const CVector3DF& V)
 	}
 }
 
-double CVector3DF::Modulus()
+float CVector3DF::Modulus()
 {
 	return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
@@ -343,7 +343,7 @@ double CVector3DF::Modulus()
 CVector3DF CVector3DF::Unit()
 {
 	CVector3DF result;
-	double x, y, z;
+	float x, y, z;
 	if (!IsNull())
 	{
 		x = GetX() / Magnitude();
@@ -365,9 +365,9 @@ CVertex3D CVector3DF::Point()
 	return aPnt;
 }
 
-double CVector3DF::Angle(const CVector3DF& Other) const
+float CVector3DF::Angle(const CVector3DF& Other) const
 {
-	double theta, a, b, dot;
+	float theta, a, b, dot;
 	CVector3DF tempV = Other;
 	if (!this->IsNull() && !tempV.IsNull())
 	{
@@ -381,9 +381,9 @@ double CVector3DF::Angle(const CVector3DF& Other) const
 		return 0;
 }
 
-double CVector3DF::Angle(const CVector3DF& Other, const CVector3DF& Dir) const
+float CVector3DF::Angle(const CVector3DF& Other, const CVector3DF& Dir) const
 {
-	double theta;
+	float theta;
 	CVector3DF tempV = Other;
 	CVector3DF D = Dir;
 	CVector3DF N = this->Crossed(tempV);
@@ -417,7 +417,7 @@ bool CVector3DF::IsNull() const
 
 bool CVector3DF::IsParallel(const CVector3DF& V) const
 {
-	/*double ang=0;
+	/*float ang=0;
 	CVector3DF tempV = V;
 	ang = this->Angle(tempV);
 	if(ang==0 || ang==2*PI)
@@ -430,7 +430,7 @@ bool CVector3DF::IsParallel(const CVector3DF& V) const
 
 bool CVector3DF::IsOpposite(const CVector3DF& V) const
 {
-	double ang = 0;
+	float ang = 0;
 	CVector3DF tempV = V;
 	ang = this->Angle(tempV);
 	if (fabs(ang - PI) <= 0.0001)
@@ -441,7 +441,7 @@ bool CVector3DF::IsOpposite(const CVector3DF& V) const
 
 bool CVector3DF::IsNormal(const CVector3DF& V) const
 {
-	double ang = 0;
+	float ang = 0;
 	CVector3DF tempV = V;
 	ang = this->Angle(tempV);
 	if (fabs(ang - PI / 2) <= 0.0001)
@@ -452,7 +452,7 @@ bool CVector3DF::IsNormal(const CVector3DF& V) const
 
 void CVector3DF::Normalize()
 {
-	double x, y, z;
+	float x, y, z;
 	if (!IsNull())
 	{
 		x = GetX() / Magnitude();
@@ -466,12 +466,12 @@ void CVector3DF::Normalize()
 		return;
 }
 
-void CVector3DF::Translate(const COneAxis& Ax, const double& amt)
+void CVector3DF::Translate(const COneAxis& Ax, const float& amt)
 {
 	//CGeometry::Translate(Ax, amt);
 }
 
-void CVector3DF::Translate(double dx, double dy, double dz)
+void CVector3DF::Translate(float dx, float dy, float dz)
 {
 	CVertex3D P = (*this);
 	P.Translate(dx, dy, dz);
@@ -495,7 +495,7 @@ void CVector3DF::Translate(const CVertex3D& P1, const CVertex3D& P2)
 	(*this) = V;
 }
 
-void CVector3DF::Rotate(const COneAxis& Ax, double ang)
+void CVector3DF::Rotate(const COneAxis& Ax, float ang)
 {
 	COneAxis ax = Ax;
 	CVector3DF P1 = ax.GetOrigin();
@@ -508,7 +508,7 @@ void CVector3DF::Rotate(const COneAxis& Ax, double ang)
 	*this = RV;
 }
 
-void CVector3DF::Scale(const CVertex3D& P1, double fact)
+void CVector3DF::Scale(const CVertex3D& P1, float fact)
 {
 	CVertex3D P = (*this);
 	P.Scale(P1, fact);
@@ -551,9 +551,9 @@ CVector3DF CVector3DF::Origin()
 //********************************************
 void CVector3DF::Inner(CVector3DF& v)
 {
-	double x = this->y* v.GetZ() - this->z* v.GetY();
-	double y = this->z* v.GetX() - this->x* v.GetZ();
-	double z = this->x* v.GetY() - this->y* v.GetX();
+	float x = this->y* v.GetZ() - this->z* v.GetY();
+	float y = this->z* v.GetX() - this->x* v.GetZ();
+	float z = this->x* v.GetY() - this->y* v.GetX();
 	SetParam(x, y, z);
 }
 
@@ -591,7 +591,7 @@ CVector3DF CVector3DF::Inner(const CVector3DF& u, const CVector3DF& v)
 //********************************************
 void CVector3DF::NormalizeL2(void)
 {
-	double norm = GetNormL2();
+	float norm = GetNormL2();
 	if (norm != 0.0f)
 	{
 		this->x = (this->x / norm);
@@ -604,9 +604,9 @@ void CVector3DF::NormalizeL2(void)
 //********************************************
 // Normalize
 //********************************************
-void CVector3DF::NormalizeL2(double v)
+void CVector3DF::NormalizeL2(float v)
 {
-	double norm = GetNormL2();
+	float norm = GetNormL2();
 	if (norm != 0.0f)
 	{
 		this->x *= (v / norm);
@@ -619,7 +619,7 @@ void CVector3DF::NormalizeL2(double v)
 //********************************************
 // GetNormSquare
 //********************************************
-double CVector3DF::GetNormL2Square(void) const
+float CVector3DF::GetNormL2Square(void) const
 {
 	return (this->x * this->x + this->y * this->y + this->z * this->z);
 }
@@ -627,7 +627,7 @@ double CVector3DF::GetNormL2Square(void) const
 //********************************************
 // GetNorm
 //********************************************
-double CVector3DF::GetNormL2(void) const
+float CVector3DF::GetNormL2(void) const
 {
 	return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
@@ -637,9 +637,9 @@ double CVector3DF::GetNormL2(void) const
 //********************************************
 int CVector3DF::Collinear(CVector3DF* pVector)
 {
-	double x = pVector->GetX() / this->x;
-	double y = pVector->GetY() / this->y;
-	double z = pVector->GetZ() / this->z;
+	float x = pVector->GetX() / this->x;
+	float y = pVector->GetY() / this->y;
+	float z = pVector->GetZ() / this->z;
 	return ((x == y) && (y == z));
 }
 
@@ -648,9 +648,9 @@ int CVector3DF::Collinear(CVector3DF* pVector)
 //********************************************
 int CVector3DF::Collinear(CVector3DF& v)
 {
-	double x = v.GetX() / this->x;
-	double y = v.GetY() / this->y;
-	double z = v.GetZ() / this->z;
+	float x = v.GetX() / this->x;
+	float y = v.GetY() / this->y;
+	float z = v.GetZ() / this->z;
 	return ((x == y) && (y == z));
 }
 

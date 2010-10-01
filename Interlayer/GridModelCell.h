@@ -84,15 +84,23 @@ public:
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-struct tagGridModelCellNew : public tagGridModelCell
+struct tagGridModelCellNew
 {
 public:
 	tagGridModelCellNew();
+	tagGridModelCellNew(const tagGridModelCellNew& varSrc)
+	{
+		for (int i = 0; i < 8; i++)
+			m_cornerPoint[i] = varSrc.m_cornerPoint[i];
+	}
 	void CalcNormals();
-	CVector3D m_faceNormals[6];
+	CVector3DF m_cornerPoint[8];
+	CVector3DF m_faceNormals[6];
 	//网格加密信息
 	bool	m_bIsGridRefinement;
+	COLORREF m_itsColor[8];
 	int	_x,_y,_z;
+	vector<tagGridModelCellNew>	m_subCells;
 };
 
 typedef vector< tagGridModelCellNew > VECTOR_ARRAY;

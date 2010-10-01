@@ -4,6 +4,29 @@
 #include "float.h"
 #include "../MainFrm.h"
 
+GLint faceindexes[24] =
+{
+	3,2,1,0,								//面0
+	5,6,7,4,								//面1
+	1,5,4,0,								//面2
+	2,6,5,1,								//面3
+	3,7,6,2,								//面4
+	4,7,3,0								//面5
+};
+//GLint faceindexes[24] =
+//{
+//	0,1,2,3,								//面0
+//	4,7,6,5,								//面1
+//	0,4,5,1,								//面2
+//	1,5,6,2,								//面3
+//	2,6,7,3,								//面4
+//	0,3,7,4								//面5
+//};
+
+GLfloat postions[72];
+GLfloat normals[72];
+GLubyte colors[72];
+
 const CPhyPara& CPhyPara::operator=(const CPhyPara& src)
 {
 	m_strName = src.m_strName;
@@ -29,6 +52,8 @@ CGridObject::CGridObject(void)
 	m_ColorBinding = COLOR_PER_VERTEX;
 
 	m_glObjType = GLSURFACE;
+	m_Color.Set(32,255,0,255);
+	m_bColorComputed = false;
 
 	GUID guid;
 	if (S_OK == ::CoCreateGuid(&guid))
@@ -307,16 +332,20 @@ void CGridObject::Display(const GLDisplayMode& dMode, bool bForce)
 	}
 
 	// Search for a new list
-	if (::glIsList(m_ListOpenGL) == GL_TRUE)
+	for(m_layerIndex=0; m_layerIndex<K; m_layerIndex++)
 	{
-		::glCallList(m_ListOpenGL);
-		return;
+		if (::glIsList(m_ListOpenGL+m_layerIndex) == GL_TRUE)
+		{
+			::glCallList(m_ListOpenGL+m_layerIndex);
+			continue;
+		}
+		else
+		{
+			TRACE("unable to draw list %d\n", m_ListOpenGL);
+			return;
+		}
 	}
-	else
-	{
-		TRACE("unable to draw list %d\n", m_ListOpenGL);
-		return;
-	}
+
 }
 
 bool CGridObject::BuildList()
@@ -325,22 +354,25 @@ bool CGridObject::BuildList()
 		return false;
 
 	// Erase last list
-	::glDeleteLists(m_ListOpenGL, 1);
+	::glDeleteLists(m_ListOpenGL, K);
 
 	// Search for a new list
-	m_ListOpenGL = ::glGenLists(1);
+	m_ListOpenGL = ::glGenLists(K);
 	if (m_ListOpenGL == 0)
 	{
 		TRACE("CGLObject::BuildList : unable to build DrawList\n");
 		return false;
 	}
 
-	// Start list
-	::glNewList(m_ListOpenGL, GL_COMPILE_AND_EXECUTE);
+	for(m_layerIndex=0; m_layerIndex<K; m_layerIndex++)
+	{
+		::glNewList(m_ListOpenGL+m_layerIndex, GL_COMPILE_AND_EXECUTE);
+		
 
-	DefineDisplay(); // 定义显示
+		DefineDisplay(); // 定义显示
 
-	::glEndList();
+		::glEndList();
+	}
 
 	// List is done now
 	m_ListDone = 1;
@@ -421,6 +453,11 @@ void CGridObject::DrawWired()
 		glColor3ub(GetColor()->GetR(), GetColor()->GetG(), GetColor()->GetB());
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnable(GL_CULL_FACE);
+	glCullFace( GL_BACK ); 
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 
 	CBoundingBox box = m_pDisplayContext->GetBoundingBox();
 	double xRange = box.XMax()-box.XMin();
@@ -444,6 +481,11 @@ void CGridObject::DrawWired()
 			pParam = &m_vecPhyPara[i];
 			break;
 		}
+	}
+
+	if( !pParam && m_displayMode != GLSHADED )
+	{
+		glEnableClientState(GL_COLOR_ARRAY);
 	}
 
 	// 判断是否为全显
@@ -493,1064 +535,96 @@ void CGridObject::DrawWired()
 
 	if( bFlag )
 	{	
-		CVertex3D curP[8];
-
-		int pCnt = 0;
-		int nCell = 0;
-
-		//int size = m_pointList.GetSize();
-		int size = m_pointList.size();
-		for (int i=0; i<size; i++)
-		{	
-			curP[pCnt % 8] = m_pointList[i];
-			pCnt++;
-			if( pCnt % 8 == 0 )
+		for(int i=0; i<I; i++)
+		{
+			for(int j=0; j<J; j++)
 			{
-				if( pParam && nCell < pParam->m_dValue.size() && m_displayMode != GLSHADED )
-				{
-					COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[nCell]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
-					glColor4ub (GetRValue(clr), GetGValue(clr), GetBValue(clr), 255);
-				}
-
-				nCell++;
-
-				COLORREF clr[8];
-				if( !pParam && m_displayMode != GLSHADED )
-				{
-					clr[0] = GetContext()->GetColorTable()->GetColor( (curP[0].GetZ()-box.ZMin())/zRange);
-					clr[1] = GetContext()->GetColorTable()->GetColor( (curP[1].GetZ()-box.ZMin())/zRange);
-					clr[2] = GetContext()->GetColorTable()->GetColor( (curP[2].GetZ()-box.ZMin())/zRange);
-					clr[3] = GetContext()->GetColorTable()->GetColor( (curP[3].GetZ()-box.ZMin())/zRange);
-					clr[4] = GetContext()->GetColorTable()->GetColor( (curP[4].GetZ()-box.ZMin())/zRange);
-					clr[5] = GetContext()->GetColorTable()->GetColor( (curP[5].GetZ()-box.ZMin())/zRange);
-					clr[6] = GetContext()->GetColorTable()->GetColor( (curP[6].GetZ()-box.ZMin())/zRange);
-					clr[7] = GetContext()->GetColorTable()->GetColor( (curP[7].GetZ()-box.ZMin())/zRange);
-				}
-
-				CVector3D nrml;
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[1]).CrossProduct(CVector3D(curP[1], curP[2])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());				
-
-				if(  !pParam && m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[4], curP[7]).CrossProduct(CVector3D(curP[7], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[4]).CrossProduct(CVector3D(curP[4], curP[5])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[1], curP[5]).CrossProduct(CVector3D(curP[5], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[2], curP[6]).CrossProduct(CVector3D(curP[6], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[3]).CrossProduct(CVector3D(curP[3], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-			}
-		}
-	}
-	else
-	{
-		CVertex3D curP[8];
-
-		int pCnt = 0;
-		int nCell = 0;
-
-		int i=0;
-		int j=0;
-		int k=0;
-
-		//int size = m_pointList.GetSize();
-		int size = m_pointList.size();
-
-		for (int m=0; m<size; m++)
-		{	
-			curP[pCnt % 8] = m_pointList[m];
-			pCnt++;
-			if( pCnt % 8 == 0 )
-			{
-				nCell++;
-				if( !m_bShowI[i] 
-				&& !m_bShowJ[j] 
-				&& !m_bShowK[k] )
-				{
-					i++;
-					if(i==I)
+				int k =m_layerIndex;
+				//for(int k=0; k<K; k++)
+				//{
+					for(int index=0; index<24; index++)
 					{
-						i = 0;
-						j++;
-						if( j==J)
+						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
+						postions[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+						postions[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+
+						postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+						postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+						postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+
+						normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
+						normals[index*3+1] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+						normals[index*3+2] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+						if( !pParam && m_displayMode != GLSHADED )
 						{
-							j = 0;
-							k++;
+							colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+1] = GetGValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
 						}
 					}
-					continue;
-				}
 
-				i++;
-				if(i==I)
-				{
-					i = 0;
-					j++;
-					if( j==J)
-					{
-						j = 0;
-						k++;
-					}
-				}
+					glVertexPointer(3,GL_FLOAT,0,postions);
+					glNormalPointer(GL_FLOAT,0,normals);
 
-				if( pParam && nCell < pParam->m_dValue.size() && m_displayMode != GLSHADED )
-				{
-					COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[nCell]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
-					glColor4ub (GetRValue(clr), GetGValue(clr), GetBValue(clr), 255);
-				}
-
-				COLORREF clr[8];
-				if(!pParam &&  m_displayMode != GLSHADED )
-				{
-					clr[0] = GetContext()->GetColorTable()->GetColor( (curP[0].GetZ()-box.ZMin())/zRange);
-					clr[1] = GetContext()->GetColorTable()->GetColor( (curP[1].GetZ()-box.ZMin())/zRange);
-					clr[2] = GetContext()->GetColorTable()->GetColor( (curP[2].GetZ()-box.ZMin())/zRange);
-					clr[3] = GetContext()->GetColorTable()->GetColor( (curP[3].GetZ()-box.ZMin())/zRange);
-					clr[4] = GetContext()->GetColorTable()->GetColor( (curP[4].GetZ()-box.ZMin())/zRange);
-					clr[5] = GetContext()->GetColorTable()->GetColor( (curP[5].GetZ()-box.ZMin())/zRange);
-					clr[6] = GetContext()->GetColorTable()->GetColor( (curP[6].GetZ()-box.ZMin())/zRange);
-					clr[7] = GetContext()->GetColorTable()->GetColor( (curP[7].GetZ()-box.ZMin())/zRange);
-				}
-
-				CVector3D nrml;
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[1]).CrossProduct(CVector3D(curP[1], curP[2])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());				
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[4], curP[7]).CrossProduct(CVector3D(curP[7], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[4]).CrossProduct(CVector3D(curP[4], curP[5])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[1], curP[5]).CrossProduct(CVector3D(curP[5], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[2], curP[6]).CrossProduct(CVector3D(curP[6], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[3]).CrossProduct(CVector3D(curP[3], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam &&  m_displayMode != GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
+					glDrawArrays(GL_QUADS,0,24);
+				//}
 			}
 		}
+
 	}
-}
-
-void CGridObject::DrawShaded2()
-{
-	if (m_displayMode == GLWIREFRAME)
-		glColor3ub(155, 155, 155);
-		//glColor4d(0.135000, 0.222500, 0.157500, 0.950000);
-
-	glEnable(GL_CULL_FACE);
-	glCullFace( GL_BACK ); 
-	
-	CBoundingBox box = m_pDisplayContext->GetBoundingBox();
-	double xRange = box.XMax()-box.XMin();
-	double yRange = box.YMax()-box.YMin();
-	double zRange = box.ZMax()-box.ZMin();
-
-	double range = (xRange>yRange?xRange:yRange);
-
-	double xMin, xMax, yMin, yMax;
-	xMin = (box.XMin()+box.XMax())/2.0-range/2;
-	xMax = (box.XMin()+box.XMax())/2.0+range/2;
-	yMin = (box.YMin()+box.YMax())/2.0-range/2;
-	yMax = (box.YMin()+box.YMax())/2.0+range/2;
-	
-	CPhyPara *pParam = NULL;
-	int nSize = m_vecPhyPara.GetSize();
-	for (int i=0; i<nSize; i++)
-	{
-		if( m_vecPhyPara[i].m_bShow )
-		{
-			pParam = &m_vecPhyPara[i];
-			break;
-		}
-	}
-
-	// 判断是否为全显
-	bool bFlag = false;
-	int n = 0;
-	int nI = 0, nJ = 0, nK = 0;
-
-	for (int i=0; i<I; i++)
-	{
-		if( m_bShowI[i])
-			n++;
-	}
-
-	nI = n;
-	if( n==I)
-		bFlag = true;
 	else
 	{
-		n = 0;
-		for (int i=0; i<J; i++)
+		for(int i=0; i<I; i++)
 		{
-			if( m_bShowJ[i])
-				n++;
-		}
-		nJ = n;
-		if( n==J)
-			bFlag = true;
-		else
-		{
-			n = 0;
-			for (int i=0; i<K; i++)
+			for(int j=0; j<J; j++)
 			{
-				if( m_bShowK[i])
-					n++;
-			}
-			nK = n;
-			if( n==K)
-				bFlag = true;
-		}
-	}
+				int k = m_layerIndex;
+				//for(int k=0; k<K; k++)
+				//{
+					if( !m_bShowI[i] 
+					&& !m_bShowJ[j] 
+					&& !m_bShowK[k] )
+						continue;
 
-	if( !bFlag 
-		&& nI == 0 
-		&& nJ == 0 
-		&& nK == 0 )
-		bFlag = true;
-	//------------------------------------------------------------------------
-
-	if( bFlag )
-	{	
-		CVertex3D curP[8];
-
-		int pCnt = 0;
-		int nCell = 0;
-
-		//int size = m_pointList.GetSize();
-		int size = m_pointList.size();
-		for (int i=0; i<size; i++)
-		{	
-			curP[pCnt % 8] = m_pointList[i];
-			pCnt++;
-			if( pCnt % 8 == 0 )
-			{
-				if( pParam && nCell < pParam->m_dValue.size() && m_displayMode == GLSHADED )
-				{
-					COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[nCell]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
-					glColor4ub (GetRValue(clr), GetGValue(clr), GetBValue(clr), 255);
-				}
-
-				nCell++;
-
-				COLORREF clr[8];
-				if( !pParam  && m_displayMode == GLSHADED)
-				{
-					clr[0] = GetContext()->GetColorTable()->GetColor( (curP[0].GetZ()-box.ZMin())/zRange);
-					clr[1] = GetContext()->GetColorTable()->GetColor( (curP[1].GetZ()-box.ZMin())/zRange);
-					clr[2] = GetContext()->GetColorTable()->GetColor( (curP[2].GetZ()-box.ZMin())/zRange);
-					clr[3] = GetContext()->GetColorTable()->GetColor( (curP[3].GetZ()-box.ZMin())/zRange);
-					clr[4] = GetContext()->GetColorTable()->GetColor( (curP[4].GetZ()-box.ZMin())/zRange);
-					clr[5] = GetContext()->GetColorTable()->GetColor( (curP[5].GetZ()-box.ZMin())/zRange);
-					clr[6] = GetContext()->GetColorTable()->GetColor( (curP[6].GetZ()-box.ZMin())/zRange);
-					clr[7] = GetContext()->GetColorTable()->GetColor( (curP[7].GetZ()-box.ZMin())/zRange);
-				}
-
-				CVector3D nrml;
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[1]).CrossProduct(CVector3D(curP[1], curP[2])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());				
-
-				if( !pParam  && m_displayMode == GLSHADED)
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam  && m_displayMode == GLSHADED)
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam  && m_displayMode == GLSHADED)
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam  && m_displayMode == GLSHADED)
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[4], curP[7]).CrossProduct(CVector3D(curP[7], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[4]).CrossProduct(CVector3D(curP[4], curP[5])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[1], curP[5]).CrossProduct(CVector3D(curP[5], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[2], curP[6]).CrossProduct(CVector3D(curP[6], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[3]).CrossProduct(CVector3D(curP[3], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-			}
-		}
-	}
-	else
-	{	
-		CVertex3D curP[8];
-		
-		int pCnt = 0;
-		int nCell = 0;
-
-		int i=0;
-		int j=0;
-		int k=0;
-
-		//int size = m_pointList.GetSize();
-		int size = m_pointList.size();
-		for (int m=0; m<size; m++)
-		{	
-			curP[pCnt % 8] = m_pointList[m];
-			pCnt++;
-			if( pCnt % 8 == 0 )
-			{
-				nCell++;
-				if( !m_bShowI[i] 
-				&& !m_bShowJ[j] 
-				&& !m_bShowK[k] )
-				{
-					i++;
-					if(i==I)
+					for(int index=0; index<24; index++)
 					{
-						i = 0;
-						j++;
-						if( j==J)
+						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
+						postions[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+						postions[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+
+						postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+						postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+						postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+
+						normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
+						normals[index*3+1] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+						normals[index*3+2] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+						if( !pParam && m_displayMode != GLSHADED )
 						{
-							j = 0;
-							k++;
+							colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+1] = GetGValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
 						}
 					}
-					continue;
-				}
-
-				i++;
-				if(i==I)
-				{
-					i = 0;
-					j++;
-					if( j==J)
-					{
-						j = 0;
-						k++;
-					}
-				}
-
-				if( pParam && nCell <= pParam->m_dValue.size() && m_displayMode == GLSHADED )
-				{
-					COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[nCell]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
-					glColor4ub (GetRValue(clr), GetGValue(clr), GetBValue(clr), 255);
-				}
-
-				COLORREF clr[8];
-				if( !pParam && m_displayMode == GLSHADED )
-				{
-					clr[0] = GetContext()->GetColorTable()->GetColor( (curP[0].GetZ()-box.ZMin())/zRange);
-					clr[1] = GetContext()->GetColorTable()->GetColor( (curP[1].GetZ()-box.ZMin())/zRange);
-					clr[2] = GetContext()->GetColorTable()->GetColor( (curP[2].GetZ()-box.ZMin())/zRange);
-					clr[3] = GetContext()->GetColorTable()->GetColor( (curP[3].GetZ()-box.ZMin())/zRange);
-					clr[4] = GetContext()->GetColorTable()->GetColor( (curP[4].GetZ()-box.ZMin())/zRange);
-					clr[5] = GetContext()->GetColorTable()->GetColor( (curP[5].GetZ()-box.ZMin())/zRange);
-					clr[6] = GetContext()->GetColorTable()->GetColor( (curP[6].GetZ()-box.ZMin())/zRange);
-					clr[7] = GetContext()->GetColorTable()->GetColor( (curP[7].GetZ()-box.ZMin())/zRange);
-				}
-
-				CVector3D nrml;
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[1]).CrossProduct(CVector3D(curP[1], curP[2])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());				
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[4], curP[7]).CrossProduct(CVector3D(curP[7], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[4]).CrossProduct(CVector3D(curP[4], curP[5])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[1], curP[5]).CrossProduct(CVector3D(curP[5], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[2], curP[6]).CrossProduct(CVector3D(curP[6], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[3]).CrossProduct(CVector3D(curP[3], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
+					glVertexPointer(3,GL_FLOAT,0,postions);
+					glNormalPointer(GL_FLOAT,0,normals);
+					//if( !pParam && m_displayMode != GLSHADED )
+					//{
+					//	glEnableClientState(GL_COLOR_ARRAY);
+					//	glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
+					//}
+					glDrawArrays(GL_QUADS,0,24);
+				//}
 			}
 		}
 	}
-
+	glEnd();
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	if( !pParam && m_displayMode != GLSHADED )
+	{
+		glDisableClientState(GL_COLOR_ARRAY);
+	}
 	glDisable(GL_CULL_FACE);
 }
 
@@ -1559,9 +633,12 @@ void CGridObject::DrawShaded()
 	if (m_displayMode == GLWIREFRAME)
 		glColor3ub(155, 155, 155);
 	//glColor4d(0.135000, 0.222500, 0.157500, 0.950000);
-
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_CULL_FACE);
 	glCullFace( GL_BACK ); 
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 
 	CBoundingBox box = m_pDisplayContext->GetBoundingBox();
 	double xRange = box.XMax()-box.XMin();
@@ -1576,6 +653,8 @@ void CGridObject::DrawShaded()
 	yMin = (box.YMin()+box.YMax())/2.0-range/2;
 	yMax = (box.YMin()+box.YMax())/2.0+range/2;
 
+	ComputePoints(box);
+
 	CPhyPara *pParam = NULL;
 	int nSize = m_vecPhyPara.GetSize();
 	for (int i=0; i<nSize; i++)
@@ -1585,6 +664,11 @@ void CGridObject::DrawShaded()
 			pParam = &m_vecPhyPara[i];
 			break;
 		}
+	}
+
+	if( !pParam && m_displayMode == GLSHADED )
+	{
+		glEnableClientState(GL_COLOR_ARRAY);
 	}
 
 	// 判断是否为全显
@@ -1635,25 +719,60 @@ void CGridObject::DrawShaded()
 
 	if( bFlag )
 	{	
-		GLint faceindexes[24] =
-		{
-			0,1,2,3,								//面0
-			4,7,6,5,								//面1
-			0,4,5,1,								//面2
-			1,5,6,2,								//面3
-			2,6,7,3,								//面4
-			0,3,7,4								//面5
-		};
-		
 		for(int i=0; i<I; i++)
 		{
 			for(int j=0; j<J; j++)
 			{
-				for(int k=0; k<K; k++)
+				//for(int k=0; k<K; k++)
+				//{
+				int k = m_layerIndex;
+				for(int index=0; index<24; index++)
 				{
-					GLfloat postions[72];
-					GLfloat normals[72];
-					GLubyte colors[72];
+					postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
+					postions[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+					postions[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+
+					postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+					postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+					postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+
+					normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
+					normals[index*3+1] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+					normals[index*3+2] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+					if( !pParam && m_displayMode == GLSHADED )
+					{
+						colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+						colors[index*3+1] = GetGValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+						colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+					}
+				}
+
+				glVertexPointer(3,GL_FLOAT,0,postions);
+				glNormalPointer(GL_FLOAT,0,normals);
+				if( !pParam && m_displayMode == GLSHADED )
+				{
+					glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
+				}
+
+				glDrawArrays(GL_QUADS,0,24);
+			//}
+			}
+		}
+
+	}
+	else
+	{	
+		for(int i=0; i<I; i++)
+		{
+			for(int j=0; j<J; j++)
+			{
+				int k = m_layerIndex;
+				//for(int k=0; k<K; k++)
+				//{
+					if( !m_bShowI[i] 
+					&& !m_bShowJ[j] 
+					&& !m_bShowK[k] )
+						continue;
 
 					for(int index=0; index<24; index++)
 					{
@@ -1661,304 +780,48 @@ void CGridObject::DrawShaded()
 						postions[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
 						postions[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
+						postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+						postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+						postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+
 						normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
 						normals[index*3+1] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
 						normals[index*3+2] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 						if( !pParam && m_displayMode == GLSHADED )
 						{
-							colors[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].m_itsColor.GetR();
-							colors[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].m_itsColor.GetG();
-							colors[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].m_itsColor.GetB();
+							colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+1] = GetGValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
 						}
 					}
-					glEnableClientState(GL_VERTEX_ARRAY);
-					glEnableClientState(GL_NORMAL_ARRAY);
+
 					glVertexPointer(3,GL_FLOAT,0,postions);
 					glNormalPointer(GL_FLOAT,0,normals);
 					if( !pParam && m_displayMode == GLSHADED )
 					{
-						glEnableClientState(GL_COLOR_ARRAY);
 						glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
 					}
-					glBegin(GL_QUADS);
-					for(int index =0; index<24; index++)
-					{
-						glArrayElement(index);
-					}
-					glEnd();
-				}
+					glDrawArrays(GL_QUADS,0,24);
+				//}
 			}
 		}
-
+		
 	}
-	else
-	{	
-		CVertex3D curP[8];
-
-		int pCnt = 0;
-		int nCell = 0;
-
-		int i=0;
-		int j=0;
-		int k=0;
-
-		//int size = m_pointList.GetSize();
-		int size = m_pointList.size();
-		for (int m=0; m<size; m++)
-		{	
-			curP[pCnt % 8] = m_pointList[m];
-			pCnt++;
-			if( pCnt % 8 == 0 )
-			{
-				nCell++;
-				if( !m_bShowI[i] 
-				&& !m_bShowJ[j] 
-				&& !m_bShowK[k] )
-				{
-					i++;
-					if(i==I)
-					{
-						i = 0;
-						j++;
-						if( j==J)
-						{
-							j = 0;
-							k++;
-						}
-					}
-					continue;
-				}
-
-				i++;
-				if(i==I)
-				{
-					i = 0;
-					j++;
-					if( j==J)
-					{
-						j = 0;
-						k++;
-					}
-				}
-
-				if( pParam && nCell <= pParam->m_dValue.size() && m_displayMode == GLSHADED )
-				{
-					COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[nCell]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
-					glColor4ub (GetRValue(clr), GetGValue(clr), GetBValue(clr), 255);
-				}
-
-				COLORREF clr[8];
-				if( !pParam && m_displayMode == GLSHADED )
-				{
-					clr[0] = GetContext()->GetColorTable()->GetColor( (curP[0].GetZ()-box.ZMin())/zRange);
-					clr[1] = GetContext()->GetColorTable()->GetColor( (curP[1].GetZ()-box.ZMin())/zRange);
-					clr[2] = GetContext()->GetColorTable()->GetColor( (curP[2].GetZ()-box.ZMin())/zRange);
-					clr[3] = GetContext()->GetColorTable()->GetColor( (curP[3].GetZ()-box.ZMin())/zRange);
-					clr[4] = GetContext()->GetColorTable()->GetColor( (curP[4].GetZ()-box.ZMin())/zRange);
-					clr[5] = GetContext()->GetColorTable()->GetColor( (curP[5].GetZ()-box.ZMin())/zRange);
-					clr[6] = GetContext()->GetColorTable()->GetColor( (curP[6].GetZ()-box.ZMin())/zRange);
-					clr[7] = GetContext()->GetColorTable()->GetColor( (curP[7].GetZ()-box.ZMin())/zRange);
-				}
-
-				CVector3D nrml;
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[1]).CrossProduct(CVector3D(curP[1], curP[2])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());				
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[4], curP[7]).CrossProduct(CVector3D(curP[7], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[4]).CrossProduct(CVector3D(curP[4], curP[5])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[1], curP[5]).CrossProduct(CVector3D(curP[5], curP[6])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[1]), GetGValue(clr[1]), GetBValue(clr[1]));
-				glVertex3d(
-					(curP[1].GetX()-xMin)/range*2.0-1.0, 
-					(curP[1].GetY()-yMin)/range*2.0-1.0,
-					(curP[1].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[5]), GetGValue(clr[5]), GetBValue(clr[5]));
-				glVertex3d(
-					(curP[5].GetX()-xMin)/range*2.0-1.0, 
-					(curP[5].GetY()-yMin)/range*2.0-1.0,
-					(curP[5].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[2], curP[6]).CrossProduct(CVector3D(curP[6], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[2]), GetGValue(clr[2]), GetBValue(clr[2]));
-				glVertex3d(
-					(curP[2].GetX()-xMin)/range*2.0-1.0, 
-					(curP[2].GetY()-yMin)/range*2.0-1.0,
-					(curP[2].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[6]), GetGValue(clr[6]), GetBValue(clr[6]));
-				glVertex3d(
-					(curP[6].GetX()-xMin)/range*2.0-1.0, 
-					(curP[6].GetY()-yMin)/range*2.0-1.0,
-					(curP[6].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-
-				glBegin(GL_QUADS);
-				nrml = CVector3D(curP[0], curP[3]).CrossProduct(CVector3D(curP[3], curP[7])); 
-				nrml.Normalize();
-				glNormal3f(nrml.GetX(), nrml.GetY(), nrml.GetZ());
-
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[0]), GetGValue(clr[0]), GetBValue(clr[0]));
-				glVertex3d(
-					(curP[0].GetX()-xMin)/range*2.0-1.0, 
-					(curP[0].GetY()-yMin)/range*2.0-1.0,
-					(curP[0].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[3]), GetGValue(clr[3]), GetBValue(clr[3]));
-				glVertex3d(
-					(curP[3].GetX()-xMin)/range*2.0-1.0, 
-					(curP[3].GetY()-yMin)/range*2.0-1.0,
-					(curP[3].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[7]), GetGValue(clr[7]), GetBValue(clr[7]));
-				glVertex3d(
-					(curP[7].GetX()-xMin)/range*2.0-1.0, 
-					(curP[7].GetY()-yMin)/range*2.0-1.0,
-					(curP[7].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				if( !pParam && m_displayMode == GLSHADED )
-					glColor3ub(GetRValue(clr[4]), GetGValue(clr[4]), GetBValue(clr[4]));
-				glVertex3d(
-					(curP[4].GetX()-xMin)/range*2.0-1.0, 
-					(curP[4].GetY()-yMin)/range*2.0-1.0,
-					(curP[4].GetZ()-box.ZMin())/zRange*2.0-1.0);
-				glEnd();
-			}
-		}
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	if( !pParam && m_displayMode == GLSHADED )
+	{
+		glDisableClientState(GL_COLOR_ARRAY);
 	}
-
 	glDisable(GL_CULL_FACE);
 }
 
-void CGridObject::ComputePoints()
+void CGridObject::ComputePoints( const CBoundingBox& box )
 {
-	CBoundingBox box = m_itsBox;
+	if(m_bColorComputed)
+		return;
+	m_bColorComputed = true;
+	//CBoundingBox box = m_itsBox;
 	double xRange = box.XMax()-box.XMin();
 	double yRange = box.YMax()-box.YMin();
 	double zRange = box.ZMax()-box.ZMin();
@@ -1970,7 +833,6 @@ void CGridObject::ComputePoints()
 	xMax = (box.XMin()+box.XMax())/2.0+range/2;
 	yMin = (box.YMin()+box.YMax())/2.0-range/2;
 	yMax = (box.YMin()+box.YMax())/2.0+range/2;
-
 	for(int i=0; i<I; i++)
 	{
 		for(int j=0; j<J; j++)
@@ -1979,13 +841,58 @@ void CGridObject::ComputePoints()
 			{
 				for(int index=0; index<8; index++)
 				{
-					m_gridCells[i][j][k].m_cornerPoint[index].SetX( (m_gridCells[i][j][k].m_cornerPoint[index].GetX()-xMin)/range*2.0-1.0);
-					m_gridCells[i][j][k].m_cornerPoint[index].SetY( (m_gridCells[i][j][k].m_cornerPoint[index].GetY()-yMin)/range*2.0-1.0);
-					m_gridCells[i][j][k].m_cornerPoint[index].SetZ( (m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange*2.0-1.0);
-					
-					m_gridCells[i][j][k].m_cornerPoint[index].m_itsColor = GetContext()->GetColorTable()->GetColor( (m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
+					m_gridCells[i][j][k].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
 				}
 			}
 		}
 	}
+	//for(int i=0; i<I; i++)
+	//{
+	//	for(int j=0; j<J; j++)
+	//	{
+	//		for(int k=0; k<K; k++)
+	//		{
+	//			for(int index=0; index<8; index++)
+	//			{
+	//				m_gridCells[i][j][k].m_cornerPoint[index].SetX( (m_gridCells[i][j][k].m_cornerPoint[index].GetX()-xMin)/range*2.0-1.0);
+	//				m_gridCells[i][j][k].m_cornerPoint[index].SetY( (m_gridCells[i][j][k].m_cornerPoint[index].GetY()-yMin)/range*2.0-1.0);
+	//				m_gridCells[i][j][k].m_cornerPoint[index].SetZ( (m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange*2.0-1.0);
+	//				
+	//				//m_gridCells[i][j][k].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
+	//			}
+	//		}
+	//	}
+	//}
 }
+
+//void CGridObject::ComputrColors( const CBoundingBox& box )
+//{
+//	if(m_bColorComputed)
+//		return;
+//	m_bColorComputed=true;
+//	double xRange = box.XMax()-box.XMin();
+//	double yRange = box.YMax()-box.YMin();
+//	double zRange = box.ZMax()-box.ZMin();
+//
+//	double range = (xRange>yRange?xRange:yRange);
+//
+//	double xMin, xMax, yMin, yMax;
+//	xMin = (box.XMin()+box.XMax())/2.0-range/2;
+//	xMax = (box.XMin()+box.XMax())/2.0+range/2;
+//	yMin = (box.YMin()+box.YMax())/2.0-range/2;
+//	yMax = (box.YMin()+box.YMax())/2.0+range/2;
+//
+//	for(int i=0; i<I; i++)
+//	{
+//		for(int j=0; j<J; j++)
+//		{
+//			for(int k=0; k<K; k++)
+//			{
+//				for(int index=0; index<8; index++)
+//				{
+//					m_gridCells[i][j][k].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
+//				}
+//			}
+//		}
+//	}
+//}

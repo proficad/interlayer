@@ -18,44 +18,44 @@ class CVector3DF
 	friend std::ostream& operator<<(std::ostream&, CVector3DF&);
 public:
 	CVector3DF();
-	CVector3DF(double x, double y, double z);
+	CVector3DF(float x, float y, float z);
 	CVector3DF(const CVertex3D&);
 	CVector3DF(const CVector3DF&, const CVector3DF&);
 	CVector3DF(const CVertex3D&, const CVertex3D&);
 	CVector3DF(CVertex3D* pVertex1, CVertex3D* pVertex2);
 	~CVector3DF();
 
-	void SetX(double x)
+	void SetX(float x)
 	{
 		this->x = x;
 	} //Set The X Component Value
-	void SetY(double y)
+	void SetY(float y)
 	{
 		this->y = y;
 	} //Set The Y Component Value
-	void SetZ(double z)
+	void SetZ(float z)
 	{
 		this->z = z;
 	} //Set The Z Component Value
-	void SetParam(double x, double y, double z)
+	void SetParam(float x, float y, float z)
 	{
 		this->x = x; this->y = y;this->z = z;
 	} //Set The X Y and Z Values
 	void SetParam(const CVector3DF& vec)
 	{
-		this->x = vec.GetX(); this->y = vec.GetY();this->z = vec.GetZ();
+		x = vec.GetX(); y = vec.GetY();z = vec.GetZ();
 	} //Set The X Y and Z Values
-	double GetX() const
+	float GetX() const
 	{
-		return this->x;
+		return x;
 	}// Returns The X Component
-	double GetY() const
+	float GetY() const
 	{
-		return this->y;
+		return y;
 	}// Returns The Y Component
-	double GetZ() const
+	float GetZ() const
 	{
-		return this->z;
+		return z;
 	}// Returns The Z Component
 
 	// cross product
@@ -70,8 +70,8 @@ public:
 		return x*vec.x + y*vec.y + z*vec.z;
 	}	
 
-	double Dot(const CVector3DF& V1) const;//Calculate Dot Product 点积
-	double DotCross(const CVector3DF& V1, const CVector3DF& V2);//Calculate Scalar Triple Product 纯量矢量三重积
+	float Dot(const CVector3DF& V1) const;//Calculate Dot Product 点积
+	float DotCross(const CVector3DF& V1, const CVector3DF& V2);//Calculate Scalar Triple Product 纯量矢量三重积
 	void Cross(const CVector3DF& V1);//Calculate Cross Product Of' this' And Other 叉积
 	CVector3DF Crossed(const CVector3DF& V1) const;//Return The Cross Product Vector 矢积
 	void CrossCross(const CVector3DF& V1, const CVector3DF& V2);//Calculate The Vector Triple Product 矢量三重积
@@ -81,9 +81,9 @@ public:
 
 	CVector3DF operator +(const CVector3DF& V1);//Return Addition Of 'this' And Other 相加	
 	CVector3DF operator -(const CVector3DF& V1);//Return Subtraction Of 'this' And Other
-	CVector3DF operator *(const double& scalar);//Scalar Multiple With Other Vector
+	CVector3DF operator *(const float& scalar);//Scalar Multiple With Other Vector
 	CVector3DF operator *(const CMatrix33& M);//Multiply With Matrix
-	CVector3DF operator /(const double& scalar);//Scalar Division
+	CVector3DF operator /(const float& scalar);//Scalar Division
 
 	CVector3DF operator ^(const CVector3DF& V1);//Return The Cross Product
 
@@ -94,36 +94,36 @@ public:
 
 	void operator -=(const CVector3DF& V1);//Subtract Other From 'this'
 
-	void operator *=(const double& scalar);//Multiply 'this' With Other
+	void operator *=(const float& scalar);//Multiply 'this' With Other
 	void operator *=(const CMatrix33& M);//Multiply 'this With Matrix
 
-	void operator /=(const double& scalar);//Divide 'this' By Scalar
+	void operator /=(const float& scalar);//Divide 'this' By Scalar
 
 	void operator ^=(const CVector3DF& V1);//Calculate Cross Product Of' this' And Other
 	bool operator ==(const CVector3DF& V) const;//Check Equality
 	bool operator !=(const CVector3DF& V) const;//Check Equality
 
-	double Magnitude() const;// Calculate 'this' Vector's Magnitude
-	double SqrMagnitude() const;// Calculate 'this' Vector's Square Magnitude
-	double CrossMagnitude(const CVector3DF& V);// Calculate 'this' Vector's Cross Magnitude
-	double CrossSqrMagnitude(const CVector3DF& V1);// Calculate 'this' Vector's Cross Square Magnitude
-	double Modulus();// Return Modulus
+	float Magnitude() const;// Calculate 'this' Vector's Magnitude
+	float SqrMagnitude() const;// Calculate 'this' Vector's Square Magnitude
+	float CrossMagnitude(const CVector3DF& V);// Calculate 'this' Vector's Cross Magnitude
+	float CrossSqrMagnitude(const CVector3DF& V1);// Calculate 'this' Vector's Cross Square Magnitude
+	float Modulus();// Return Modulus
 	CVector3DF Unit();//Return Normalized Vector Of 'this'
 	CVertex3D Point();//Return Component Triplet As Point
-	double Angle(const CVector3DF&) const;//Angle Bet'n 'this' And Other
-	double Angle(const CVector3DF&, const CVector3DF&) const;//Angle Bet'n 'this' And Other WRT Direction
+	float Angle(const CVector3DF&) const;//Angle Bet'n 'this' And Other
+	float Angle(const CVector3DF&, const CVector3DF&) const;//Angle Bet'n 'this' And Other WRT Direction
 	bool IsNull() const;//Check For Null Vector
 	bool IsParallel(const CVector3DF&) const;//Check If Parallel To Other
 	bool IsOpposite(const CVector3DF&) const;//Check If Opposite Direction To Other
 	bool IsNormal(const CVector3DF&) const;//Check If Normal To Other	
 	operator CVertex3D();//Convertion Cast To Point;	
 	void Normalize();//Normalize 'this' Vector
-	virtual void Translate(const COneAxis&, const double&);
-	virtual void Translate(double dx, double dy, double dz);
+	virtual void Translate(const COneAxis&, const float&);
+	virtual void Translate(float dx, float dy, float dz);
 	virtual void Translate(const CVector3DF&);
 	virtual void Translate(const CVertex3D&, const CVertex3D&);
-	virtual void Rotate(const COneAxis&, double);
-	virtual void Scale(const CVertex3D&, double);
+	virtual void Rotate(const COneAxis&, float);
+	virtual void Scale(const CVertex3D&, float);
 	virtual void Mirror(const CVertex3D&);
 	virtual void Mirror(const COneAxis&);
 	virtual void Mirror(const CPlane&);
@@ -136,9 +136,9 @@ public:
 
 	// Misc
 	void NormalizeL2(void);
-	void NormalizeL2(double val);
-	double GetNormL2(void) const;
-	double GetNormL2Square(void) const;
+	void NormalizeL2(float val);
+	float GetNormL2(void) const;
+	float GetNormL2Square(void) const;
 	int Collinear(CVector3DF* pVector);
 	int Collinear(CVector3DF& v);
 

@@ -78,7 +78,7 @@ C3DObject::C3DObject(CReader* r)
 	SetMaterial(Jade);
 
 	ComputePoints(r);
-	//ComputeBoundLimits();
+	ComputeBoundLimits();
 }
 
 
@@ -1921,7 +1921,7 @@ void C3DObject::Serialize(CArchive& ar)
 
 		for (int i=0; i<size; i++)
 			ar << m_indexs[i];
-		CFile file("F:\\work\\Interlayer\\test", CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+		CFile file("F:\\test", CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
 		CArchive art(&file, CArchive::store);
 		size = m_pointList.size();
 		art << size;
@@ -1959,7 +1959,7 @@ void C3DObject::Serialize(CArchive& ar)
 			m_indexs.push_back(index);
 		}
 
-		//ComputeBoundLimits();
+		ComputeBoundLimits();
 
 
 		//------------------------------------------------------------------------
