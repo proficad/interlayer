@@ -19,8 +19,10 @@ public:
 
 	C3DModelDoc* m_pDoc;
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	void FillTreeCtrl();
+	virtual void FillTreeCtrl();
 
+	void TreeVisit(HTREEITEM hItem);
+	void	DeleteAllGlObjects();
 	void OnDeleteItem();
 	void AddObj(CGLObject *pObj);
 
@@ -50,4 +52,12 @@ public:
 	afx_msg void OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
-
+class CIntersectSearchTree : public C3DObjTreeCtrl
+{
+public:
+	virtual void FillTreeCtrl();
+	virtual void AddObj(CGLObject *pObj);
+	void	SetModel(CGLObject* pObj);
+	void AddLayer(CGLObject* pObj);
+protected:
+};

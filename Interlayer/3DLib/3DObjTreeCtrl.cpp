@@ -11,6 +11,7 @@
 #include "../3DLib/GridObject.h"
 #include "../DlgZSlice.h"
 #include "../DlgXYSlice.h"
+#include "../IntersectSearchManager.h"
 // C3DObjTreeCtrl
 
 IMPLEMENT_DYNAMIC(C3DObjTreeCtrl, CTreeCtrl)
@@ -1645,4 +1646,237 @@ void C3DObjTreeCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 		}
 	}
 	*pResult = 0;
+}
+
+void C3DObjTreeCtrl::TreeVisit(HTREEITEM hItem)
+{
+	if(ItemHasChildren(hItem))  
+	{
+		HTREEITEM hChildItem = GetChildItem(hItem);  
+
+		while(hChildItem!=NULL)  
+		{
+			CGLObject *pObj = (CGLObject*)GetItemData(hItem);
+			if( pObj == NULL || pObj->GetGLObjType() == GLTRIHEDRON )
+				return;
+
+			DeleteItem(hItem);
+
+			if( pObj->GetGLObjType() == GLDICE )
+				m_pDoc->GetContext()->EraseDice(pObj);
+			else if (pObj->GetGLObjType() == GLSLICE)
+				m_pDoc->GetContext()->EraseSlice(pObj);
+			else
+				m_pDoc->GetContext()->Erase(pObj);
+
+			POSITION pos = m_pDoc->GetFirstViewPosition();
+			CView *pView = m_pDoc->GetNextView(pos);
+			pView->Invalidate(FALSE);
+
+			m_pDoc->SetModifiedFlag();
+
+			TreeVisit(hChildItem);
+			hChildItem = GetNextItem(hChildItem, TVGN_NEXT);  
+		}  
+	}
+}
+
+void C3DObjTreeCtrl::DeleteAllGlObjects()
+{
+	//TreeVisit(GetRootItem());
+	//CIntersectSearchManager
+}
+
+void CIntersectSearchTree::FillTreeCtrl()
+{
+	DeleteAllItems();
+	if( m_pDoc == NULL )
+		return;
+	
+	HTREEITEM hItem1 = InsertItem(_T("网格模型"),0,0);
+	HTREEITEM hItem2 = InsertItem(_T("夹层曲面"),0,0);
+	//HTREEITEM hItem31 = InsertItem(_T("横切片"),0,0,hItem3);
+	//HTREEITEM hItem32 = InsertItem(_T("纵切片"),0,0,hItem3);
+
+	POSITION pos = m_pDoc->GetFirstViewPosition();
+	C3DModelView *pView = (C3DModelView *)m_pDoc->GetNextView(pos);
+
+	CGLTrihedron* pTri = pView->m_myView->m_myTrihedron;
+
+	//if( !pView->m_myView->IsShowAxis() && !pView->m_myView->IsShowGird() && !pView->m_myView->IsShowLegend() )
+	//	SetCheck(hItem1,2);
+	//else
+	//	SetCheck(hItem1,1);
+
+	if( IsAllChildHide(hItem1))
+		SetCheck(hItem1, 2);
+	else
+		SetCheck(hItem1, 1);
+	
+	if( IsAllChildHide(hItem2))
+		SetCheck(hItem2, 2);
+	else
+		SetCheck(hItem2, 1);
+		
+
+	Expand(hItem1, TVE_EXPAND);
+	Expand(hItem2, TVE_EXPAND);
+}
+
+void CIntersectSearchTree::AddObj( CGLObject *pObj )
+{
+	if( m_pDoc == NULL )
+		return;
+
+	//HTREEITEM hSrc2 = GetChildNode(TVI_ROOT, _T("图形切块"));
+	HTREEITEM hSrc1 = GetChildNode(TVI_ROOT, _T("网格模型"));
+	HTREEITEM hSrc2 = GetChildNode(TVI_ROOT, _T("夹层曲面"));
+	//HTREEITEM hSrc41 = GetChildNode(hSrc4, _T("面"));
+	//HTREEITEM hSrc42 = GetChildNode(hSrc4, _T("线"));
+	//HTREEITEM hSrc43 = GetChildNode(hSrc4, _T("点"));
+
+	HTREEITEM hItem;
+	int nImage = 0, nSelectImage = 0;
+	switch(pObj->GetGLObjType())
+	{
+	/*case GLDICE:
+		{
+			nImage = 4;
+			nSelectImage = 4;
+			hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage, hSrc2);
+		}
+		break;
+		*/
+	case GLSURFACE:
+		{
+			nImage = 7;
+			nSelectImage = 7;
+			//hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage, hSrc4, TVI_FIRST);
+
+			CGridObject *pGrid = (CGridObject *)pObj;
+
+			HTREEITEM h = InsertItem(_T("X"),8,8,hItem);
+			int n = 0;
+			for (int i = 0; i < pGrid->I; i++)
+			{
+				CString str;
+				str.Format(_T("#%d"), i+1);
+				HTREEITEM hh = InsertItem(str,6,6,h);
+				if( pGrid->m_bShowI[i] )
+				{
+					SetCheck(hh, 5);
+					n++;
+				}
+				else
+					SetCheck(hh, 3);
+			}
+			if( n == 0 )
+				SetCheck(h, 3);
+			else if( n < pGrid->I )
+				SetCheck(h, 4);
+			else
+				SetCheck(h, 5);
+
+			h = InsertItem(_T("Y"),8,8,hItem);
+			n = 0;
+			for (int i = 0; i < pGrid->J; i++)
+			{
+				CString str;
+				str.Format(_T("#%d"), i+1);
+				HTREEITEM hh = InsertItem(str,6,6,h);
+				if( pGrid->m_bShowJ[i] )
+				{
+					SetCheck(hh, 5);
+					n++;
+				}
+				else
+					SetCheck(hh, 3);
+			}
+			if( n == 0 )
+				SetCheck(h, 3);
+			else if( n < pGrid->J )
+				SetCheck(h, 4);
+			else
+				SetCheck(h, 5);
+
+			h = InsertItem(_T("Z"),8,8,hItem);
+			n = 0;
+			for (int i = 0; i < pGrid->K; i++)
+			{
+				CString str;
+				str.Format(_T("#%d"), i+1);
+				HTREEITEM hh = InsertItem(str,5,5,h);
+				if( pGrid->m_bShowK[i] )
+				{
+					SetCheck(hh, 5);
+					n++;
+				}
+				else
+					SetCheck(hh, 3);
+			}
+			if( n == 0 )
+				SetCheck(h, 3);
+			else if( n < pGrid->K )
+				SetCheck(h, 4);
+			else
+				SetCheck(h, 5);
+
+
+			h = InsertItem(_T("属性"),8,8,hItem);
+			SetCheck(h, 6);
+			for (int i=0; i<pGrid->m_vecPhyPara.GetSize(); i++)
+			{				
+				HTREEITEM hh = InsertItem(pGrid->m_vecPhyPara[i].m_strName,9,9,h);
+				SetCheck(hh, 6);
+				if( pGrid->m_vecPhyPara[i].m_bShow )
+				{
+					SetCheck(hh, 7);
+					SetCheck(h, 7);
+				}
+			}
+		}
+		break;
+	case GLPLANE:
+		{
+			nImage = 10;
+			nSelectImage = 10;
+			//hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage, hSrc41);
+		}
+		break;
+	default:
+		break;
+	}
+
+	if( pObj->isShow())
+		SetCheck(hItem, 1);
+	else
+		SetCheck(hItem, 2);
+
+	SetItemData(hItem, (DWORD)pObj);
+
+	Select(hItem, TVGN_CARET);
+
+	/*if( pObj->GetGLObjType() == GLDICE )
+		Expand(hSrc2, TVE_EXPAND);
+	else*/
+}
+
+void CIntersectSearchTree::SetModel( CGLObject* pObj )
+{
+	HTREEITEM hSrc = GetChildNode(TVI_ROOT, _T("网格模型"));
+	int nImage = 0, nSelectImage = 0;
+	nImage = 10;
+	nSelectImage = 10;
+	HTREEITEM hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage,hSrc);
+	CIntersectSearchManager::Instance()->SetGridModel(dynamic_cast<CGridObject*>(pObj));
+}
+
+void CIntersectSearchTree::AddLayer( CGLObject* pObj )
+{
+	HTREEITEM hSrc = GetChildNode(TVI_ROOT, _T("夹层曲面"));
+	int nImage = 0, nSelectImage = 0;
+	nImage = 10;
+	nSelectImage = 10;
+	HTREEITEM hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage, hSrc);
+	CIntersectSearchManager::Instance()->AddLayerModel(pObj);
 }

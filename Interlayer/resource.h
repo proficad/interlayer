@@ -663,6 +663,7 @@
 #define ID_VIEW_TOOL_LAYER              33105
 #define ID_VIEW_3D_OBJ                  33106
 #define ID_CTRL_POINT_SET               33107
+#define ID_VIEW_INTERSECT_SEARCH   33108
 #define ID_DELETE_CTRL_POINT            33121
 #define ID_EDIT_CTRL_POINT              33122
 #define ID_DUMMY_CTRL_POINT             33123
@@ -737,6 +738,7 @@
 #define ID_WIREFRAME                    33199
 #define ID_FILL                         33200
 #define ID_EXPORT                       33201
+#define IDC_BUTTON_INTERSECTSEARCH		33202
 
 // Next default values for new objects
 // 

@@ -50,6 +50,7 @@ public:
 	CGraphView*        GetTreeGraphView(){ return &m_wndGraphView; }
 	CLayerBar*         GetLayerToolbar(){ return &m_wndToolBarLayer; }
 	C3DObjBar*		   Get3DBar(){return &m_wnd3DObjBar;}
+	CLayerIntersectSearch* GetSearchBar(){return &m_wndSearchBar;}
 
 	BOOL SaveEmptyOleDocument(LPCTSTR lpszFileName);
 	void ActiveView(CView *pView);
@@ -98,6 +99,7 @@ protected:  // 控件条嵌入成员
 
 	//------------------------------------------------------------------------
 	C3DObjBar		  m_wnd3DObjBar;
+	CLayerIntersectSearch	m_wndSearchBar;
 
 //	COutputWnd        m_wndOutput;
 //	CPropertiesWnd    m_wndProperties;	

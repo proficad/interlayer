@@ -1460,6 +1460,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\IntersectSearchManager.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GeoMap\LayerBar.h"
 					>
 				</File>
@@ -1552,11 +1556,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\GeoMap\RgnClipping.h"
+					RelativePath=".\RgnClipping.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RgnClipping.h"
+					RelativePath=".\GeoMap\RgnClipping.h"
 					>
 				</File>
 				<File
@@ -1967,6 +1971,10 @@
 				</File>
 				<File
 					RelativePath=".\Interlayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\IntersectSearchManager.cpp"
 					>
 				</File>
 				<File

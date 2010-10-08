@@ -306,6 +306,11 @@ void CGLDisplayContext::AddGLObj(CGLObject* aObj)
 		return;
 
 	CGLObject* pObj = aObj;
+
+	CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+
+	C3DObjBar*pBar = pMF->Get3DBar();
+	CLayerIntersectSearch *pSearchbar = pMF->GetSearchBar();
 	//CGLObject* pObj = aObj->Copy();
 
 	switch(pObj->GetGLObjType())
@@ -333,6 +338,31 @@ void CGLDisplayContext::AddGLObj(CGLObject* aObj)
 				m_dVertical = GetVerticalOriginal();
 
 			m_listDisplay->push_back(pObj);				// 添加到显示链表
+			pSearchbar->m_wndTree.SetModel(pObj);
+		}
+		break;
+	case GLPLANE:
+		{
+			bool bOri = (fabs(m_dVertical - GetVerticalOriginal())<0.0000001);
+
+			if (m_listDisplay->empty())
+				m_viewBox = pObj->GetBoundingBox();
+			else
+				m_viewBox.AddBox(pObj->GetBoundingBox());
+
+			if( m_dVertical == 0.6 || bOri )
+				m_dVertical = GetVerticalOriginal();
+
+			int nSize = m_listDisplay->size();
+
+			int j = nSize%21+1;
+
+			GLMaterial mat = (GLMaterial)j;
+
+			pObj->SetMaterial(mat);
+
+			m_listDisplay->push_back(pObj);				// 添加到显示链表
+			pSearchbar->m_wndTree.AddLayer(pObj);
 		}
 		break;
 	default:
@@ -361,9 +391,6 @@ void CGLDisplayContext::AddGLObj(CGLObject* aObj)
 
 	}	
 	
-	CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
-
-	C3DObjBar*pBar = pMF->Get3DBar();
 	pBar->m_wndTree.AddObj(pObj);
 
 	SetModifiedFlag(true);
