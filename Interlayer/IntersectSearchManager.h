@@ -14,7 +14,13 @@ public:
 		static CIntersectSearchManager instance;
 		return &instance;
 	}
+
+	bool LoadGridModel(const std::string& filename,const std::string& outfilename);
+
 	void SetGridModel(CGridObject* model){ m_model = model; }
+	void SetGridModelName(const std::string& filename){m_gridFilename=filename;}
+	std::string GetGridModelName(){return m_gridFilename;}
+
 	void AddLayerModel(CGLObject* layer);
 
 	CGridObject* GetGrid();
@@ -28,6 +34,7 @@ protected:
 	CIntersectSearchManager();
 	~CIntersectSearchManager();
 	CGridObject* m_model;
+	std::string		 m_gridFilename;
 	std::vector<CGLObject*>   m_interlayers;
 };
 

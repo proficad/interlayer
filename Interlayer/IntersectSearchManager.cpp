@@ -2,6 +2,14 @@
 #include "IntersectSearchManager.h"
 #include "3DLib/GridObject.h"
 #include "3DLib/GLObject.h"
+#include "MainFrm.h"
+#include "../ShapeDll/GridCellShape/GridCellShape.h"
+
+#ifdef _DEBUG
+	#pragma comment(lib,"../debug/GridCellShape.lib");
+#else
+	#pragma comment(lib,"../release/GridCellShape.lib");
+#endif
 
 CIntersectSearchManager::CIntersectSearchManager()
 {
@@ -56,4 +64,9 @@ CGLObject* CIntersectSearchManager::GetLayer( const std::string& name )
 void CIntersectSearchManager::ReleaseAll()
 {
 	
+}
+
+bool CIntersectSearchManager::LoadGridModel( const std::string& filename,const std::string& outfilename )
+{
+	return LoadEclipseFile(filename, outfilename);
 }

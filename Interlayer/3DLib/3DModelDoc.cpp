@@ -13,6 +13,7 @@
 #include "../GridModel.h"
 #include "../FieldCell.h"
 #include "PipeLine.h"
+#include "../IntersectSearchManager.h"
 
 using namespace  GridModel;
 
@@ -208,6 +209,7 @@ void C3DModelDoc::AddPlane(LPCTSTR lpszFileName, LPCTSTR lpszName)
 {
 	CPlaneReader* pReader = new CPlaneReader(lpszFileName);
 	C3DObject* pPlaneObj = new C3DObject(pReader);
+	//pPlaneObj->ReversePoints();
 	pPlaneObj->SetContext(m_pDisplayContext);
 	delete pReader;
 	pPlaneObj->SetGLObjType(GLPLANE);
@@ -232,6 +234,7 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 	CGridModel gridModel;
 	if( gridfile.Open(lpszFileName, CFile::modeRead | CFile::typeBinary ) )
 	{
+		CIntersectSearchManager::Instance()->SetGridModelName(lpszFileName);
 		CArchive ar(&gridfile,CArchive::load);
 		gridModel.Serialize(ar);
 		ar.Close();

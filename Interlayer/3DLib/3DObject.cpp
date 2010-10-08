@@ -311,17 +311,17 @@ void C3DObject::ComputeBoundLimits()
 
 			if( P.x < dMinX )
 				dMinX = P.x;
-			if( P.y < dMinY )
-				dMinY = P.y;
-			if( P.z < dMinZ )
-				dMinZ = P.z;
+			if( (-P.y) < dMinY )
+				dMinY = -P.y;
+			if( (-P.z) < dMinZ )
+				dMinZ = -P.z;
 
 			if( P.x > dMaxX )
 				dMaxX = P.x;
-			if( P.y > dMaxY )
-				dMaxY = P.y;
-			if( P.z > dMaxZ )
-				dMaxZ = P.z;
+			if( (-P.y) > dMaxY )
+				dMaxY = -P.y;
+			if( (-P.z) > dMaxZ )
+				dMaxZ = -P.z;
 		}
 
 		pCnt++;
@@ -449,12 +449,6 @@ void C3DObject::DrawShaded()
 
 		pFace = m_ArrayFace[i];
 		ASSERT(pFace != NULL);
-
-		// Normal (per face)
-		//if(m_NormalBinding == NORMAL_PER_FACE)
-		{
-			//::glNormal3f(pFace->GetNormal().GetX(),pFace->GetNormal().GetY(),pFace->GetNormal().GetZ());
-		}
 		
 		for(int j=0;j<3;j++)
 		{
@@ -501,8 +495,8 @@ void C3DObject::ComputePoints(CReader* r)
 	{
 		CVertex3D *pVert = new CVertex3D;
 		pVert->x = m_pointList[i].x;
-		pVert->y = m_pointList[i].y;
-		pVert->z = m_pointList[i].z;
+		pVert->y = -m_pointList[i].y;
+		pVert->z = -m_pointList[i].z;
 
 		m_ArrayVertex.Add(pVert);
 	}
@@ -1921,19 +1915,6 @@ void C3DObject::Serialize(CArchive& ar)
 
 		for (int i=0; i<size; i++)
 			ar << m_indexs[i];
-		CFile file("F:\\test", CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
-		CArchive art(&file, CArchive::store);
-		size = m_pointList.size();
-		art << size;
-
-		for (int i= 0; i < size; i++)
-			art << m_pointList[i];
-
-		size = m_indexs.size();
-		art << size;
-		for (int i=0; i<size; i++)
-			art << m_indexs[i];
-		art.Close();
 	}
 	else
 	{
@@ -1985,4 +1966,56 @@ void C3DObject::Serialize(CArchive& ar)
 		CalculateNormalPerFace();
 		CalculateNormalPerVertex();
 	}
+}
+
+void C3DObject::ReversePoints()
+{
+	CFaceTriangles *pFace;
+	CVector3D *pVector;	
+
+	unsigned int NbVertex = (unsigned int)m_ArrayVertex.GetSize();
+	unsigned int NbFace = (unsigned int)m_ArrayFace.GetSize();
+
+	//if(!NbVertex)
+	//	return;
+	//if(!NbFace)
+	//	return;
+
+	for(unsigned int i=0;i<NbFace;i++)
+	{
+
+		pFace = m_ArrayFace[i];
+		ASSERT(pFace != NULL);
+
+		for(int j=0;j<3;j++)
+		{
+			pFace->v(j)->y = -pFace->v(j)->y;
+			pFace->v(j)->z = -pFace->v(j)->z;
+		}
+	}
+
+	int size = m_pointList.size();
+
+	for (int i= 0; i < size; i++)
+	{
+		m_pointList[i].y = -m_pointList[i].y;
+		m_pointList[i].z = -m_pointList[i].z;
+	}
+}
+
+void C3DObject::SaveSurface( const std::string& filename )
+{
+	CFile file(filename.c_str(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+	CArchive art(&file, CArchive::store);
+	int size = m_pointList.size();
+	art << size;
+
+	for (int i= 0; i < size; i++)
+		art << m_pointList[i];
+
+	size = m_indexs.size();
+	art << size;
+	for (int i=0; i<size; i++)
+		art << m_indexs[i];
+	art.Close();
 }

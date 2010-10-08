@@ -30,6 +30,8 @@ public:
 	virtual void Display(const GLDisplayMode& = GLWIREFRAME, bool bForce = false);
 	virtual void DisplaySelected(const GLSelectedMode& = GLSELECTED);
 	virtual void Hilight(const GLSelectedMode&);
+	void ReversePoints();
+	void SaveSurface(const std::string& filename);
 
 	int m_iSelectedPoint;
 	std::vector<CVertex3D>* GetPointList() { return &m_pointList; }

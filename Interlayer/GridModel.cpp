@@ -1141,6 +1141,15 @@ void GridModel::CGridModel::ReleaseGrid()
 
 void GridModel::CGridModel::FillGridCells()
 {
+	m_dMinX = DBL_MAX;
+	m_dMaxX = -DBL_MAX;
+
+	m_dMinY = DBL_MAX;
+	m_dMaxY = -DBL_MAX;
+
+	m_dMinZ = DBL_MAX;
+	m_dMaxZ = -DBL_MAX;
+
 	for(int i=0; i<m_nGridX; i++)
 	{
 		VECTOR_ARRAY2D gridPlane;
@@ -1159,7 +1168,25 @@ void GridModel::CGridModel::FillGridCells()
 				cell.m_cornerPoint[5] = GetCornerPoint(i, j, k, 5);
 				cell.m_cornerPoint[6] = GetCornerPoint(i, j, k, 6);
 				cell.m_cornerPoint[7] = GetCornerPoint(i, j, k, 7);
-				
+
+				for (int m=0;m<8;m++)
+				{			
+					if( cell.m_cornerPoint[m].x > m_dMaxX )
+						m_dMaxX = cell.m_cornerPoint[m].x;
+					if( cell.m_cornerPoint[m].x < m_dMinX )
+						m_dMinX = cell.m_cornerPoint[m].x;
+
+					if( cell.m_cornerPoint[m].y > m_dMaxY )
+						m_dMaxY = cell.m_cornerPoint[m].y;
+					if( cell.m_cornerPoint[m].y < m_dMinY )
+						m_dMinY = cell.m_cornerPoint[m].y;
+
+					if( cell.m_cornerPoint[m].z > m_dMaxZ )
+						m_dMaxZ = cell.m_cornerPoint[m].z;
+					if( cell.m_cornerPoint[m].z < m_dMinZ )
+						m_dMinZ = cell.m_cornerPoint[m].z;
+				}				
+
 				cell.CalcNormals();
 				
 				//m_gridCells[i][j][k]._x = i;
