@@ -5,7 +5,8 @@
 	Name="GridCellShape"
 	ProjectGUID="{B93ADCC5-A0A9-42BA-84A2-F3AA6161690B}"
 	RootNamespace="GridCellShape"
-	TargetFrameworkVersion="196613"
+	AssemblyReferenceSearchPaths="&quot;..\..\Debug&quot;"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -156,6 +157,26 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<AssemblyReference
+			RelativePath="..\..\GridCellThick\Track\bin\Debug\EclipseGridIO.dll"
+			AssemblyName="EclipseGridIO, Version=1.0.0.0, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="..\..\GridCellThick\Track\bin\Debug\Mosaic.dll"
+			AssemblyName="Mosaic, Version=1.0.0.0, processorArchitecture=MSIL"
+			MinFrameworkVersion="0"
+		/>
+		<AssemblyReference
+			RelativePath="..\..\GridCellThick\Track\bin\Debug\octc.dll"
+			AssemblyName="octc, Version=1.0.3933.15068, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="..\..\GridCellThick\Track\bin\Debug\Track.dll"
+			AssemblyName="Track, Version=1.0.0.0, processorArchitecture=MSIL"
+			MinFrameworkVersion="0"
+		/>
 	</References>
 	<Files>
 		<Filter

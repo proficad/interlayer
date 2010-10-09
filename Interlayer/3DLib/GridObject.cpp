@@ -429,17 +429,17 @@ void CGridObject::ComputeBoundLimits()
 					P = m_gridCells[i][j][k].m_cornerPoint[index];
 					if( P.x < dMinX )
 						dMinX = P.x;
-					if( P.y < dMinY )
-						dMinY = P.y;
-					if( P.z < dMinZ )
-						dMinZ = P.z;
+					if( (-P.y) < dMinY )
+						dMinY = -P.y;
+					if( (-P.z) < dMinZ )
+						dMinZ = -P.z;
 
 					if( P.x > dMaxX )
 						dMaxX = P.x;
-					if( P.y > dMaxY )
-						dMaxY = P.y;
-					if( P.z > dMaxZ )
-						dMaxZ = P.z;
+					if( (-P.y) > dMaxY )
+						dMaxY = -P.y;
+					if( (-P.z) > dMaxZ )
+						dMaxZ = -P.z;
 				}
 			}
 		}
@@ -545,16 +545,16 @@ void CGridObject::DrawWired()
 					for(int index=0; index<24; index++)
 					{
 						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
-						postions[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
-						postions[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+						postions[index*3+1] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+						postions[index*3+2] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
 						postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
 						postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
 						postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
 						normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
-						normals[index*3+1] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
-						normals[index*3+2] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+						normals[index*3+1] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+						normals[index*3+2] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 						if( !pParam && m_displayMode != GLSHADED )
 						{
 							colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
@@ -589,16 +589,16 @@ void CGridObject::DrawWired()
 					for(int index=0; index<24; index++)
 					{
 						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
-						postions[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
-						postions[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+						postions[index*3+1] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+						postions[index*3+2] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
 						postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
 						postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
 						postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
 						normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
-						normals[index*3+1] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
-						normals[index*3+2] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+						normals[index*3+1] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+						normals[index*3+2] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 						if( !pParam && m_displayMode != GLSHADED )
 						{
 							colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
@@ -729,16 +729,16 @@ void CGridObject::DrawShaded()
 				for(int index=0; index<24; index++)
 				{
 					postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
-					postions[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
-					postions[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+					postions[index*3+1] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+					postions[index*3+2] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
 					postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
 					postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
 					postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
 					normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
-					normals[index*3+1] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
-					normals[index*3+2] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+					normals[index*3+1] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+					normals[index*3+2] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 					if( !pParam && m_displayMode == GLSHADED )
 					{
 						colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
@@ -777,16 +777,16 @@ void CGridObject::DrawShaded()
 					for(int index=0; index<24; index++)
 					{
 						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
-						postions[index*3+1] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
-						postions[index*3+2] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+						postions[index*3+1] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+						postions[index*3+2] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
 						postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
 						postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
 						postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
 						normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
-						normals[index*3+1] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
-						normals[index*3+2] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+						normals[index*3+1] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+						normals[index*3+2] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 						if( !pParam && m_displayMode == GLSHADED )
 						{
 							colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
@@ -841,7 +841,7 @@ void CGridObject::ComputePoints( const CBoundingBox& box )
 			{
 				for(int index=0; index<8; index++)
 				{
-					m_gridCells[i][j][k].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
+					m_gridCells[i][j][k].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (-m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
 				}
 			}
 		}

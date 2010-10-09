@@ -2,6 +2,7 @@
 #include "IntersectSearchManager.h"
 #include "3DLib/GridObject.h"
 #include "3DLib/GLObject.h"
+#include "3DLib/3DObject.h"
 #include "MainFrm.h"
 #include "../ShapeDll/GridCellShape/GridCellShape.h"
 
@@ -14,6 +15,7 @@
 CIntersectSearchManager::CIntersectSearchManager()
 {
 	m_model = NULL;
+	m_interlayers.clear();
 }
 
 
@@ -69,4 +71,43 @@ void CIntersectSearchManager::ReleaseAll()
 bool CIntersectSearchManager::LoadGridModel( const std::string& filename,const std::string& outfilename )
 {
 	return LoadEclipseFile(filename, outfilename);
+}
+
+bool CIntersectSearchManager::SearchInterSect()
+{
+	if((m_model==NULL)||(m_interlayers.empty()))
+		return false;
+	for(std::vector<CGLObject*>::iterator it=m_interlayers.begin(); it!=m_interlayers.end(); ++it)
+	{
+		CGLObject* face = (*it);
+		SearchALayer(face);
+	}
+}
+
+void CIntersectSearchManager::SearchALayer( CGLObject* gird )
+{
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	CString strFileName = pMF->GetProjectDatPath();
+	strFileName += _T("\\models\\");
+	CString strNewtempFileName;
+	strNewtempFileName = strFileName + newGUID();
+	CString strNewFileName;
+	strNewFileName = strFileName + newGUID();
+
+	C3DObject* obj3d = dynamic_cast<C3DObject*>(gird);
+	if(!obj3d)
+		return;
+	obj3d->SaveSurface(strNewtempFileName.GetString());
+
+	bool rs = Tracking(strNewtempFileName.GetString(),m_gridFilename,strNewFileName.GetString());
+
+	TRY
+	{
+		CFile::Remove( strNewtempFileName.GetBuffer() );
+	}
+	CATCH( CFileException, e )
+	{
+		assert(false&&"É¾³ýÎÄ¼þÊ§°Ü");
+	}
+	END_CATCH 
 }

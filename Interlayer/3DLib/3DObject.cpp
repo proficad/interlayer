@@ -495,9 +495,11 @@ void C3DObject::ComputePoints(CReader* r)
 	{
 		CVertex3D *pVert = new CVertex3D;
 		pVert->x = m_pointList[i].x;
-		pVert->y = -m_pointList[i].y;
-		pVert->z = -m_pointList[i].z;
+		pVert->y = m_pointList[i].y;
+		pVert->z = m_pointList[i].z;
 
+		m_pointList[i].y = -m_pointList[i].y;
+		m_pointList[i].z = -m_pointList[i].z;
 		m_ArrayVertex.Add(pVert);
 	}
 	

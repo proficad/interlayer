@@ -588,6 +588,7 @@ void CLayerIntersectSearch::OnClickButton()
 	CLayerIntersectSearch *pSearchbar = pMF->GetSearchBar();
 	//CIntersectSearchManager::Instance()->ReleaseAll();
 	//遍历管理器把模型和夹层保存并调用C#追夹层
+	CIntersectSearchManager::Instance()->SearchInterSect();
 	pBar->m_wndTree.DeleteAllItems();
 	pBar->m_wndTree.FillTreeCtrl();
 	pSearchbar->m_wndTree.DeleteAllItems();
