@@ -33,6 +33,8 @@ enum NODE_STYLE // 节点类型
 	FARM_DAT,				// 场数据
 	FARM_LAYER,				// 每层数据
 
+	INTERSECT_DAT=1,		//网格与夹层面的相交
+
 	GRAPHICS_2DS=1,			// 二维视图集
 	GRAPHICS_3DS,			// 三维视图集
 	GRAPHICS_LOGS,			// 测井曲线视图集

@@ -759,6 +759,8 @@ void C3DObjTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 				{
 					for (int i=0;i<pGridObj->K; i++)
 						pGridObj->m_bShowK[i] = TRUE;
+					for (int i=0;i<pGridObj->K;i++)
+						pGridObj->m_bChangeK[i] = TRUE;
 				}
 				else
 				{
@@ -780,6 +782,7 @@ void C3DObjTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 						else if( str == _T("Z"))
 						{
 							pGridObj->m_bShowK[num] = TRUE;
+							pGridObj->m_bChangeK[num] = TRUE;
 						}
 					}
 				}
@@ -817,6 +820,8 @@ void C3DObjTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 				{
 					for (int i=0;i<pGridObj->K; i++)
 						pGridObj->m_bShowK[i] = FALSE;
+					for (int i=0;i<pGridObj->K; i++)
+						pGridObj->m_bChangeK[i] = TRUE;
 				}
 				else
 				{
@@ -838,6 +843,7 @@ void C3DObjTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 						else if( str == _T("Z"))
 						{
 							pGridObj->m_bShowK[num] = FALSE;
+							pGridObj->m_bChangeK[num] = TRUE;
 						}
 					}
 

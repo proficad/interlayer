@@ -98,8 +98,16 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird )
 	if(!obj3d)
 		return;
 	obj3d->SaveSurface(strNewtempFileName.GetString());
+	TRY 
+	{	
+		bool rs = Tracking(strNewtempFileName.GetBuffer(),m_gridFilename,strNewFileName.GetBuffer());
+	}
+	CATCH (CMemoryException, e)
+	{
+		
+	}
+	END_CATCH
 
-	bool rs = Tracking(strNewtempFileName.GetString(),m_gridFilename,strNewFileName.GetString());
 
 	TRY
 	{

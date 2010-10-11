@@ -6,6 +6,86 @@
 #include "3DLib/Vertex3D.h"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+struct GridRefinement
+{
+	GridRefinement()
+	{
+		m_X1 = m_X2 = m_Y1 = m_Y2 = m_Z1 = m_Z2 = m_DX = m_DY = m_DZ = m_NWMAX = 0;
+	}
+	GridRefinement(const GridRefinement& varSrc)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			m_Name[i] = varSrc.m_Name[i];
+			m_GLOBAL[i] = varSrc.m_GLOBAL[i];
+		}
+		m_X1 = varSrc.m_X1;
+		m_X2 = varSrc.m_X2;
+		m_Y1 = varSrc.m_Y1;
+		m_Y2= varSrc.m_Y2;
+		m_Z1= varSrc.m_Z1;
+		m_Z2= varSrc.m_Z2;
+		m_DX= varSrc.m_DX;
+		m_DY = varSrc.m_DY;
+		m_DZ= varSrc.m_DZ;
+		m_NWMAX= varSrc.m_NWMAX;
+	}
+	char m_Name[8];
+	int m_X1;
+	int m_X2;
+	int m_Y1;
+	int m_Y2;
+	int m_Z1;
+	int m_Z2;
+	int m_DX;
+	int m_DY;
+	int m_DZ;
+	int m_NWMAX;
+	char m_GLOBAL[8];
+
+	void Serialize(CArchive& ar)
+	{
+		if (ar.IsStoring())
+		{
+			for (int i = 0; i < 8; i++)
+				ar << m_Name[i];
+			ar <<  m_X1;
+			ar <<  m_X2;
+			ar <<  m_Y1;
+			ar <<  m_Y2;
+			ar <<  m_Z1;
+			ar <<  m_Z2;
+			ar <<  m_DX;
+			ar <<  m_DY;
+			ar <<  m_DZ;
+			ar <<  m_NWMAX;
+			for (int i = 0; i < 8; i++)
+				ar << m_GLOBAL[i];
+		}
+		else
+		{
+			for (int i = 0; i < 8; i++)
+				ar >> m_Name[i];
+			ar >>  m_X1;
+			ar >>  m_X2;
+			ar >>  m_Y1;
+			ar >>  m_Y2;
+			ar >>  m_Z1;
+			ar >>  m_Z2;
+			ar >>  m_DX;
+			ar >>  m_DY;
+			ar >>  m_DZ;
+			ar >>  m_NWMAX;
+			for (int i = 0; i < 8; i++)
+				ar >> m_GLOBAL[i];
+		}
+	}
+};
+
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 struct tagGridModelCell // 网格单元体
 {
 public:
@@ -92,6 +172,35 @@ public:
 	{
 		for (int i = 0; i < 8; i++)
 			m_cornerPoint[i] = varSrc.m_cornerPoint[i];
+	}
+	void Serialize(CArchive& ar)
+	{	
+		for (int i = 0; i < 8; i++)
+			m_cornerPoint[i].Serialize(ar);
+		for (int i = 0; i <6; i++)
+			m_faceNormals[i].Serialize(ar);
+		if (ar.IsStoring())
+		{
+			ar << m_bIsGridRefinement;
+			ar << _x;
+			ar << _y;
+			ar << _z;
+			for(int i=0; i<8; i++)
+			{
+				ar << m_itsColor[i];
+			}
+		}
+		else
+		{
+			ar >> m_bIsGridRefinement;
+			ar >> _x;
+			ar >> _y;
+			ar >> _z;
+			for(int i=0; i<8; i++)
+			{
+				ar >>m_itsColor[i];
+			}
+		}
 	}
 	void CalcNormals();
 	CVector3DF m_cornerPoint[8];

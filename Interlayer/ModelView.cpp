@@ -1121,8 +1121,14 @@ bool CModelView::ReadPBRSModel(LPCSTR lpszFileName, LPCSTR lpszModelFileName)
 // 读取Eclipse网格模型
 bool CModelView::ReadEclipseModel(LPCSTR lpszFileName, LPCSTR lpszModelFileName)
 {
-	return CIntersectSearchManager::Instance()->LoadGridModel(lpszFileName,lpszModelFileName);
-	//return true;
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	CString strMsg;
+	strMsg = _T("正在解析网格数据文件，请稍等...");
+	pMF->GetStatusBar().SetPaneText(0, strMsg);
+	bool rl= CIntersectSearchManager::Instance()->LoadGridModel(lpszFileName,lpszModelFileName);
+	strMsg = _T("就绪");
+	pMF->GetStatusBar().SetPaneText(0, strMsg);
+	return rl;
 }
 
 // 读取静态场数据并返回新的静态场文件名

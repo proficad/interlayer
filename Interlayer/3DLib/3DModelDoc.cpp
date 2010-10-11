@@ -257,7 +257,7 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 	pGridObj->K = gridModel.m_nGridZ;
 
 	pGridObj->m_gridCells = gridModel.m_gridCells;
-
+	//pGridObj->m_gridRedine = gridModel.m_gridRedine;
 	////pGridObj->K = 2;
 	////pGridObj->m_pointList.SetSize(pGridObj->I*pGridObj->J*pGridObj->K*8);
 	//if( pGridObj->m_pointList.capacity()<pGridObj->I*pGridObj->J*pGridObj->K*8 )
@@ -289,6 +289,8 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 		pGridObj->m_bShowJ.Add(FALSE);
 	for (int i=0;i<gridModel.m_nGridZ;i++)
 		pGridObj->m_bShowK.Add(FALSE);
+	for (int i=0;i<gridModel.m_nGridZ;i++)
+		pGridObj->m_bChangeK.Add(TRUE);
 
 	int nSize = arParamName.GetSize();
 	for (int i=0;i<nSize; i++)

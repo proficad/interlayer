@@ -98,6 +98,7 @@ public:
 	std::vector<CVertex3D> m_pointList;
 
 	VECTOR_ARRAY3D		 m_gridCells;
+	//std::vector<GridRefinement> m_gridRedine;
 
 	int								m_layerIndex;
 	//CList<CVertex3D,CVertex3D&> m_pointList;
@@ -110,6 +111,7 @@ public:
 	CArray<BOOL, BOOL> m_bShowI;
 	CArray<BOOL, BOOL> m_bShowJ;
 	CArray<BOOL, BOOL> m_bShowK;
+	CArray<BOOL, BOOL> m_bChangeK;
 	
 	void Add(LPCTSTR lpszName, double dValue);
 private:

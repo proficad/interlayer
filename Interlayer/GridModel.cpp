@@ -134,8 +134,12 @@ void CGridModel::Serialize(CArchive& ar)
 				ar << m_zcornGrid[i];
 			}
 
-			//读取加密信息
-			//size = m_nGridY* m_nGridX* m_nGridZ；
+			//写加密信息
+			size = m_gridRedine.size();
+			for (long i = 0; i < size; i++)
+			{
+				m_gridRedine[i].Serialize(ar);
+			}
 		}
 		else
 		{
@@ -202,6 +206,14 @@ void CGridModel::Serialize(CArchive& ar)
 					{
 						ar >> v;
 						m_zcornGrid.push_back(v);
+					}
+
+					ar >> size;
+					m_gridRedine.clear();
+					m_gridRedine.resize(size);
+					for (long i = 0; i < size; i++)
+					{
+						m_gridRedine[i].Serialize(ar);
 					}
 				}
 				else
@@ -1197,6 +1209,32 @@ void GridModel::CGridModel::FillGridCells()
 			gridPlane.push_back(gridline);
 		}
 		m_gridCells.push_back(gridPlane);
+	}
+
+	for(vector<GridRefinement>::iterator it=m_gridRedine.begin(); it!=m_gridRedine.end(); ++it)
+	{
+		GridRefinement gr = (*it);
+		for(int x=gr.m_X1; x<=gr.m_X2; x++)
+		{
+			for(int y=gr.m_Y1; y<=gr.m_Y2; y++)
+			{
+				for(int z=gr.m_Z1; z<=gr.m_Z2; z++)
+				{
+					if(gr.m_DX!=0||gr.m_DY!=0||gr.m_DZ!=0)
+					{
+						m_gridCells[x][y][z].m_bIsGridRefinement = true;
+						m_gridCells[x][y][z]._x = gr.m_DX/(gr.m_X2-gr.m_X1+1);
+						m_gridCells[x][y][z]._y = gr.m_DY/(gr.m_Y2-gr.m_Y1+1);
+						m_gridCells[x][y][z]._z = gr.m_DZ/(gr.m_Z2-gr.m_Z1+1);
+					}
+					else
+					{
+						m_gridCells[x][y][z].m_bIsGridRefinement = FALSE;
+					}
+
+				}
+			}
+		}
 	}
 }
 

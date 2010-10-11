@@ -35,8 +35,20 @@ extern "C" _declspec(dllexport) bool Tracking(const string& FaceFileName, const 
 
 	bool IsTrue = false;
 
-	gtk->AddFaceName(face);
-	//IsTrue = gtk->Tracking(face, grid, save);
-	IsTrue = gtk->Tracking(grid,save);
+	IsTrue = gtk->Tracking(face, grid, save);
+
+	return IsTrue;
+}
+
+extern "C" _declspec(dllexport) bool Tracking2(const string& GridFileName, const string& SaveFileName)
+{
+	GridTracking ^gtk = gcnew GridTracking();
+
+	String ^grid = gcnew String(GridFileName.c_str());
+	String ^save = gcnew String(SaveFileName.c_str());
+
+	bool IsTrue = false;
+	IsTrue = gtk->Tracking(grid, save);
+
 	return IsTrue;
 }

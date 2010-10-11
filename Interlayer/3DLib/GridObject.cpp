@@ -120,12 +120,22 @@ void CGridObject::Serialize(CArchive &ar)
 		}
 
 		//int size = m_pointList.GetSize();
-		int size = m_pointList.size();
-		ar << size;
+		int size;
+		//ar << size;
 
-		for (int i=0; i<size; i++)
+		//for (int i=0; i<size; i++)
+		//{
+		//	ar << m_pointList[i];
+		//}
+		for(int i=0; i<I; i++)
 		{
-			ar << m_pointList[i];
+			for(int j=0; j<J; j++)
+			{
+				for(int k=0; k<K; k++)
+				{
+					m_gridCells[i][j][k].Serialize(ar);
+				}
+			}
 		}
 
 		size = m_vecPhyPara.GetSize();
@@ -162,20 +172,48 @@ void CGridObject::Serialize(CArchive &ar)
 		}
 
 		int size;
-		ar >> size;
+		//ar >> size;
 		//m_pointList.SetSize(size);
 		
-		if( m_pointList.capacity()<size )
-			m_pointList.reserve(size);
+		//if( m_pointList.capacity()<size )
+		//	m_pointList.reserve(size);
 
-		for (int i=0; i<size; i++)
+		//for (int i=0; i<size; i++)
+		//{
+		//	CVertex3D point;
+
+		//	ar >> point;
+
+		//	//m_pointList[i] = point;
+		//	m_pointList.push_back(point);
+		//}
+		m_gridCells.clear();
+		for(int i=0; i<I; i++)
 		{
-			CVertex3D point;
+			VECTOR_ARRAY2D gridPlane;
+			for(int j=0; j<J; j++)
+			{
+				VECTOR_ARRAY gridline;
+				for(int k=0; k<K; k++)
+				{
+					tagGridModelCellNew cell;
 
-			ar >> point;
+					gridline.push_back(cell);
+				}
+				gridPlane.push_back(gridline);
+			}
+			m_gridCells.push_back(gridPlane);
+		}
 
-			//m_pointList[i] = point;
-			m_pointList.push_back(point);
+		for(int i=0; i<I; i++)
+		{
+			for(int j=0; j<J; j++)
+			{
+				for(int k=0; k<K; k++)
+				{
+					m_gridCells[i][j][k].Serialize(ar);
+				}
+			}
 		}
 
 		ar >> size;
@@ -368,9 +406,9 @@ bool CGridObject::BuildList()
 	{
 		::glNewList(m_ListOpenGL+m_layerIndex, GL_COMPILE_AND_EXECUTE);
 		
-
+		//if(m_bChangeK[m_layerIndex])
 		DefineDisplay(); // ∂®“Âœ‘ æ
-
+		//m_bChangeK[m_layerIndex] = FALSE;
 		::glEndList();
 	}
 

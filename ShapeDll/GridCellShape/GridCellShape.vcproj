@@ -5,7 +5,6 @@
 	Name="GridCellShape"
 	ProjectGUID="{B93ADCC5-A0A9-42BA-84A2-F3AA6161690B}"
 	RootNamespace="GridCellShape"
-	AssemblyReferenceSearchPaths="&quot;..\..\Debug&quot;"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -43,6 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				MinimalRebuild="false"
+				ExceptionHandling="0"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				WarningLevel="3"
@@ -89,8 +89,9 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="2"
+			ManagedExtensions="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -157,26 +158,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<AssemblyReference
-			RelativePath="..\..\GridCellThick\Track\bin\Debug\EclipseGridIO.dll"
-			AssemblyName="EclipseGridIO, Version=1.0.0.0, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="..\..\GridCellThick\Track\bin\Debug\Mosaic.dll"
-			AssemblyName="Mosaic, Version=1.0.0.0, processorArchitecture=MSIL"
-			MinFrameworkVersion="0"
-		/>
-		<AssemblyReference
-			RelativePath="..\..\GridCellThick\Track\bin\Debug\octc.dll"
-			AssemblyName="octc, Version=1.0.3933.15068, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
-		<AssemblyReference
-			RelativePath="..\..\GridCellThick\Track\bin\Debug\Track.dll"
-			AssemblyName="Track, Version=1.0.0.0, processorArchitecture=MSIL"
-			MinFrameworkVersion="0"
-		/>
 	</References>
 	<Files>
 		<Filter
@@ -201,6 +182,14 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

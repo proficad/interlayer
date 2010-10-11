@@ -181,10 +181,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{B93ADCC5-A0A9-42BA-84A2-F3AA6161690B}"
-			RelativePathToProject=".\ShapeDll\GridCellShape\GridCellShape.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter
@@ -1562,11 +1558,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\RgnClipping.h"
+					RelativePath=".\GeoMap\RgnClipping.h"
 					>
 				</File>
 				<File
-					RelativePath=".\GeoMap\RgnClipping.h"
+					RelativePath=".\RgnClipping.h"
 					>
 				</File>
 				<File
