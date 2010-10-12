@@ -4,6 +4,8 @@
 #include "3DLib/GLObject.h"
 #include "3DLib/3DObject.h"
 #include "MainFrm.h"
+#include "3dlib/3DModelDoc.h"
+#include "3dlib/3DModelView.h"
 #include "../ShapeDll/GridCellShape/GridCellShape.h"
 
 #ifdef _DEBUG
@@ -82,6 +84,26 @@ bool CIntersectSearchManager::SearchInterSect()
 		CGLObject* face = (*it);
 		SearchALayer(face);
 	}
+
+	//写点坝文件
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	CString strFileName = pMF->GetProjectDatPath();
+	strFileName += _T("\\models\\");
+	CString strNewtempFileName;
+	strNewtempFileName = strFileName + newGUID() + ".pointbar";
+
+	CFile file(strNewtempFileName.GetBuffer(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+	CArchive art(&file, CArchive::store);
+	art << m_interlayerNames.size();
+	for(int i=0; i<m_interlayerNames.size(); i++)
+	{
+		art << (m_interlayerNames[i]).length();
+		for(int j=0; j<(m_interlayerNames[i]).length(); j++)
+			art <<m_interlayerNames[i].c_str()[j];
+	}
+	art.Close();
+	m_interlayerNames.clear();
+	m_interlayers.clear();
 }
 
 void CIntersectSearchManager::SearchALayer( CGLObject* gird )
@@ -98,9 +120,30 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird )
 	if(!obj3d)
 		return;
 	obj3d->SaveSurface(strNewtempFileName.GetString());
+	m_interlayerNames.push_back(strNewFileName.GetBuffer());
+
 	TRY 
 	{	
 		bool rs = Tracking(strNewtempFileName.GetBuffer(),m_gridFilename,strNewFileName.GetBuffer());
+		//InterLayerGridObject test;
+		//test.LoadLayer(strNewFileName.GetBuffer());
+
+		CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+		CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+		if( pWnd )
+		{
+			C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+			if(pView)
+			{
+				if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+				{
+					C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+					pDoc->AddInterlayer(strNewFileName.GetBuffer(),"test");
+				}
+			}
+		}	
+
+		//pMF->get3d
 	}
 	CATCH (CMemoryException, e)
 	{
@@ -118,4 +161,5 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird )
 		assert(false&&"删除文件失败");
 	}
 	END_CATCH 
+		
 }

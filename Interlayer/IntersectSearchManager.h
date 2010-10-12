@@ -37,6 +37,7 @@ protected:
 	void SearchALayer(CGLObject* gird);
 	CGridObject* m_model;
 	std::string		 m_gridFilename;
+	std::vector<std::string>  	 m_interlayerNames;
 	std::vector<CGLObject*>   m_interlayers;
 };
 

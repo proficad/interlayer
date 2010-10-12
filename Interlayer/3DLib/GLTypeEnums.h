@@ -17,6 +17,7 @@ enum GLObjectType
 	GLPOINT		= 456123,					// 点
 	GLSURFACE	= 561234,					// 表面
 	GLTRIHEDRON	= 612345,					// 三面体
+	GLINTERLAYERCELL = 621345,			//夹层相交网格
 	GLPIPELINE,								// 三维管子
 
 	GLONEAXIS	= 765432,

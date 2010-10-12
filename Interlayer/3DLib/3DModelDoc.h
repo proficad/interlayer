@@ -29,6 +29,7 @@ public:
 	void AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CStringArray &arParamName, const CStringArray &arFileName);
 	void AddPhyParam(LPCTSTR lpszFileName, LPCTSTR lpszName);
 	void AddWellPath(HTREEITEM hItem);
+	void AddInterlayer(LPCTSTR lpszFileName, LPCTSTR lpszName);
 private:
 	CGLDisplayContext* m_pDisplayContext;		// œ‘ æ≥°æ∞
 

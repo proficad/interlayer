@@ -341,6 +341,22 @@ void CGLDisplayContext::AddGLObj(CGLObject* aObj)
 			pSearchbar->m_wndTree.SetModel(pObj);
 		}
 		break;
+	case GLINTERLAYERCELL:
+		{
+			bool bOri = (fabs(m_dVertical - GetVerticalOriginal())<0.0000001);
+
+			if (m_listDisplay->empty())
+				m_viewBox = pObj->GetBoundingBox();
+			else
+				m_viewBox.AddBox(pObj->GetBoundingBox());
+
+			if( m_dVertical == 0.6 || bOri )
+				m_dVertical = GetVerticalOriginal();
+
+			m_listDisplay->push_back(pObj);				// 添加到显示链表
+			//pSearchbar->m_wndTree.SetModel(pObj);
+		}
+		break;
 	case GLPLANE:
 		{
 			bool bOri = (fabs(m_dVertical - GetVerticalOriginal())<0.0000001);

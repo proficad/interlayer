@@ -731,3 +731,18 @@ void C3DModelDoc::AddWellPath(HTREEITEM hItem)
 
 	UpdateAllViews(NULL);
 }
+
+void C3DModelDoc::AddInterlayer( LPCTSTR lpszFileName, LPCTSTR lpszName )
+{
+	InterLayerGridObject* playerObj = new InterLayerGridObject();
+	//pPlaneObj->ReversePoints();
+	playerObj->LoadLayer(lpszFileName);
+	playerObj->SetContext(m_pDisplayContext);
+	playerObj->SetGLObjType(GLINTERLAYERCELL);
+	playerObj->SetObjName(lpszName);
+	playerObj->ComputeBoundLimits();
+	m_pDisplayContext->AddGLObj(playerObj);
+	//delete pPlaneObj;
+
+	UpdateAllViews(NULL);
+}

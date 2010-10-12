@@ -120,3 +120,40 @@ private:
 private:
 	bool	m_bColorComputed;
 };
+
+
+class InterLayerGridObject : public CGLObject
+{
+public:
+	InterLayerGridObject(void);
+	~InterLayerGridObject(void);
+
+	virtual CGLObject* Copy();
+	virtual void DefineDisplay();
+	virtual void Display(const GLDisplayMode& = GLWIREFRAME, bool bForce = false);
+	virtual void DisplaySelected(const GLSelectedMode& = GLSELECTED);
+	virtual void Hilight(const GLSelectedMode&);
+	virtual bool BuildList(); 
+	void ComputeBoundLimits();
+
+	void ComputePoints( const CBoundingBox& box );
+
+	CArray<CPhyPara, CPhyPara&>	m_vecPhyPara;
+	//CArray<CVertex3D,CVertex3D&> m_pointList;
+
+	VECTOR_ARRAY			m_gridCells;
+	vector<std::string>		m_layerNames;
+	int								m_layerIndex;
+	// ±£´æ
+	virtual void Serialize(CArchive& ar);
+	void	LoadLayer(const std::string& filename);
+
+	int I, J, K;
+
+	//void Add(LPCTSTR lpszName, double dValue);
+private:
+	void DrawWired();
+	void DrawShaded();
+
+	bool	m_bColorComputed;
+};
