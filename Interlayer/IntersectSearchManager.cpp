@@ -128,6 +128,7 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird )
 		//InterLayerGridObject test;
 		//test.LoadLayer(strNewFileName.GetBuffer());
 
+		//相交网格的显示
 		CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
 		CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
 		if( pWnd )

@@ -1392,6 +1392,15 @@ void CGLDisplayContext::Serialize(CArchive& ar)
 					m_listDisplay->push_back(pObj);
 				}
 				break;
+			case GLINTERLAYERCELL:
+				{
+					InterLayerGridObject *pObj = new InterLayerGridObject;
+					pObj->SetGLObjType(GLINTERLAYERCELL);
+					pObj->SetContext(this);
+					pObj->Serialize(ar);
+					m_listDisplay->push_back(pObj);
+				}
+				break;
 			default:
 				break;
 			}
