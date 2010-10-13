@@ -580,6 +580,7 @@ void CGridObject::DrawWired()
 				int k =m_layerIndex;
 				//for(int k=0; k<K; k++)
 				//{
+
 					for(int index=0; index<24; index++)
 					{
 						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
@@ -608,7 +609,6 @@ void CGridObject::DrawWired()
 				//}
 			}
 		}
-
 	}
 	else
 	{
@@ -624,6 +624,8 @@ void CGridObject::DrawWired()
 					&& !m_bShowK[k] )
 						continue;
 
+				if( !m_gridCells[i][j][k].m_bIsGridRefinement)
+				{
 					for(int index=0; index<24; index++)
 					{
 						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
@@ -644,14 +646,44 @@ void CGridObject::DrawWired()
 							colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
 						}
 					}
+
 					glVertexPointer(3,GL_FLOAT,0,postions);
 					glNormalPointer(GL_FLOAT,0,normals);
-					//if( !pParam && m_displayMode != GLSHADED )
-					//{
-					//	glEnableClientState(GL_COLOR_ARRAY);
-					//	glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
-					//}
+
 					glDrawArrays(GL_QUADS,0,24);
+				}
+				else
+				{
+					for(vector<tagGridModelCellNew>::iterator it=m_gridCells[i][j][k].m_subCells.begin(); it!=m_gridCells[i][j][k].m_subCells.end(); ++it )
+					{
+						tagGridModelCellNew cell = (*it);
+						for(int index=0; index<24; index++)
+						{
+							postions[index*3] = cell.m_cornerPoint[faceindexes[index]].GetX();
+							postions[index*3+1] = -cell.m_cornerPoint[faceindexes[index]].GetY();
+							postions[index*3+2] = -cell.m_cornerPoint[faceindexes[index]].GetZ();
+
+							postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+							postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+							postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+
+							normals[index*3] = cell.m_faceNormals[index>>2].GetX();		// index>>2ÎªÃæºÅ
+							normals[index*3+1] = -cell.m_faceNormals[index>>2].GetY();
+							normals[index*3+2] = -cell.m_faceNormals[index>>2].GetZ();
+							if( !pParam && m_displayMode != GLSHADED )
+							{
+								colors[index*3] = GetRValue(cell.m_itsColor[faceindexes[index]]);
+								colors[index*3+1] = GetGValue(cell.m_itsColor[faceindexes[index]]);
+								colors[index*3+2] = GetBValue(cell.m_itsColor[faceindexes[index]]);
+							}
+						}
+
+						glVertexPointer(3,GL_FLOAT,0,postions);
+						glNormalPointer(GL_FLOAT,0,normals);
+
+						glDrawArrays(GL_QUADS,0,24);
+					}
+				}
 				//}
 			}
 		}

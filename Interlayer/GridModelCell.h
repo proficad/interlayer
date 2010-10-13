@@ -11,10 +11,12 @@ struct GridRefinement
 	GridRefinement()
 	{
 		m_X1 = m_X2 = m_Y1 = m_Y2 = m_Z1 = m_Z2 = m_DX = m_DY = m_DZ = m_NWMAX = 0;
+		memset(m_Name,0,16);
+		memset(m_GLOBAL,0,16);
 	}
 	GridRefinement(const GridRefinement& varSrc)
 	{
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 16; i++)
 		{
 			m_Name[i] = varSrc.m_Name[i];
 			m_GLOBAL[i] = varSrc.m_GLOBAL[i];
@@ -30,7 +32,7 @@ struct GridRefinement
 		m_DZ= varSrc.m_DZ;
 		m_NWMAX= varSrc.m_NWMAX;
 	}
-	char m_Name[8];
+	char m_Name[16];
 	int m_X1;
 	int m_X2;
 	int m_Y1;
@@ -41,13 +43,13 @@ struct GridRefinement
 	int m_DY;
 	int m_DZ;
 	int m_NWMAX;
-	char m_GLOBAL[8];
+	char m_GLOBAL[16];
 
 	void Serialize(CArchive& ar)
 	{
 		if (ar.IsStoring())
 		{
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 16; i++)
 				ar << m_Name[i];
 			ar <<  m_X1;
 			ar <<  m_X2;
@@ -59,12 +61,12 @@ struct GridRefinement
 			ar <<  m_DY;
 			ar <<  m_DZ;
 			ar <<  m_NWMAX;
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 16; i++)
 				ar << m_GLOBAL[i];
 		}
 		else
 		{
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 16; i++)
 				ar >> m_Name[i];
 			ar >>  m_X1;
 			ar >>  m_X2;
@@ -76,7 +78,7 @@ struct GridRefinement
 			ar >>  m_DY;
 			ar >>  m_DZ;
 			ar >>  m_NWMAX;
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 16; i++)
 				ar >> m_GLOBAL[i];
 		}
 	}
@@ -170,8 +172,23 @@ public:
 	tagGridModelCellNew();
 	tagGridModelCellNew(const tagGridModelCellNew& varSrc)
 	{
-		for (int i = 0; i < 8; i++)
-			m_cornerPoint[i] = varSrc.m_cornerPoint[i];
+		m_cornerPoint = varSrc.m_cornerPoint;
+		m_itsColor = varSrc.m_itsColor;
+		
+		m_faceNormals = varSrc.m_faceNormals;
+
+		m_bIsGridRefinement = varSrc.m_bIsGridRefinement;
+		_x = varSrc._x;
+		_y = varSrc._y;
+		_z = varSrc._z;
+		if(m_bIsGridRefinement)
+		{
+			for(int i=0; i<varSrc.m_subCells.size(); i++)
+			{
+				////tagGridModelCellNew cell(*it);
+				m_subCells.push_back(varSrc.m_subCells[i]);
+			}
+		}
 	}
 	void Serialize(CArchive& ar)
 	{	
@@ -179,6 +196,11 @@ public:
 			m_cornerPoint[i].Serialize(ar);
 		for (int i = 0; i <6; i++)
 			m_faceNormals[i].Serialize(ar);
+		for(vector<tagGridModelCellNew>::iterator it=m_subCells.begin(); it!=m_subCells.end(); ++it)
+		{
+			tagGridModelCellNew cell = (*it);
+			cell.Serialize(ar);
+		}
 		if (ar.IsStoring())
 		{
 			ar << m_bIsGridRefinement;
@@ -203,13 +225,13 @@ public:
 		}
 	}
 	void CalcNormals();
-	CVector3DF m_cornerPoint[8];
-	CVector3DF m_faceNormals[6];
+	CVector3DF *m_cornerPoint;
+	CVector3DF *m_faceNormals;
 	//网格加密信息
-	bool	m_bIsGridRefinement;
-	COLORREF m_itsColor[8];
+	COLORREF *m_itsColor;
 	int	_x,_y,_z;
 	vector<tagGridModelCellNew>	m_subCells;
+	bool	m_bIsGridRefinement;
 };
 
 typedef vector< tagGridModelCellNew > VECTOR_ARRAY;

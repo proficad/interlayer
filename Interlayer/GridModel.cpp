@@ -1200,7 +1200,7 @@ void GridModel::CGridModel::FillGridCells()
 				}				
 
 				cell.CalcNormals();
-				
+				cell.m_bIsGridRefinement = false;
 				//m_gridCells[i][j][k]._x = i;
 				//m_gridCells[i][j][k]._y = j;
 				//m_gridCells[i][j][k]._z = k;
@@ -1214,23 +1214,95 @@ void GridModel::CGridModel::FillGridCells()
 	for(vector<GridRefinement>::iterator it=m_gridRedine.begin(); it!=m_gridRedine.end(); ++it)
 	{
 		GridRefinement gr = (*it);
-		for(int x=gr.m_X1; x<=gr.m_X2; x++)
+		for(int index_x=gr.m_X1;  index_x<=gr.m_X2;  index_x++)
 		{
-			for(int y=gr.m_Y1; y<=gr.m_Y2; y++)
+			for(int  index_y=gr.m_Y1;  index_y<=gr.m_Y2;  index_y++)
 			{
-				for(int z=gr.m_Z1; z<=gr.m_Z2; z++)
+				for(int  index_z=gr.m_Z1;  index_z<=gr.m_Z2;  index_z++)
 				{
-					if(gr.m_DX!=0||gr.m_DY!=0||gr.m_DZ!=0)
+					//if(gr.m_DX!=0||gr.m_DY!=0||gr.m_DZ!=0)
 					{
-						m_gridCells[x][y][z].m_bIsGridRefinement = true;
-						m_gridCells[x][y][z]._x = gr.m_DX/(gr.m_X2-gr.m_X1+1);
-						m_gridCells[x][y][z]._y = gr.m_DY/(gr.m_Y2-gr.m_Y1+1);
-						m_gridCells[x][y][z]._z = gr.m_DZ/(gr.m_Z2-gr.m_Z1+1);
+						 m_gridCells[index_x][index_y][index_z].m_bIsGridRefinement = true;
+						 m_gridCells[index_x][index_y][index_z]._x = gr.m_DX/(gr.m_X2-gr.m_X1+1);
+						 m_gridCells[index_x][index_y][index_z]._y = gr.m_DY/(gr.m_Y2-gr.m_Y1+1);
+						 m_gridCells[index_x][index_y][index_z]._z = gr.m_DZ/(gr.m_Z2-gr.m_Z1+1);
+
+						int size =  m_gridCells[index_x][index_y][index_z]._x * m_gridCells[index_x][index_y][index_z]._y * m_gridCells[index_x][index_y][index_z]._z;
+
+						float XLength_1_0 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[1].x -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].x) /  m_gridCells[index_x][index_y][index_z]._x;
+						float XLength_2_3 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[2].x -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[3].x) /  m_gridCells[index_x][index_y][index_z]._x;
+						float XLength_5_4 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[5].x -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[4].x) /  m_gridCells[index_x][index_y][index_z]._x;
+						float XLength_6_7 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[6].x -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[7].x) /  m_gridCells[index_x][index_y][index_z]._x;
+
+						float YLength_0_4 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].y -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[4].y) /  m_gridCells[index_x][index_y][index_z]._y;
+						float YLength_1_5 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[1].y -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[5].y) /  m_gridCells[index_x][index_y][index_z]._y;
+						float YLength_3_7 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[3].y -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[7].y) /  m_gridCells[index_x][index_y][index_z]._y;
+						float YLength_2_6 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[2].y -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[6].y) /  m_gridCells[index_x][index_y][index_z]._y;
+
+						float ZLength_0_3 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].z -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[3].z) /  m_gridCells[index_x][index_y][index_z]._z;
+						float ZLength_1_2 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[1].z -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[2].z) /  m_gridCells[index_x][index_y][index_z]._z;
+						float ZLength_4_7 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[4].z -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[7].z) /  m_gridCells[index_x][index_y][index_z]._z;
+						float ZLength_5_6 = ( m_gridCells[index_x][index_y][index_z].m_cornerPoint[5].z -  m_gridCells[index_x][index_y][index_z].m_cornerPoint[6].z) /  m_gridCells[index_x][index_y][index_z]._z;
+
+						for (int i = 0; i < size; i++)
+						{
+							tagGridModelCellNew subcell;
+							int x = (i % ( m_gridCells[index_x][index_y][index_z]._x *  m_gridCells[index_x][index_y][index_z]._y) %  m_gridCells[index_x][index_y][index_z]._x);
+							int y = (i % ( m_gridCells[index_x][index_y][index_z]._x *  m_gridCells[index_x][index_y][index_z]._y) /  m_gridCells[index_x][index_y][index_z]._x);
+							int z = i / ( m_gridCells[index_x][index_y][index_z]._x *  m_gridCells[index_x][index_y][index_z]._y);
+							//上面
+
+							//0
+							subcell.m_cornerPoint[0].x =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].x + x * XLength_1_0;
+							subcell.m_cornerPoint[0].y =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].y + y * YLength_0_4;
+							subcell.m_cornerPoint[0].z =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].z + z * ZLength_0_3;
+
+							//1
+							subcell.m_cornerPoint[1].x =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].x + (x + 1) * XLength_1_0;
+							subcell.m_cornerPoint[1].y =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[1].y - y * YLength_1_5;
+							subcell.m_cornerPoint[1].z =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[1].z - z * ZLength_1_2;
+
+							//2
+							subcell.m_cornerPoint[2].x =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[3].x + (x + 1) * XLength_2_3;
+							subcell.m_cornerPoint[2].y =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[2].y - y * YLength_2_6;
+							subcell.m_cornerPoint[2].z =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[1].z - (z +1) * ZLength_1_2;
+
+							//3
+							subcell.m_cornerPoint[3].x =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[3].x + x * XLength_2_3;
+							subcell.m_cornerPoint[3].y =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[3].y + y * YLength_3_7;
+							subcell.m_cornerPoint[3].z =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].z - (z +1) * ZLength_0_3;
+
+							//下面
+
+							//4
+							subcell.m_cornerPoint[4].x =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[4].x + x * XLength_5_4;
+							subcell.m_cornerPoint[4].y =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].y - (y + 1) * YLength_0_4;
+							subcell.m_cornerPoint[4].z =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[4].z + z * ZLength_4_7;
+
+							//5
+							subcell.m_cornerPoint[5].x =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[4].x + (x +1) * XLength_5_4;
+							subcell.m_cornerPoint[5].y =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[1].y - (y + 1) * YLength_1_5;
+							subcell.m_cornerPoint[5].z =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[5].z + z * ZLength_5_6;
+
+							//6
+							subcell.m_cornerPoint[6].x =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[7].x + (x +1) * XLength_6_7;
+							subcell.m_cornerPoint[6].y =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[2].y - (y + 1) * YLength_2_6;
+							subcell.m_cornerPoint[6].z =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[5].z - (z + 1) * ZLength_5_6;
+
+							//7
+							subcell.m_cornerPoint[7].x =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[7].x + x * XLength_6_7;
+							subcell.m_cornerPoint[7].y =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[3].y - (y + 1) * YLength_3_7;
+							subcell.m_cornerPoint[7].z =   m_gridCells[index_x][index_y][index_z].m_cornerPoint[4].z - (z + 1) * ZLength_4_7;
+
+							subcell.CalcNormals();
+
+							 m_gridCells[index_x][index_y][index_z].m_subCells.push_back(subcell);
+						}
 					}
-					else
-					{
-						m_gridCells[x][y][z].m_bIsGridRefinement = FALSE;
-					}
+					//else
+					//{
+					//	m_gridCells[index_x][index_y][index_z].m_bIsGridRefinement = FALSE;
+					//}
 
 				}
 			}
