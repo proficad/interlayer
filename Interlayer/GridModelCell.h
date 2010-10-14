@@ -172,10 +172,14 @@ public:
 	tagGridModelCellNew();
 	tagGridModelCellNew(const tagGridModelCellNew& varSrc)
 	{
-		m_cornerPoint = varSrc.m_cornerPoint;
-		m_itsColor = varSrc.m_itsColor;
-		
-		m_faceNormals = varSrc.m_faceNormals;
+		for(int i=0; i<8; i++)
+		{
+			m_cornerPoint[i] = varSrc.m_cornerPoint[i];
+			m_itsColor[i] = varSrc.m_itsColor[i];
+		}
+
+		for(int i=0; i<6; i++)
+			m_faceNormals[i] = varSrc.m_faceNormals[i];
 
 		m_bIsGridRefinement = varSrc.m_bIsGridRefinement;
 		_x = varSrc._x;
@@ -189,6 +193,13 @@ public:
 				m_subCells.push_back(varSrc.m_subCells[i]);
 			}
 		}
+	}
+	~tagGridModelCellNew()
+	{
+		//delete [] m_cornerPoint;
+		//delete [] m_faceNormals;
+		//delete [] m_itsColor;
+		//m_subCells.clear();
 	}
 	void Serialize(CArchive& ar)
 	{	
@@ -225,10 +236,10 @@ public:
 		}
 	}
 	void CalcNormals();
-	CVector3DF *m_cornerPoint;
-	CVector3DF *m_faceNormals;
+	CVector3DF m_cornerPoint[8];
+	CVector3DF m_faceNormals[6];
 	//网格加密信息
-	COLORREF *m_itsColor;
+	COLORREF m_itsColor[8];
 	int	_x,_y,_z;
 	vector<tagGridModelCellNew>	m_subCells;
 	bool	m_bIsGridRefinement;

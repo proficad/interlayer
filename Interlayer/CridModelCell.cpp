@@ -4,10 +4,10 @@
 tagGridModelCellNew::tagGridModelCellNew()
 :m_bIsGridRefinement(false),_x(0),_y(0),_z(0)
 {
-	m_cornerPoint = new CVector3DF[8];
-	m_faceNormals = new CVector3DF[6];
-	//网格加密信息
-	m_itsColor =new COLORREF[8];
+	//m_cornerPoint = new CVector3DF[8];
+	//m_faceNormals = new CVector3DF[6];
+	////网格加密信息
+	//m_itsColor =new COLORREF[8];
 }
 
 void tagGridModelCellNew::CalcNormals()
