@@ -95,9 +95,9 @@ public:
 	CArray<CPhyPara, CPhyPara&>	m_vecPhyPara;
 	//CArray<CVertex3D,CVertex3D&> m_pointList;
 
-	std::vector<CVertex3D> m_pointList;
+	//std::vector<CVertex3D> m_pointList;
 
-	VECTOR_ARRAY3D		 m_gridCells;
+	VECTOR_ARRAY3DPTR		 m_gridCells;
 	//std::vector<GridRefinement> m_gridRedine;
 
 	int								m_layerIndex;
@@ -156,4 +156,5 @@ private:
 	void DrawShaded();
 
 	bool	m_bColorComputed;
+	COLORREF		m_singleColor;
 };

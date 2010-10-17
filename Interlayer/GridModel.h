@@ -60,7 +60,8 @@ namespace GridModel
 		vector<int>		  m_subMeshY;		// y方向网格细分数 m_nGridX*m_nGridY*m_gridD
 		vector<int>		  m_subMeshZ;		// y方向网格细分数 m_nGridX*m_nGridY*m_gridD
 
-		VECTOR_ARRAY3D m_gridCells;		//保存网格单元格信息
+		VECTOR_ARRAY3DPTR m_gridCells;		//保存网格单元格信息
+
 		vector<GridRefinement>	m_gridRedine;
 	};
 }

@@ -1466,6 +1466,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\IntersectUIView.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GeoMap\LayerBar.h"
 					>
 				</File>

@@ -72,15 +72,17 @@ CGridObject::CGridObject(void)
 
 CGridObject::~CGridObject(void)
 {
-	for(VECTOR_ARRAY3D_ITERATOR it3d=m_gridCells.begin(); it3d!=m_gridCells.end(); ++it3d)
-	{
-		for(VECTOR_ARRAY2D_ITERATOR it2d=(*it3d).begin(); it2d!=(*it3d).end(); ++it2d)
-		{
-			(*it2d).clear();
-		}
-		(*it3d).clear();
-	}
-	m_gridCells.clear();
+	m_vecPhyPara.FreeExtra();
+	m_bShowI.FreeExtra();
+	m_bShowJ.FreeExtra();
+	m_bShowK.FreeExtra();
+	m_bChangeK.FreeExtra();
+	m_vecPhyPara.RemoveAll();
+	m_bShowI.RemoveAll();
+	m_bShowJ.RemoveAll();
+	m_bShowK.RemoveAll();
+	m_bChangeK.RemoveAll();
+
 }
 
 void CGridObject::Add(LPCTSTR lpszName, double dValue)
@@ -142,7 +144,7 @@ void CGridObject::Serialize(CArchive &ar)
 			{
 				for(int k=0; k<K; k++)
 				{
-					m_gridCells[i][j][k].Serialize(ar);
+					m_gridCells->m_gridCells[i][j][k].Serialize(ar);
 				}
 			}
 		}
@@ -196,7 +198,9 @@ void CGridObject::Serialize(CArchive &ar)
 		//	//m_pointList[i] = point;
 		//	m_pointList.push_back(point);
 		//}
-		m_gridCells.clear();
+		VECTOR_ARRAY3DPTR grid_cells(new GridCells);
+		m_gridCells = grid_cells; 
+		m_gridCells->m_gridCells.clear();
 		for(int i=0; i<I; i++)
 		{
 			VECTOR_ARRAY2D gridPlane;
@@ -211,7 +215,7 @@ void CGridObject::Serialize(CArchive &ar)
 				}
 				gridPlane.push_back(gridline);
 			}
-			m_gridCells.push_back(gridPlane);
+			m_gridCells->m_gridCells.push_back(gridPlane);
 		}
 
 		for(int i=0; i<I; i++)
@@ -220,7 +224,7 @@ void CGridObject::Serialize(CArchive &ar)
 			{
 				for(int k=0; k<K; k++)
 				{
-					m_gridCells[i][j][k].Serialize(ar);
+					m_gridCells->m_gridCells[i][j][k].Serialize(ar);
 				}
 			}
 		}
@@ -239,30 +243,30 @@ void CGridObject::Serialize(CArchive &ar)
 CGLObject* CGridObject::Copy()
 {
 	CGridObject* O = new CGridObject();
-	O->SetContext(m_pDisplayContext);
-	O->m_glObjID = m_glObjID;
-	O->m_strObjName = m_strObjName;
-	O->m_glObjType = m_glObjType;
-	O->I = I;
-	O->J = J;
-	O->K = K;
+	//O->SetContext(m_pDisplayContext);
+	//O->m_glObjID = m_glObjID;
+	//O->m_strObjName = m_strObjName;
+	//O->m_glObjType = m_glObjType;
+	//O->I = I;
+	//O->J = J;
+	//O->K = K;
 
-	//if( m_pointList.GetSize()>0)
-	if( m_pointList.size()>0)
-	{
-		//O->m_pointList.Copy(m_pointList);
-		if( O->m_pointList.capacity()<m_pointList.size() )
-			O->m_pointList.reserve(m_pointList.size());
+	////if( m_pointList.GetSize()>0)
+	//if( m_pointList.size()>0)
+	//{
+	//	//O->m_pointList.Copy(m_pointList);
+	//	if( O->m_pointList.capacity()<m_pointList.size() )
+	//		O->m_pointList.reserve(m_pointList.size());
 
-		std::copy(m_pointList.begin(), m_pointList.end(), O->m_pointList.begin());
-	}
+	//	std::copy(m_pointList.begin(), m_pointList.end(), O->m_pointList.begin());
+	//}
 
-	if( m_vecPhyPara.GetSize()>0)
-	{
-		O->m_vecPhyPara.Copy(m_vecPhyPara );
-	}
+	//if( m_vecPhyPara.GetSize()>0)
+	//{
+	//	O->m_vecPhyPara.Copy(m_vecPhyPara );
+	//}
 
-	O->ComputeBoundLimits();
+	//O->ComputeBoundLimits();
 
 	return O;
 }
@@ -473,7 +477,7 @@ void CGridObject::ComputeBoundLimits()
 			{
 				for(int index=0; index<8; index++)
 				{
-					P = m_gridCells[i][j][k].m_cornerPoint[index];
+					P = m_gridCells->m_gridCells[i][j][k].m_cornerPoint[index];
 					if( P.x < dMinX )
 						dMinX = P.x;
 					if( (-P.y) < dMinY )
@@ -592,22 +596,22 @@ void CGridObject::DrawWired()
 
 					for(int index=0; index<24; index++)
 					{
-						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
-						postions[index*3+1] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
-						postions[index*3+2] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+						postions[index*3] = m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
+						postions[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+						postions[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
 						postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
 						postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
 						postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
-						normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
-						normals[index*3+1] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
-						normals[index*3+2] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+						normals[index*3] = m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
+						normals[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+						normals[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 						if( !pParam && m_displayMode != GLSHADED )
 						{
-							colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-							colors[index*3+1] = GetGValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-							colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
 						}
 					}
 
@@ -633,26 +637,26 @@ void CGridObject::DrawWired()
 					&& !m_bShowK[k] )
 						continue;
 
-				if( !m_gridCells[i][j][k].m_bIsGridRefinement)
+				if( !m_gridCells->m_gridCells[i][j][k].m_bIsGridRefinement)
 				{
 					for(int index=0; index<24; index++)
 					{
-						postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
-						postions[index*3+1] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
-						postions[index*3+2] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+						postions[index*3] = m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
+						postions[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+						postions[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
 						postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
 						postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
 						postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
-						normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
-						normals[index*3+1] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
-						normals[index*3+2] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+						normals[index*3] = m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
+						normals[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+						normals[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 						if( !pParam && m_displayMode != GLSHADED )
 						{
-							colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-							colors[index*3+1] = GetGValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-							colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
 						}
 					}
 
@@ -663,7 +667,7 @@ void CGridObject::DrawWired()
 				}
 				else
 				{
-					for(vector<tagGridModelCellNew>::iterator it=m_gridCells[i][j][k].m_subCells.begin(); it!=m_gridCells[i][j][k].m_subCells.end(); ++it )
+					for(vector<tagGridModelCellNew>::iterator it=m_gridCells->m_gridCells[i][j][k].m_subCells.begin(); it!=m_gridCells->m_gridCells[i][j][k].m_subCells.end(); ++it )
 					{
 						tagGridModelCellNew cell = (*it);
 						for(int index=0; index<24; index++)
@@ -807,22 +811,22 @@ void CGridObject::DrawShaded()
 				int k = m_layerIndex;
 				for(int index=0; index<24; index++)
 				{
-					postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
-					postions[index*3+1] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
-					postions[index*3+2] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+					postions[index*3] = m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
+					postions[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+					postions[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
 					postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
 					postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
 					postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
-					normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
-					normals[index*3+1] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
-					normals[index*3+2] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+					normals[index*3] = m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
+					normals[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+					normals[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 					if( !pParam && m_displayMode == GLSHADED )
 					{
-						colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-						colors[index*3+1] = GetGValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-						colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+						colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+						colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+						colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
 					}
 				}
 
@@ -853,26 +857,26 @@ void CGridObject::DrawShaded()
 					&& !m_bShowK[k] )
 						continue;
 
-					if( !m_gridCells[i][j][k].m_bIsGridRefinement)
+					if( !m_gridCells->m_gridCells[i][j][k].m_bIsGridRefinement)
 					{
 						for(int index=0; index<24; index++)
 						{
-							postions[index*3] = m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
-							postions[index*3+1] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
-							postions[index*3+2] = -m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
+							postions[index*3] = m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
+							postions[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetY();
+							postions[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetZ();
 
 							postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
 							postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
 							postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
-							normals[index*3] = m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
-							normals[index*3+1] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
-							normals[index*3+2] = -m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
+							normals[index*3] = m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
+							normals[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
+							normals[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
 							if( !pParam && m_displayMode == GLSHADED )
 							{
-								colors[index*3] = GetRValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-								colors[index*3+1] = GetGValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-								colors[index*3+2] = GetBValue(m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+								colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+								colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+								colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
 							}
 						}
 
@@ -886,7 +890,7 @@ void CGridObject::DrawShaded()
 					}
 					else
 					{
-						for(vector<tagGridModelCellNew>::iterator it=m_gridCells[i][j][k].m_subCells.begin(); it!=m_gridCells[i][j][k].m_subCells.end(); ++it )
+						for(vector<tagGridModelCellNew>::iterator it=m_gridCells->m_gridCells[i][j][k].m_subCells.begin(); it!=m_gridCells->m_gridCells[i][j][k].m_subCells.end(); ++it )
 						{
 							tagGridModelCellNew cell = (*it);
 							for(int index=0; index<24; index++)
@@ -958,7 +962,7 @@ void CGridObject::ComputePoints( const CBoundingBox& box )
 			{
 				for(int index=0; index<8; index++)
 				{
-					m_gridCells[i][j][k].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (-m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
+					m_gridCells->m_gridCells[i][j][k].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (-m_gridCells->m_gridCells[i][j][k].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
 				}
 			}
 		}
@@ -978,6 +982,9 @@ InterLayerGridObject::InterLayerGridObject( void )
 	m_glObjType = GLINTERLAYERCELL;
 	m_Color.Set(32,255,0,255);
 	m_bColorComputed = false;
+
+	m_singleColor = 0;
+	
 
 	GUID guid;
 	if (S_OK == ::CoCreateGuid(&guid))
@@ -1280,35 +1287,95 @@ void InterLayerGridObject::DrawWired()
 
 	for(int i=0; i<m_gridCells.size(); i++)
 	{
-		for(int index=0; index<24; index++)
+		if( !m_gridCells[i].m_bIsGridRefinement)
 		{
-			postions[index*3] = m_gridCells[i].m_cornerPoint[faceindexes[index]].GetX();
-			postions[index*3+1] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetY();
-			postions[index*3+2] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetZ();
-
-			postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
-			postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
-			postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
-
-			normals[index*3] = m_gridCells[i].m_faceNormals[index>>2].GetX();		// index>>2为面号
-			normals[index*3+1] = -m_gridCells[i].m_faceNormals[index>>2].GetY();
-			normals[index*3+2] = -m_gridCells[i].m_faceNormals[index>>2].GetZ();
-			if( m_displayMode == GLSHADED )
+			for(int index=0; index<24; index++)
 			{
-				colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
-				colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
-				colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+				postions[index*3] = m_gridCells[i].m_cornerPoint[faceindexes[index]].GetX();
+				postions[index*3+1] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetY();
+				postions[index*3+2] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetZ();
+
+				postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+				postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+				postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+
+				normals[index*3] = m_gridCells[i].m_faceNormals[index>>2].GetX();		// index>>2为面号
+				normals[index*3+1] = -m_gridCells[i].m_faceNormals[index>>2].GetY();
+				normals[index*3+2] = -m_gridCells[i].m_faceNormals[index>>2].GetZ();
+				if( m_displayMode != GLSHADED )
+				{
+					colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+					colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+					colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+				}
+			}
+
+			glVertexPointer(3,GL_FLOAT,0,postions);
+			glNormalPointer(GL_FLOAT,0,normals);
+
+			glDrawArrays(GL_QUADS,0,24);
+		}
+		else
+		{
+			for(vector<tagGridModelCellNew>::iterator it=m_gridCells[i].m_subCells.begin(); it!=m_gridCells[i].m_subCells.end(); ++it )
+			{
+				tagGridModelCellNew cell = (*it);
+				for(int index=0; index<24; index++)
+				{
+					postions[index*3] = cell.m_cornerPoint[faceindexes[index]].GetX();
+					postions[index*3+1] = -cell.m_cornerPoint[faceindexes[index]].GetY();
+					postions[index*3+2] = -cell.m_cornerPoint[faceindexes[index]].GetZ();
+
+					postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+					postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+					postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+
+					normals[index*3] = cell.m_faceNormals[index>>2].GetX();		// index>>2为面号
+					normals[index*3+1] = -cell.m_faceNormals[index>>2].GetY();
+					normals[index*3+2] = -cell.m_faceNormals[index>>2].GetZ();
+					if( m_displayMode != GLSHADED )
+					{
+						colors[index*3] = GetRValue(cell.m_itsColor[faceindexes[index]]);
+						colors[index*3+1] = GetGValue(cell.m_itsColor[faceindexes[index]]);
+						colors[index*3+2] = GetBValue(cell.m_itsColor[faceindexes[index]]);
+					}
+				}
+
+				glVertexPointer(3,GL_FLOAT,0,postions);
+				glNormalPointer(GL_FLOAT,0,normals);
+
+				glDrawArrays(GL_QUADS,0,24);
 			}
 		}
+		//for(int index=0; index<24; index++)
+		//{
+		//	postions[index*3] = m_gridCells[i].m_cornerPoint[faceindexes[index]].GetX();
+		//	postions[index*3+1] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetY();
+		//	postions[index*3+2] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetZ();
 
-		glVertexPointer(3,GL_FLOAT,0,postions);
-		glNormalPointer(GL_FLOAT,0,normals);
-		if( m_displayMode != GLSHADED )
-		{
-			glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
-		}
+		//	postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+		//	postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+		//	postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
-		glDrawArrays(GL_QUADS,0,24);
+		//	normals[index*3] = m_gridCells[i].m_faceNormals[index>>2].GetX();		// index>>2为面号
+		//	normals[index*3+1] = -m_gridCells[i].m_faceNormals[index>>2].GetY();
+		//	normals[index*3+2] = -m_gridCells[i].m_faceNormals[index>>2].GetZ();
+		//	if( m_displayMode == GLSHADED )
+		//	{
+		//		colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+		//		colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+		//		colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+		//	}
+		//}
+
+		//glVertexPointer(3,GL_FLOAT,0,postions);
+		//glNormalPointer(GL_FLOAT,0,normals);
+		//if( m_displayMode != GLSHADED )
+		//{
+		//	glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
+		//}
+
+		//glDrawArrays(GL_QUADS,0,24);
 	}
 
 
@@ -1338,11 +1405,16 @@ void InterLayerGridObject::ComputePoints( const CBoundingBox& box )
 	xMax = (box.XMin()+box.XMax())/2.0+range/2;
 	yMin = (box.YMin()+box.YMax())/2.0-range/2;
 	yMax = (box.YMin()+box.YMax())/2.0+range/2;
+	//int r_color = rand()%255;
+	//int g_color = rand()%255;
+	int b_color = rand()%m_gridCells.size();
+
+	//m_singleColor = r_color+g_color<<8 + b_color<<16;
 	for(int i=0; i<m_gridCells.size(); i++)
 	{
 		for(int index=0; index<8; index++)
 		{
-			m_gridCells[i].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (-m_gridCells[i].m_cornerPoint[index].GetZ()-box.ZMin())/zRange);
+			m_gridCells[i].m_itsColor[index] = GetContext()->GetColorTable()->GetColor( (-m_gridCells[b_color].m_cornerPoint[0].GetZ()-box.ZMin())/zRange);
 		}
 	}
 
@@ -1385,35 +1457,101 @@ void InterLayerGridObject::DrawShaded()
 
 	for(int i=0; i<m_gridCells.size(); i++)
 	{
-		for(int index=0; index<24; index++)
+		if( !m_gridCells[i].m_bIsGridRefinement)
 		{
-			postions[index*3] = m_gridCells[i].m_cornerPoint[faceindexes[index]].GetX();
-			postions[index*3+1] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetY();
-			postions[index*3+2] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetZ();
+			for(int index=0; index<24; index++)
+			{
+				postions[index*3] = m_gridCells[i].m_cornerPoint[faceindexes[index]].GetX();
+				postions[index*3+1] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetY();
+				postions[index*3+2] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetZ();
 
-			postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
-			postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
-			postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+				postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+				postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+				postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
-			normals[index*3] = m_gridCells[i].m_faceNormals[index>>2].GetX();		// index>>2为面号
-			normals[index*3+1] = -m_gridCells[i].m_faceNormals[index>>2].GetY();
-			normals[index*3+2] = -m_gridCells[i].m_faceNormals[index>>2].GetZ();
+				normals[index*3] = m_gridCells[i].m_faceNormals[index>>2].GetX();		// index>>2为面号
+				normals[index*3+1] = -m_gridCells[i].m_faceNormals[index>>2].GetY();
+				normals[index*3+2] = -m_gridCells[i].m_faceNormals[index>>2].GetZ();
+				if(  m_displayMode == GLSHADED )
+				{
+					colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+					colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+					colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+				}
+			}
+
+			glVertexPointer(3,GL_FLOAT,0,postions);
+			glNormalPointer(GL_FLOAT,0,normals);
 			if( m_displayMode == GLSHADED )
 			{
-				colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
-				colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
-				colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+				glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
+			}
+			glDrawArrays(GL_QUADS,0,24);
+		}
+		else
+		{
+			for(vector<tagGridModelCellNew>::iterator it=m_gridCells[i].m_subCells.begin(); it!=m_gridCells[i].m_subCells.end(); ++it )
+			{
+				tagGridModelCellNew cell = (*it);
+				for(int index=0; index<24; index++)
+				{
+					postions[index*3] = cell.m_cornerPoint[faceindexes[index]].GetX();
+					postions[index*3+1] = -cell.m_cornerPoint[faceindexes[index]].GetY();
+					postions[index*3+2] = -cell.m_cornerPoint[faceindexes[index]].GetZ();
+
+					postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+					postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+					postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
+
+					normals[index*3] = cell.m_faceNormals[index>>2].GetX();		// index>>2为面号
+					normals[index*3+1] = -cell.m_faceNormals[index>>2].GetY();
+					normals[index*3+2] = -cell.m_faceNormals[index>>2].GetZ();
+					if(  m_displayMode == GLSHADED )
+					{
+						colors[index*3] = GetRValue(cell.m_itsColor[faceindexes[index]]);
+						colors[index*3+1] = GetGValue(cell.m_itsColor[faceindexes[index]]);
+						colors[index*3+2] = GetBValue(cell.m_itsColor[faceindexes[index]]);
+					}
+				}
+
+				glVertexPointer(3,GL_FLOAT,0,postions);
+				glNormalPointer(GL_FLOAT,0,normals);
+				if( m_displayMode == GLSHADED )
+				{
+					glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
+				}
+				glDrawArrays(GL_QUADS,0,24);
 			}
 		}
+		//for(int index=0; index<24; index++)
+		//{
+		//	postions[index*3] = m_gridCells[i].m_cornerPoint[faceindexes[index]].GetX();
+		//	postions[index*3+1] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetY();
+		//	postions[index*3+2] = -m_gridCells[i].m_cornerPoint[faceindexes[index]].GetZ();
 
-		glVertexPointer(3,GL_FLOAT,0,postions);
-		glNormalPointer(GL_FLOAT,0,normals);
-		if( m_displayMode == GLSHADED )
-		{
-			glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
-		}
+		//	postions[index*3] = (postions[index*3]-xMin)/range*2.0-1.0;
+		//	postions[index*3+1] = (postions[index*3+1]-yMin)/range*2.0-1.0;
+		//	postions[index*3+2] = (postions[index*3+2]-box.ZMin())/zRange*2.0-1.0;
 
-		glDrawArrays(GL_QUADS,0,24);
+		//	normals[index*3] = m_gridCells[i].m_faceNormals[index>>2].GetX();		// index>>2为面号
+		//	normals[index*3+1] = -m_gridCells[i].m_faceNormals[index>>2].GetY();
+		//	normals[index*3+2] = -m_gridCells[i].m_faceNormals[index>>2].GetZ();
+		//	if( m_displayMode == GLSHADED )
+		//	{
+		//		colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+		//		colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+		//		colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+		//	}
+		//}
+
+		//glVertexPointer(3,GL_FLOAT,0,postions);
+		//glNormalPointer(GL_FLOAT,0,normals);
+		//if( m_displayMode == GLSHADED )
+		//{
+		//	glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
+		//}
+
+		//glDrawArrays(GL_QUADS,0,24);
 	}
 
 
@@ -1454,10 +1592,12 @@ void InterLayerGridObject::LoadLayer( const std::string& filename )
 		cell.CalcNormals();
 		int size_t;
 		art >> size_t;
-
+		if(size_t>0)
+			cell.m_bIsGridRefinement = true;
 		for (int j = 0; j < size_t; j++)
 		{
 			tagGridModelCellNew subcell;
+			
 			for (int k = 0; k < 8; k++)
 			{
 				art >> subcell.m_cornerPoint[k].x;

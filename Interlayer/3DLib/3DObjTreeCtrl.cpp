@@ -46,7 +46,7 @@ void C3DObjTreeCtrl::FillTreeCtrl()
 	HTREEITEM hItem41 = InsertItem(_T("面"),0,0,hItem4);
 	HTREEITEM hItem42 = InsertItem(_T("线"),0,0,hItem4);
 	HTREEITEM hItem43 = InsertItem(_T("点"),0,0,hItem4);
-
+	HTREEITEM hItem44 = InsertItem(_T("夹层网格"),0,0,hItem4);
 
 	POSITION pos = m_pDoc->GetFirstViewPosition();
 	C3DModelView *pView = (C3DModelView *)m_pDoc->GetNextView(pos);
@@ -340,6 +340,7 @@ void C3DObjTreeCtrl::AddObj(CGLObject *pObj)
 	HTREEITEM hSrc41 = GetChildNode(hSrc4, _T("面"));
 	HTREEITEM hSrc42 = GetChildNode(hSrc4, _T("线"));
 	HTREEITEM hSrc43 = GetChildNode(hSrc4, _T("点"));
+	HTREEITEM hSrc44 = GetChildNode(hSrc4, _T("夹层网格"));
 
 	HTREEITEM hItem;
 	int nImage = 0, nSelectImage = 0;
@@ -464,6 +465,13 @@ void C3DObjTreeCtrl::AddObj(CGLObject *pObj)
 			nImage = 10;
 			nSelectImage = 10;
 			hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage, hSrc41);
+		}
+		break;
+	case GLINTERLAYERCELL:
+		{
+			nImage = 10;
+			nSelectImage = 10;
+			hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage, hSrc44);
 		}
 		break;
 

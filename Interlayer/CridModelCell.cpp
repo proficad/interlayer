@@ -34,3 +34,16 @@ void tagGridModelCellNew::CalcNormals()
 	nrml.Normalize();
 	m_faceNormals[5] = nrml;
 }
+
+GridCells::~GridCells()
+{
+	for(VECTOR_ARRAY3D_ITERATOR it3d=m_gridCells.begin(); it3d!=m_gridCells.end(); ++it3d)
+	{
+		for(VECTOR_ARRAY2D_ITERATOR it2d=(*it3d).begin(); it2d!=(*it3d).end(); ++it2d)
+		{
+			(*it2d).clear();
+		}
+		(*it3d).clear();
+	}
+	m_gridCells.clear();
+}

@@ -1930,7 +1930,7 @@ void C3DObject::Serialize(CArchive& ar)
 		{
 			CVertex3D point;
 			ar >> point;
-			m_pointList.push_back(point);
+			m_pointList.push_back(CVertex3D(point.x, -point.y, -point.z));
 		}
 
 		ar >> size;
@@ -1941,9 +1941,8 @@ void C3DObject::Serialize(CArchive& ar)
 			ar >> index;
 			m_indexs.push_back(index);
 		}
-
+		
 		ComputeBoundLimits();
-
 
 		//------------------------------------------------------------------------
 		size = m_pointList.size();

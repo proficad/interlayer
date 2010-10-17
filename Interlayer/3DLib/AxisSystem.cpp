@@ -34,7 +34,17 @@ CAxisSystem::CAxisSystem(const CVertex3D& Pos, const CVector3D& Dir, const CVect
 	m_XDirection = XDir;
 	m_XDirection.Normalize();
 	if (!m_Direction.IsNormal(m_XDirection))
-		throw CGeomException(ConstructionFailure);
+	{
+		try
+		{
+			throw CGeomException(ConstructionFailure);
+		}
+
+		catch(...)
+		{
+
+		}
+	}
 	else
 		m_YDirection = m_Direction.Crossed(m_XDirection);
 

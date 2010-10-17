@@ -5,13 +5,14 @@
 #include "Interlayer.h"
 #include "DlgWithGraph.h"
 #include "GeoMap/GeoMapView.h"
+#include "afc/ResizableLib/ResizableDialog.h"
 
 #define DEMO_MAX_GRAPHS 16
 
 extern COLORREF DefaultGraphColors[DEMO_MAX_GRAPHS];
 
 // CDlgWithGraph ¶Ô»°¿ò
-
+class CResizableDialog;
 IMPLEMENT_DYNAMIC(CDlgWithGraph, CResizableDialog)
 
 CDlgWithGraph::CDlgWithGraph(CWnd* pParent /*=NULL*/)

@@ -2089,13 +2089,13 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 									{
 										if( GetCheck(hItem) )
 										{
-											CTreeNodeDat *lpNode = (CTreeNodeDat *)GetItemData(hItem);
-											switch( lpNode->m_nType )
+											CTreeNodeDat *lpNode1 = (CTreeNodeDat *)GetItemData(hItem);
+											switch( lpNode1->m_nType )
 											{
 											case FILE_PLANE:				// 面
 												{
 													CString strSourcePathName = pMF->GetProjectDatPath();
-													CString strFileName = ((CFileViewObj*)lpNode->m_pNodeDat)->m_strFileName;
+													CString strFileName = ((CFileViewObj*)lpNode1->m_pNodeDat)->m_strFileName;
 													strSourcePathName += _T("\\files\\");
 													strSourcePathName += strFileName;
 
@@ -2105,6 +2105,26 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 													pDoc->AddPlane(strSourcePathName, strText);													
 												}
 												break;
+											//case GRID_LAYER:			// 网格模型
+											//	{
+											//		C3DModelDoc *pDoc = ((C3DModelView*)pDropWnd)->GetDocument();
+
+											//		CGLObject*pObj = NULL;
+
+											//		{
+											//			CWaitCursor wait;
+											//			//CString strSourcePathName = pMF->GetProjectDatPath();
+											//			CString strFileName = ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
+											//			//strSourcePathName += _T("\\models\\");
+											//			//strSourcePathName += strFileName;
+
+											//			CString strText = GetItemText(m_hitemDrag);
+
+											//			//CStringArray ar1, ar2;
+											//			pDoc->AddInterlayer(strFileName, strText);
+											//		}
+											//	}
+											//	break;
 											default:
 												break;
 
@@ -2162,6 +2182,26 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 									}
 								}
 								break;
+							case GRID_LAYER:			// 网格模型
+								{
+									C3DModelDoc *pDoc = ((C3DModelView*)pDropWnd)->GetDocument();
+
+									CGLObject*pObj = NULL;
+
+									{
+										CWaitCursor wait;
+										//CString strSourcePathName = pMF->GetProjectDatPath();
+										CString strFileName = ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
+										//strSourcePathName += _T("\\models\\");
+										//strSourcePathName += strFileName;
+
+										CString strText = GetItemText(m_hitemDrag);
+
+										//CStringArray ar1, ar2;
+										pDoc->AddInterlayer(strFileName, strText);
+									}
+								}
+								break;
 							case FARM_DAT:
 								{
 									CWaitCursor wait;
@@ -2173,6 +2213,73 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 									CString strText = GetItemText(m_hitemDrag);
 									C3DModelDoc *pDoc = ((C3DModelView*)pDropWnd)->GetDocument();
 									pDoc->AddPhyParam(strSourcePathName, strText);
+								}
+								break;
+
+							case FOLDER:
+								{
+									CWaitCursor wait;
+									HTREEITEM hItem = GetChildItem(m_hitemDrag);
+									int num = 0;
+
+									while(hItem != NULL)
+									{
+										if( GetCheck(hItem) )
+											num++;
+										hItem = GetNextSiblingItem(hItem);
+									}
+
+									if( num > 0 )
+										StatusProgress(1, num);
+
+									num = 0;
+
+									hItem = GetChildItem(m_hitemDrag);
+									while(hItem != NULL)
+									{
+										if( GetCheck(hItem) )
+										{
+											CTreeNodeDat *lpNode = (CTreeNodeDat *)GetItemData(hItem);
+											switch( lpNode->m_nType )
+											{
+											case  GRID_DAT:
+												{
+													//AfxMessageBox("不能同时导入多个网格模型");
+													//return ;
+												}
+												break;
+											case GRID_LAYER:			// 网格模型
+												{
+													C3DModelDoc *pDoc = ((C3DModelView*)pDropWnd)->GetDocument();
+
+													CGLObject*pObj = NULL;
+
+													{
+														CWaitCursor wait;
+														//CString strSourcePathName = pMF->GetProjectDatPath();
+														CString strFileName = ((CFileViewObj*)lpNode->m_pNodeDat)->m_strFileName;
+														//strSourcePathName += _T("\\models\\");
+														//strSourcePathName += strFileName;
+
+														CString strText = GetItemText(m_hitemDrag);
+
+														//CStringArray ar1, ar2;
+														pDoc->AddInterlayer(strFileName, strText);
+													}
+												}
+												break;
+											default:
+												break;
+
+											}
+											num ++;
+
+											StatusSetProgress(1, num);
+										}
+										hItem = GetNextSiblingItem(hItem);										
+									}
+									if( num > 0 )
+										StatusProgress(1);
 								}
 								break;
 							default:

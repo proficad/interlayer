@@ -2381,3 +2381,35 @@ void CModelView::OnUpdateEditPaste(CCmdUI *pCmdUI)
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	m_wndModelView.OnUpdateEditPaste(pCmdUI);
 }
+
+bool CModelView::OnImportInterlayer( LPCSTR strFileName, LPCSTR strFileTitle)
+{
+	HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+	if( hItem == NULL )
+		hItem = TVI_ROOT;
+
+	HTREEITEM h = AddTreeItem(strFileTitle, 1, 1, hItem);
+
+	CTreeNodeDat *lpNodeDat = new CTreeNodeDat;
+
+	CFileViewObj *pObj = new CFileViewObj;
+	pObj->m_strFileName = strFileName;
+
+	lpNodeDat->m_nImage			= 10;
+	lpNodeDat->m_nSelectedImage	= 10;
+	lpNodeDat->m_nType			= GRID_LAYER;
+	lpNodeDat->m_pNodeDat		= pObj;
+	lpNodeDat->m_uState			= TVIS_EXPANDED;
+	CString tmp = strFileName;
+	tmp.MakeUpper();
+	strFileName = tmp;
+	lpNodeDat->m_strFileName = strFileName;
+
+	m_wndModelView.SetItemData(h, (DWORD)lpNodeDat);
+
+	m_wndModelView.Expand(hItem, TVE_EXPAND);
+
+	m_wndModelView.EditLabel(h);
+
+	return true;
+}

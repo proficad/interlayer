@@ -54,6 +54,7 @@ public:
 	bool ReadGridPBRS(LPCSTR lpszGridFileName, LPCSTR lpszModelFileName, HTREEITEM hItem);
 	bool ReadGridEclipse(LPCSTR lpszGridFileName, LPCSTR lpszModelFileName, HTREEITEM hItem);
 
+	bool OnImportInterlayer( LPCSTR filename, LPCSTR name );
 // ÖØÐ´
 public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

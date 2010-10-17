@@ -79,10 +79,11 @@ bool CIntersectSearchManager::SearchInterSect()
 {
 	if((m_model==NULL)||(m_interlayers.empty()))
 		return false;
+	int index = 1;
 	for(std::vector<CGLObject*>::iterator it=m_interlayers.begin(); it!=m_interlayers.end(); ++it)
 	{
 		CGLObject* face = (*it);
-		SearchALayer(face);
+		SearchALayer(face, index++);
 	}
 
 	//写点坝文件
@@ -106,7 +107,7 @@ bool CIntersectSearchManager::SearchInterSect()
 	m_interlayers.clear();
 }
 
-void CIntersectSearchManager::SearchALayer( CGLObject* gird )
+void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index )
 {
 	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
 	CString strFileName = pMF->GetProjectDatPath();
@@ -129,20 +130,23 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird )
 		//test.LoadLayer(strNewFileName.GetBuffer());
 
 		//相交网格的显示
+		CString title;
+		title.Format("%s%d","夹层网格", index);
 		CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
-		CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
-		if( pWnd )
-		{
-			C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
-			if(pView)
-			{
-				if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
-				{
-					C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
-					pDoc->AddInterlayer(strNewFileName.GetBuffer(),"test");
-				}
-			}
-		}	
+		pMF->GetTreeModelView()->OnImportInterlayer(strNewFileName, title);
+		//CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+		//if( pWnd )
+		//{
+		//	//C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+		//	//if(pView)
+		//	//{
+		//	//	if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+		//	//	{
+		//	//		C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+		//	//		pDoc->AddInterlayer(strNewFileName.GetBuffer(),strNewFileName.GetBuffer());
+		//	//	}
+		//	}
+		//}	
 
 		//pMF->get3d
 	}

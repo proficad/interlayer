@@ -47,6 +47,7 @@ private:
 	void DrawWired(const GLSelectedMode& dMode = GLNOSELECTED);
 	void DrawShaded();
 	void ComputePoints(CReader* r);
+
 	void ComputeBoundLimits();
 private:	
 

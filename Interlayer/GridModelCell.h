@@ -4,6 +4,7 @@
 #define _GRID_MODEL_CELL_
 
 #include "3DLib/Vertex3D.h"
+#include "boost/shared_ptr.hpp"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 struct GridRefinement
@@ -196,10 +197,7 @@ public:
 	}
 	~tagGridModelCellNew()
 	{
-		//delete [] m_cornerPoint;
-		//delete [] m_faceNormals;
-		//delete [] m_itsColor;
-		//m_subCells.clear();
+		m_subCells.clear();
 	}
 	void Serialize(CArchive& ar)
 	{	
@@ -251,5 +249,12 @@ typedef vector< VECTOR_ARRAY > VECTOR_ARRAY2D;
 typedef VECTOR_ARRAY2D::iterator VECTOR_ARRAY2D_ITERATOR;
 typedef vector<VECTOR_ARRAY2D > VECTOR_ARRAY3D;
 typedef VECTOR_ARRAY3D::iterator VECTOR_ARRAY3D_ITERATOR;
+//typedef boost::shared_ptr<VECTOR_ARRAY3DI> VECTOR_ARRAY3D;
+struct GridCells
+{
+	~GridCells();
+	VECTOR_ARRAY3D m_gridCells;
+};
 
+typedef boost::shared_ptr<GridCells> VECTOR_ARRAY3DPTR;
 #endif

@@ -56,6 +56,10 @@ CPlane::CPlane(CVertex3D* pVertex1, CVertex3D* pVertex2, CVertex3D* pVertex3)
 
 	CVector3D V1(P1, P2);
 	CVector3D V2(P1, P3);
+	if(V1.IsNull())
+		V1=CVector3D(1,0,0);
+	if(V2.IsNull())
+		V2=CVector3D(0,1,0);
 	CVector3D Dir = V1 ^ V2;
 
 	CAxisSystem ax(P1, Dir, V1);

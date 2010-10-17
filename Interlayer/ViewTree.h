@@ -32,6 +32,7 @@ enum NODE_STYLE // 节点类型
 	GRID_DAT=1,				// 模型
 	FARM_DAT,				// 场数据
 	FARM_LAYER,				// 每层数据
+	GRID_LAYER,					//.模型夹层面
 
 	INTERSECT_DAT=1,		//网格与夹层面的相交
 

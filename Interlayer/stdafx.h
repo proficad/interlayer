@@ -38,6 +38,10 @@
 #include <afxcontrolbars.h>     // 功能区和控件条的 MFC 支持
 #include <afxrich.h>            // MFC Rich Edit 类
 
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
 #include <afx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
