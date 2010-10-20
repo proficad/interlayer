@@ -77,7 +77,8 @@ bool CIntersectSearchManager::LoadGridModel( const std::string& filename,const s
 
 bool CIntersectSearchManager::SearchInterSect()
 {
-	if((m_model==NULL)||(m_interlayers.empty()))
+	CWaitCursor wait;
+	if((m_gridFilename.empty())||(m_interlayers.empty()))
 		return false;
 	int index = 1;
 	for(std::vector<CGLObject*>::iterator it=m_interlayers.begin(); it!=m_interlayers.end(); ++it)
@@ -86,23 +87,23 @@ bool CIntersectSearchManager::SearchInterSect()
 		SearchALayer(face, index++);
 	}
 
-	//写点坝文件
-	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
-	CString strFileName = pMF->GetProjectDatPath();
-	strFileName += _T("\\models\\");
-	CString strNewtempFileName;
-	strNewtempFileName = strFileName + newGUID() + ".pointbar";
+	////写点坝文件
+	//CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	//CString strFileName = pMF->GetProjectDatPath();
+	//strFileName += _T("\\models\\");
+	//CString strNewtempFileName;
+	//strNewtempFileName = strFileName + newGUID() + ".pointbar";
 
-	CFile file(strNewtempFileName.GetBuffer(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
-	CArchive art(&file, CArchive::store);
-	art << m_interlayerNames.size();
-	for(int i=0; i<m_interlayerNames.size(); i++)
-	{
-		art << (m_interlayerNames[i]).length();
-		for(int j=0; j<(m_interlayerNames[i]).length(); j++)
-			art <<m_interlayerNames[i].c_str()[j];
-	}
-	art.Close();
+	//CFile file(strNewtempFileName.GetBuffer(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+	//CArchive art(&file, CArchive::store);
+	//art << m_interlayerNames.size();
+	//for(int i=0; i<m_interlayerNames.size(); i++)
+	//{
+	//	art << (m_interlayerNames[i]).length();
+	//	for(int j=0; j<(m_interlayerNames[i]).length(); j++)
+	//		art <<m_interlayerNames[i].c_str()[j];
+	//}
+	//art.Close();
 	m_interlayerNames.clear();
 	m_interlayers.clear();
 }
@@ -126,6 +127,8 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index )
 	TRY 
 	{	
 		bool rs = Tracking(strNewtempFileName.GetBuffer(),m_gridFilename,strNewFileName.GetBuffer());
+		if(!rs)
+			return ;
 		//InterLayerGridObject test;
 		//test.LoadLayer(strNewFileName.GetBuffer());
 

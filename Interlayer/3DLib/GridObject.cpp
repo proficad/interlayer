@@ -42,6 +42,42 @@ const CPhyPara& CPhyPara::operator=(const CPhyPara& src)
 	return *this;
 }
 
+void CPhyPara::SavePara( const std::string& filename )
+{
+	CFile file(filename.c_str(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+	CArchive ar(&file, CArchive::store);
+
+	//ar << m_strName;
+	char *tmp = m_strName.GetBuffer();
+	for(int i=0; i<8; i++)
+	{
+		if(i<=(m_strName.GetLength()-1))
+		{
+			ar << tmp[i];
+			ar << '\0';
+		}
+		else
+		{
+			ar << '\0';
+			ar << '\0';
+		}
+	}
+	ar << m_bShow;	
+	ar << m_dMinValue;
+	ar << m_dMaxValue;
+	ar << I;
+	ar << J;
+	ar << K;
+	int nSize = m_dValue.size();
+	ar << nSize;
+	for (int i=0; i<nSize; i++)
+	{
+		ar << m_dValue[i];
+	}
+
+	ar.Close();
+}
+
 //------------------------------------------------------------------------
 
 CGridObject::CGridObject(void)
@@ -104,6 +140,9 @@ void CGridObject::Add(LPCTSTR lpszName, double dValue)
 
 	CPhyPara param;
 	param.m_strName = str;
+	param.I = I;
+	param.J = J;
+	param.K = K;
 	param.Add(dValue);
 	m_vecPhyPara.Add(param);
 }
@@ -749,7 +788,7 @@ void CGridObject::DrawShaded()
 		}
 	}
 
-	if( !pParam && m_displayMode == GLSHADED )
+	if( /*!pParam &&*/ m_displayMode == GLSHADED )
 	{
 		glEnableClientState(GL_COLOR_ARRAY);
 	}
@@ -822,17 +861,27 @@ void CGridObject::DrawShaded()
 					normals[index*3] = m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
 					normals[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
 					normals[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
-					if( !pParam && m_displayMode == GLSHADED )
+					if( /*!pParam &&*/ m_displayMode == GLSHADED )
 					{
-						colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-						colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-						colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+						if(pParam)
+						{
+							COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[k*I*J + j*I + i]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
+							colors[index*3] = GetRValue(clr);
+							colors[index*3+1] = GetGValue(clr);
+							colors[index*3+2] = GetBValue(clr);
+						}
+						else
+						{
+							colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+							colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+						}
 					}
 				}
 
 				glVertexPointer(3,GL_FLOAT,0,postions);
 				glNormalPointer(GL_FLOAT,0,normals);
-				if( !pParam && m_displayMode == GLSHADED )
+				if( /*!pParam &&*/ m_displayMode == GLSHADED )
 				{
 					glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
 				}
@@ -872,17 +921,27 @@ void CGridObject::DrawShaded()
 							normals[index*3] = m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetX();		// index>>2为面号
 							normals[index*3+1] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetY();
 							normals[index*3+2] = -m_gridCells->m_gridCells[i][j][k].m_faceNormals[index>>2].GetZ();
-							if( !pParam && m_displayMode == GLSHADED )
+							if(/* !pParam &&*/ m_displayMode == GLSHADED )
 							{
-								colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-								colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
-								colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+								if(pParam)
+								{
+									COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[k*I*J + j*I + i]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
+									colors[index*3] = GetRValue(clr);
+									colors[index*3+1] = GetGValue(clr);
+									colors[index*3+2] = GetBValue(clr);
+								}
+								else
+								{
+									colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+									colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+									colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+								}
 							}
 						}
 
 						glVertexPointer(3,GL_FLOAT,0,postions);
 						glNormalPointer(GL_FLOAT,0,normals);
-						if( !pParam && m_displayMode == GLSHADED )
+						if( /*!pParam && */m_displayMode == GLSHADED )
 						{
 							glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
 						}
@@ -906,17 +965,27 @@ void CGridObject::DrawShaded()
 								normals[index*3] = cell.m_faceNormals[index>>2].GetX();		// index>>2为面号
 								normals[index*3+1] = -cell.m_faceNormals[index>>2].GetY();
 								normals[index*3+2] = -cell.m_faceNormals[index>>2].GetZ();
-								if( !pParam && m_displayMode == GLSHADED )
+								if( /*!pParam && */m_displayMode == GLSHADED )
 								{
-									colors[index*3] = GetRValue(cell.m_itsColor[faceindexes[index]]);
-									colors[index*3+1] = GetGValue(cell.m_itsColor[faceindexes[index]]);
-									colors[index*3+2] = GetBValue(cell.m_itsColor[faceindexes[index]]);
+									if(pParam)
+									{
+										COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[k*I*J + j*I + i]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
+										colors[index*3] = GetRValue(clr);
+										colors[index*3+1] = GetGValue(clr);
+										colors[index*3+2] = GetBValue(clr);
+									}
+									else
+									{
+										colors[index*3] = GetRValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+										colors[index*3+1] = GetGValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+										colors[index*3+2] = GetBValue(m_gridCells->m_gridCells[i][j][k].m_itsColor[faceindexes[index]]);
+									}
 								}
 							}
 
 							glVertexPointer(3,GL_FLOAT,0,postions);
 							glNormalPointer(GL_FLOAT,0,normals);
-							if( !pParam && m_displayMode == GLSHADED )
+							if( /*!pParam &&*/ m_displayMode == GLSHADED )
 							{
 								glColorPointer(3,GL_UNSIGNED_BYTE,0,colors);
 							}
@@ -930,7 +999,7 @@ void CGridObject::DrawShaded()
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
-	if( !pParam && m_displayMode == GLSHADED )
+	if( /*!pParam && */m_displayMode == GLSHADED )
 	{
 		glDisableClientState(GL_COLOR_ARRAY);
 	}
@@ -1231,6 +1300,13 @@ void InterLayerGridObject::Serialize( CArchive& ar )
 		{
 			m_gridCells[i].Serialize(ar);
 		}
+
+		int size = m_vecPhyPara.GetSize();
+
+		ar << size;
+
+		for (int i=0; i<size; i++)
+			ar << m_vecPhyPara[i];
 	}
 	else
 	{		
@@ -1246,6 +1322,15 @@ void InterLayerGridObject::Serialize( CArchive& ar )
 			tagGridModelCellNew cell;
 			cell.Serialize(ar);
 			m_gridCells.push_back(cell);
+		}
+
+		ar >> size;
+		m_vecPhyPara.SetSize(size);
+		for (int i=0; i<size; i++)
+		{
+			CPhyPara tmp;
+			ar >> tmp;
+			m_vecPhyPara[i] = tmp;
 		}
 	}
 }
@@ -1447,6 +1532,16 @@ void InterLayerGridObject::DrawShaded()
 
 	ComputePoints(box);
 
+	CPhyPara *pParam = NULL;
+	int nSize = m_vecPhyPara.GetSize();
+	for (int i=0; i<nSize; i++)
+	{
+		if( m_vecPhyPara[i].m_bShow )
+		{
+			pParam = &m_vecPhyPara[i];
+			break;
+		}
+	}
 
 	if( m_displayMode == GLSHADED )
 	{
@@ -1474,9 +1569,25 @@ void InterLayerGridObject::DrawShaded()
 				normals[index*3+2] = -m_gridCells[i].m_faceNormals[index>>2].GetZ();
 				if(  m_displayMode == GLSHADED )
 				{
-					colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
-					colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
-					colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+					if(pParam)
+					{
+						int x = m_gridCells[i]._x;		
+						int y = m_gridCells[i]._y;
+						int z = m_gridCells[i]._z;
+						COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[z*I*J + y*I + x]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
+						colors[index*3] = GetRValue(clr);
+						colors[index*3+1] = GetGValue(clr);
+						colors[index*3+2] = GetBValue(clr);
+					}
+					else
+					{
+						colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+						colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+						colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+					}
+					//colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+					//colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+					//colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
 				}
 			}
 
@@ -1508,9 +1619,22 @@ void InterLayerGridObject::DrawShaded()
 					normals[index*3+2] = -cell.m_faceNormals[index>>2].GetZ();
 					if(  m_displayMode == GLSHADED )
 					{
-						colors[index*3] = GetRValue(cell.m_itsColor[faceindexes[index]]);
-						colors[index*3+1] = GetGValue(cell.m_itsColor[faceindexes[index]]);
-						colors[index*3+2] = GetBValue(cell.m_itsColor[faceindexes[index]]);
+						if(pParam)
+						{
+							int x = m_gridCells[i]._x;		
+							int y = m_gridCells[i]._y;
+							int z = m_gridCells[i]._z;
+							COLORREF clr = GetContext()->GetColorTable()->GetColor( (pParam->m_dValue[z*I*J + y*I + x]-pParam->m_dMinValue)/( pParam->m_dMaxValue- pParam->m_dMinValue));
+							colors[index*3] = GetRValue(clr);
+							colors[index*3+1] = GetGValue(clr);
+							colors[index*3+2] = GetBValue(clr);
+						}
+						else
+						{
+							colors[index*3] = GetRValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+							colors[index*3+1] = GetGValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+							colors[index*3+2] = GetBValue(m_gridCells[i].m_itsColor[faceindexes[index]]);
+						}
 					}
 				}
 
@@ -1611,4 +1735,30 @@ void InterLayerGridObject::LoadLayer( const std::string& filename )
 	}
 
 	art.Close();
+}
+
+void InterLayerGridObject::Add( LPCTSTR lpszName, double dValue )
+{
+	int nSize = m_vecPhyPara.GetSize();
+
+	CString str = lpszName;
+	str.Trim();
+	str.MakeUpper();
+
+	for (int i=0; i<nSize; i++)
+	{
+		if( m_vecPhyPara[i].m_strName == str )
+		{
+			m_vecPhyPara[i].Add(dValue);
+			return;
+		}
+	}
+
+	CPhyPara param;
+	param.m_strName = str;
+	param.I = I;
+	param.J = J;
+	param.K = K;
+	param.Add(dValue);
+	m_vecPhyPara.Add(param);
 }

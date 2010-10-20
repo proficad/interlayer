@@ -490,11 +490,22 @@ HTREEITEM CViewTree::ReadTreeViewContent(CArchive& ar, HTREEITEM hItem)
 						pNote->m_nImage = nImage;
 						pNote->m_nSelectedImage = nImage;
 					}
-
+					if( m_eTreeType == modelTree )
+					{
+						switch(pNote->m_nType)
+						{
+						case GRID_LAYER:
+							{
+								pNote->m_nImage = 10;
+								pNote->m_nSelectedImage = 10;
+							}
+							break;
+						}
+					}
 					hAfter = InsertItem(strTxt, pNote->m_nImage, pNote->m_nSelectedImage, m_hItems[m_nIndex], hAfter);
 				}
 				SetItemData(hAfter, (DWORD_PTR)pNote);
-
+	
 				if( m_nIndex == 0 )
 					hItemRet = hAfter;
 			}
@@ -2855,6 +2866,7 @@ void CViewTree::OnRename()
 				case FOLDER:
 				case GRID_DAT:
 				case FARM_DAT:
+				case GRID_LAYER:
 					EditLabel(hti);
 					break;
 				default:

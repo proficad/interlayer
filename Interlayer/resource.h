@@ -278,6 +278,8 @@
 #define IDI_ICON_LOGGING_INFO           506
 #define IDD_DLG_SLICE_Z                 507
 #define IDD_DLG_SLICE_XY                508
+#define IDD_DIALOG1                     509
+#define IDD_DLG_PHYPARARANGE            509
 #define IDC_EDIT_MINV                   1000
 #define IDC_EDIT_MAXV                   1001
 #define IDC_EDIT_MINDV                  1002
@@ -416,6 +418,8 @@
 #define IDC_EDIT_Y1                     1134
 #define IDC_EDIT_Y2                     1135
 #define IDC_EDIT_X2                     1136
+#define IDC_EDIT1                       1137
+#define IDC_EDIT2                       1138
 #define IDC_EDIT_NAME                   3016
 #define IDC_EDIT_SCALE                  3017
 #define IDC_EDIT_HPAGE                  3020
@@ -553,6 +557,7 @@
 #define ID_IMPORT_MATEX                 32985
 #define ID_IMPORT_FIELD                 32986
 #define ID_NEW_WELL_DAT                 32987
+#define ID_SEARCH_MODEL                 32988
 #define ID_EXPORT_MODEL                 32990
 #define ID_IMPORT_POINT                 32993
 #define ID_IMPORT_LINE                  32994
@@ -663,7 +668,7 @@
 #define ID_VIEW_TOOL_LAYER              33105
 #define ID_VIEW_3D_OBJ                  33106
 #define ID_CTRL_POINT_SET               33107
-#define ID_VIEW_INTERSECT_SEARCH   33108
+#define ID_VIEW_INTERSECT_SEARCH        33108
 #define ID_DELETE_CTRL_POINT            33121
 #define ID_EDIT_CTRL_POINT              33122
 #define ID_DUMMY_CTRL_POINT             33123
@@ -738,15 +743,21 @@
 #define ID_WIREFRAME                    33199
 #define ID_FILL                         33200
 #define ID_EXPORT                       33201
-#define IDC_BUTTON_INTERSECTSEARCH		33202
+#define IDC_BUTTON_INTERSECTSEARCH      33202
+#define ID_BUTTON33202                  33202
+#define ID_PHYPARARANGESET              33204
+#define ID_EDIT_ADDPRT                  33205
+#define ID_EDIT_CALCPRT                 33206
+#define ID_EDIT_ADJPRT                  33207
+#define ID_P                            33207
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        509
-#define _APS_NEXT_COMMAND_VALUE         33202
-#define _APS_NEXT_CONTROL_VALUE         1137
+#define _APS_NEXT_RESOURCE_VALUE        510
+#define _APS_NEXT_COMMAND_VALUE         33208
+#define _APS_NEXT_CONTROL_VALUE         1139
 #define _APS_NEXT_SYMED_VALUE           450
 #endif
 #endif

@@ -1282,6 +1282,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\DlgInterlayerParaRange.h"
+					>
+				</File>
+				<File
 					RelativePath=".\DlgLayerParamSet.h"
 					>
 				</File>
@@ -1562,11 +1566,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\GeoMap\RgnClipping.h"
+					RelativePath=".\RgnClipping.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RgnClipping.h"
+					RelativePath=".\GeoMap\RgnClipping.h"
 					>
 				</File>
 				<File
@@ -1801,6 +1805,10 @@
 				</File>
 				<File
 					RelativePath=".\DlgImportWellInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DlgInterlayerParaRange.cpp"
 					>
 				</File>
 				<File

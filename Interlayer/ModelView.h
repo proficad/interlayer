@@ -78,6 +78,10 @@ public:
 	afx_msg void OnUpdateEditRename(CCmdUI *pCmdUI);
 	afx_msg void OnImportModel();
 	afx_msg void OnUpdateImportModel(CCmdUI *pCmdUI);
+
+	afx_msg void OnSearchModel();
+	afx_msg void OnUpdateSearchModel(CCmdUI *pCmdUI);
+
 	afx_msg void OnImportField();
 	afx_msg void OnUpdateImportField(CCmdUI *pCmdUI);
 	afx_msg void OnExpandAllTree();

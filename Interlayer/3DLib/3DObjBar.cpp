@@ -7,6 +7,9 @@
 #include "../Interlayer.h"
 #include "../IntersectSearchManager.h"
 #include "../MainFrm.h"
+#include "../3DLib/3DModelView.h"
+#include "../3DLib/GridObject.h"
+#include "../DlgImportModel.h"
 
 // C3DObjBar
 
@@ -19,6 +22,8 @@ C3DObjBar::C3DObjBar()
 
 C3DObjBar::~C3DObjBar()
 {
+	m_PhyParaName.clear();
+	m_PhyParaNamefilename.clear();
 }
 
 
@@ -40,7 +45,13 @@ BEGIN_MESSAGE_MAP(C3DObjBar, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_MATERIAL_SET, OnUpdateSetMaterial)
 	ON_COMMAND(ID_COLOR_SET, OnSetColor)
 	ON_UPDATE_COMMAND_UI(ID_COLOR_SET, OnUpdateSetColor)
+	ON_COMMAND(ID_EDIT_ADDPRT, OnAddPhyPara)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_ADDPRT, OnUpdateAddPhyPara)
 
+	ON_COMMAND(ID_EDIT_CALCPRT, OnCalcPhyPara)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_CALCPRT, OnUpdateCalcPhyPara)
+	ON_COMMAND(ID_EDIT_ADJPRT, OnAdjPhyPara)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_ADJPRT, OnUpdateAdjPhyPara)
 END_MESSAGE_MAP()
 
 
@@ -287,6 +298,497 @@ void C3DObjBar::OnSetColor()
 void C3DObjBar::OnUpdateSetColor(CCmdUI *pCmdUI)
 {
 	m_wndTree.OnUpdateSetColor(pCmdUI);
+}
+
+void C3DObjBar::OnAddPhyPara()
+{
+	HTREEITEM hItem = m_wndTree.GetSelectedItem();
+
+	CString strFileName;
+	CString strName;
+	CDlgImportModel dlg(TRUE,0,0,4|2|64,_T("所有文件 (*.*)|*.*||")); // 导入模型及场数据
+	dlg.m_ofn.lpstrTitle = _T("导入场数据");
+	if( dlg.DoModal() == IDOK )
+	{
+		strFileName = dlg.GetPathName();
+	}
+
+	ReadEclipseGrid(strFileName);
+
+	if( hItem != NULL )
+	{
+		CGLObject *pObj = (CGLObject*)(m_wndTree.GetItemData(hItem));
+		if( pObj == NULL )
+			return;
+		else
+		{
+			switch(pObj->GetGLObjType())
+			{
+			case GLINTERLAYERCELL:
+				{
+					bool bIsExist = false;
+					InterLayerGridObject * pGrid = dynamic_cast<InterLayerGridObject*>(pObj);
+					//for(int i=0; i<m_PhyParaName.size(); i++)
+					//{
+					int nSize = pGrid->m_vecPhyPara.GetSize();
+
+					
+					for (int i=0; i<nSize;i++)
+					{
+						strName = m_PhyParaName[i];
+						if( strName == pGrid->m_vecPhyPara[i].m_strName)
+						{
+							bIsExist = true;
+							break;
+						}
+					}
+					//}
+
+					if( bIsExist )
+					{
+						strName.Format(_T("网格模型中已经存在[%s]属性数据了"), strName.GetBuffer());
+						AfxMessageBox(strName, MB_OK|MB_ICONINFORMATION);
+						return;
+					}
+
+					CWaitCursor wait;
+					CFile file;
+					for(int i=0; i<m_PhyParaNamefilename.size(); i++)
+					{
+						if( file.Open(m_PhyParaNamefilename[i].GetBuffer(), CFile::modeRead | CFile::typeBinary ) )
+						{
+							CArchive ar(&file,CArchive::load);
+
+							CString str;
+							ar >> str;
+
+							int nSize;
+							ar >> nSize;
+							if( nSize != (pGrid->I*pGrid->J*pGrid->K))
+							{
+								ar.Close();
+								file.Close();
+								AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
+								return;
+							}
+
+							for( int j = 0; j< nSize; j++)
+							{
+								double tmp;
+								ar >> tmp;
+								pGrid->Add(m_PhyParaName[i],tmp);
+							}
+
+							ar.Close();
+							file.Close();
+
+							CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+
+							CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+							if( pWnd )
+							{
+								C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+								if(pView)
+								{
+									if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+									{
+										C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+										pDoc->GetContext()->SetModifiedFlag();
+									}
+								}
+							}	
+
+						}
+					}
+
+					CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+					C3DObjBar*pBar = pMF->Get3DBar();
+					pBar->m_wndTree.FillTreeCtrl();
+				}
+				break;
+			case GLSURFACE:
+				{
+					bool bIsExist = false;
+					CGridObject * pGrid = dynamic_cast<CGridObject*>(pObj);
+					//for(int i=0; i<m_PhyParaName.size(); i++)
+					//{
+					int nSize = pGrid->m_vecPhyPara.GetSize();
+
+					
+					for (int i=0; i<nSize;i++)
+					{
+						strName = m_PhyParaName[i];
+						if( strName == pGrid->m_vecPhyPara[i].m_strName)
+						{
+							bIsExist = true;
+							break;
+						}
+					}
+					//}
+
+					if( bIsExist )
+					{
+						strName.Format(_T("网格模型中已经存在[%s]属性数据了"), strName.GetBuffer());
+						AfxMessageBox(strName, MB_OK|MB_ICONINFORMATION);
+						return;
+					}
+
+					CWaitCursor wait;
+					CFile file;
+					for(int i=0; i<m_PhyParaNamefilename.size(); i++)
+					{
+						if( file.Open(m_PhyParaNamefilename[i].GetBuffer(), CFile::modeRead | CFile::typeBinary ) )
+						{
+							CArchive ar(&file,CArchive::load);
+
+							CString str;
+							ar >> str;
+
+							int nSize;
+							ar >> nSize;
+							if( nSize != (pGrid->I*pGrid->J*pGrid->K))
+							{
+								ar.Close();
+								file.Close();
+								AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
+								return;
+							}
+
+							for( int j = 0; j< nSize; j++)
+							{
+								double tmp;
+								ar >> tmp;
+								pGrid->Add(m_PhyParaName[i],tmp);
+							}
+
+							ar.Close();
+							file.Close();
+
+							pGrid->m_vecPhyPara[0].I = pGrid->I;
+							pGrid->m_vecPhyPara[0].J = pGrid->J;
+							pGrid->m_vecPhyPara[0].K = pGrid->K;
+							pGrid->m_vecPhyPara[0].SavePara("f:\\grid.grd");
+
+							CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+
+							CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+							if( pWnd )
+							{
+								C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+								if(pView)
+								{
+									if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+									{
+										C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+										pDoc->GetContext()->SetModifiedFlag();
+									}
+								}
+							}	
+
+						}
+					}
+		
+					CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+					C3DObjBar*pBar = pMF->Get3DBar();
+					pBar->m_wndTree.FillTreeCtrl();
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void C3DObjBar::OnUpdateAddPhyPara( CCmdUI *pCmdUI )
+{
+	HTREEITEM hti;
+	hti = m_wndTree.GetSelectedItem();
+	if( hti != NULL )
+	{
+		CGLObject *pObj = (CGLObject*)(m_wndTree.GetItemData(hti));
+		if( pObj!=NULL
+			&&( pObj->GetGLObjType() == GLSURFACE 
+			|| pObj->GetGLObjType() == GLINTERLAYERCELL) )
+			pCmdUI->Enable(TRUE);
+		else
+			pCmdUI->Enable(FALSE);
+	}
+	else
+		pCmdUI->Enable(FALSE);
+}
+
+void C3DObjBar::ReadEclipseGrid( LPCTSTR filename )
+{
+	m_PhyParaName.clear();
+	m_PhyParaNamefilename.clear();
+	CStdioFile fileOld;
+	if( !fileOld.Open(filename, CFile::modeRead | CFile::typeText) )
+		return ;
+	if( fileOld.GetLength() < 1 ) // 如果文件长度为0 返回空的文件名
+	{
+		fileOld.Close();
+		return ;
+	}
+
+	fileOld.Close();
+
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
+	CWaitCursor wait;
+
+	CString strMsg;
+	strMsg = _T("正在分析静态场数据文件，请稍等...");
+	pMF->GetStatusBar().SetPaneText(0, strMsg);
+
+	CString strTmp;
+
+	std::vector<double> values;
+
+	CParseEclipseFile eclipseFile;
+	eclipseFile.OpenFile(filename);
+	CSimuToken token;
+	CEclipseCommandItem commType; // 数据类型
+
+	do
+	{
+		CEclipseCommandItem commItem;
+		token = eclipseFile.GetToken(commItem);
+		if( token.token_type == CSimuToken::COMMAND )
+		{
+			switch(commItem.m_nCommID)
+			{
+			case CEclipseCommandItem::PORO:		// 有效厚度
+			case CEclipseCommandItem::GENERAL:			// x方向渗透率
+			case CEclipseCommandItem::NTG:
+			case CEclipseCommandItem::PERMX:
+			case CEclipseCommandItem::PERMY:
+			case CEclipseCommandItem::SWAT:				
+				if( values.size()> 0 )
+				{
+					strMsg = _T("正在保存静态场数据文件，请稍等...");
+					pMF->GetStatusBar().SetPaneText(0, strMsg);
+
+					CString strName = newGUID();
+					strName += _T(".grd");
+
+					CString strNewFileName = pMF->GetProjectDatPath();
+					strNewFileName += _T("\\models\\");
+					strNewFileName += strName;
+
+					CFile fileNew;
+					if( fileNew.Open(strNewFileName, CFile::modeCreate | CFile::modeWrite ) )
+					{
+						CArchive archive(&fileNew, CArchive::store);
+
+						CString strModelFileName = commType.m_strCommand;
+
+						m_PhyParaName.push_back(strModelFileName);
+						m_PhyParaNamefilename.push_back(strNewFileName);
+
+						archive << strModelFileName;
+
+						int nSize = values.size();
+
+						archive << nSize;
+
+						for ( int i=0; i<nSize; i++)
+						{
+							archive << values[i];
+						}
+						archive << RGB(255,0,0);
+						archive << RGB(255,255,255);
+						archive << (double)0;
+						archive << (double)-1;
+						archive.Close();
+						fileNew.Close();
+					}
+					values.erase(values.begin(), values.end());
+				}
+				commType = commItem;			
+				break;
+
+			default:				
+				if(values.size()>0)
+				{					
+					commType.m_nCommID = CEclipseCommandItem::UNKNOWN;
+					strMsg = _T("正在保存静态场数据文件，请稍等...");
+					pMF->GetStatusBar().SetPaneText(0, strMsg);
+
+					CString strName = newGUID();
+					strName += _T(".grd");
+
+					CString strNewFileName = pMF->GetProjectDatPath();
+					strNewFileName += _T("\\models\\");
+					strNewFileName += strName;
+
+					CFile fileNew;
+					if( fileNew.Open(strNewFileName, CFile::modeCreate | CFile::modeWrite ) )
+					{
+						CArchive archive(&fileNew, CArchive::store);
+
+						CString strModelFileName = commType.m_strCommand;
+
+						m_PhyParaName.push_back(strModelFileName);
+						m_PhyParaNamefilename.push_back(strNewFileName);
+
+						archive << strModelFileName;
+
+						int nSize = values.size();
+
+						archive << nSize;
+
+						for ( int i=0; i<nSize; i++)
+						{
+							archive << values[i];
+						}
+
+						archive << RGB(255,0,0);
+						archive << RGB(255,255,255);
+						archive << (double)0;
+						archive << (double)-1;
+						archive.Close();
+						fileNew.Close();
+					}
+
+					values.erase(values.begin(), values.end());
+
+					strMsg = "正在分析静态场数据文件，请稍等...";
+				}
+				break;
+			}
+		}		
+		else if( token.token_type == CSimuToken::NUMBER )
+		{
+			CString strTmp = token.m_strToken;
+			int index = strTmp.Find("*");
+
+			switch(commType.m_nCommID)
+			{
+			case CEclipseCommandItem::PORO:		// 有效厚度
+			case CEclipseCommandItem::GENERAL:	// x方向渗透率
+			case CEclipseCommandItem::NTG:
+			case CEclipseCommandItem::PERMX:
+			case CEclipseCommandItem::PERMY:
+			case CEclipseCommandItem::SWAT:	
+				{					
+					if(index > -1) // 是 2*0.5 格式
+					{
+						int n = atoi(strTmp.Left(index));
+						double v = atof(strTmp.Right(strTmp.GetLength()-index+1));
+						for (int i=0;i<n;i++)
+							values.push_back(v);
+					}
+					else
+					{
+						double v = atof(strTmp);
+						values.push_back(v);
+					}
+				}
+				break;
+			default:
+				break;
+			}			
+		}
+		else if( token.token_type == CSimuToken::STRING )
+		{
+			commType.m_nCommID = CEclipseCommandItem::UNKNOWN;
+		}
+		else
+		{
+			commType.m_nCommID = CEclipseCommandItem::UNKNOWN;
+		}
+
+	}while(token.token_type != CSimuToken::END);
+
+
+	if( values.size() > 0 )
+	{
+		strMsg = _T("正在保存静态场数据文件，请稍等...");
+		pMF->GetStatusBar().SetPaneText(0, strMsg);
+
+		CString strName = newGUID();
+		strName += _T(".grd");
+
+		CString strNewFileName = pMF->GetProjectDatPath();
+		strNewFileName += _T("\\models\\");
+		strNewFileName += strName;
+
+		CFile fileNew;
+		if( fileNew.Open(strNewFileName, CFile::modeCreate | CFile::modeWrite ) )
+		{
+			CArchive archive(&fileNew, CArchive::store);
+
+			CString strModelFileName = commType.m_strCommand;
+
+			m_PhyParaName.push_back(strModelFileName);
+			m_PhyParaNamefilename.push_back(strNewFileName);
+
+			archive << strModelFileName;
+
+			int nSize = values.size();
+
+			archive << nSize;
+
+			for ( int i=0; i<nSize; i++)
+			{
+				archive << values[i];
+			}
+			archive << RGB(255,0,0);
+			archive << RGB(255,255,255);
+			archive << (double)0;
+			archive << (double)-1;
+			archive.Close();
+			fileNew.Close();
+		}
+
+	}
+}
+
+void C3DObjBar::OnCalcPhyPara()
+{
+
+}
+
+void C3DObjBar::OnUpdateCalcPhyPara( CCmdUI *pCmdUI )
+{
+	HTREEITEM hti;
+	hti = m_wndTree.GetSelectedItem();
+	if( hti != NULL )
+	{
+		CGLObject *pObj = (CGLObject*)(m_wndTree.GetItemData(hti));
+		if( pObj!=NULL
+			&&( pObj->GetGLObjType() == GLSURFACE 
+			|| pObj->GetGLObjType() == GLINTERLAYERCELL) )
+			pCmdUI->Enable(TRUE);
+		else
+			pCmdUI->Enable(FALSE);
+	}
+	else
+		pCmdUI->Enable(FALSE);
+}
+
+void C3DObjBar::OnAdjPhyPara()
+{
+
+}
+
+void C3DObjBar::OnUpdateAdjPhyPara( CCmdUI *pCmdUI )
+{
+	HTREEITEM hti;
+	hti = m_wndTree.GetSelectedItem();
+	if( hti != NULL )
+	{
+		CGLObject *pObj = (CGLObject*)(m_wndTree.GetItemData(hti));
+		if( pObj!=NULL
+			&&( pObj->GetGLObjType() == GLSURFACE 
+			|| pObj->GetGLObjType() == GLINTERLAYERCELL) )
+			pCmdUI->Enable(TRUE);
+		else
+			pCmdUI->Enable(FALSE);
+	}
+	else
+		pCmdUI->Enable(FALSE);
 }
 
 IMPLEMENT_DYNAMIC(CLayerIntersectSearch, CDockablePane)
@@ -593,4 +1095,9 @@ void CLayerIntersectSearch::OnClickButton()
 	pBar->m_wndTree.FillTreeCtrl();
 	pSearchbar->m_wndTree.DeleteAllItems();
 	pSearchbar->m_wndTree.FillTreeCtrl();
+}
+
+void CLayerIntersectSearch::SetGrid( const std::string& gridname )
+{
+	m_wndTree.SetModel(gridname);
 }

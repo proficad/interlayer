@@ -229,11 +229,11 @@ BEGIN
     SEPARATOR
     BUTTON      ID_Vertical_Model
     BUTTON      ID_INTERLAYER_SPACE_SET
-    SEPARATOR
+    BUTTON      ID_PHYPARARANGESET
     BUTTON      ID_EDIT_CUT
+    SEPARATOR
     BUTTON      ID_EDIT_COPY
     BUTTON      ID_EDIT_PASTE
-    SEPARATOR
     BUTTON      ID_FILE_PRINT
     SEPARATOR
     BUTTON      ID_APP_ABOUT
@@ -252,11 +252,11 @@ BEGIN
     SEPARATOR
     BUTTON      ID_Vertical_Model
     BUTTON      ID_INTERLAYER_SPACE_SET
-    SEPARATOR
+    BUTTON      ID_PHYPARARANGESET
     BUTTON      ID_EDIT_CUT
     BUTTON      ID_EDIT_COPY
-    BUTTON      ID_EDIT_PASTE
     SEPARATOR
+    BUTTON      ID_EDIT_PASTE
     BUTTON      ID_FILE_PRINT
     BUTTON      ID_APP_ABOUT
 END
@@ -950,6 +950,10 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "重命名\tF2",                     ID_EDIT_RENAME
         MENUITEM "删除(&R)\tDel",                 ID_EDIT_CLEAR
+		MENUITEM SEPARATOR
+		MENUITEM "导入场数据"						ID_EDIT_ADDPRT
+		MENUITEM "计算场数据"						ID_EDIT_CALCPRT
+		MENUITEM "校正场数据"						ID_EDIT_ADJPRT
         MENUITEM SEPARATOR
         MENUITEM "材质",                          ID_MATERIAL_SET
         MENUITEM "线框颜色",                        ID_COLOR_SET
@@ -2329,6 +2333,19 @@ BEGIN
     CONTROL         "显示切面",IDC_CHECK_PLANE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,205,75,48,10
 END
 
+IDD_DLG_PHYPARARANGE DIALOGEX 0, 0, 213, 134
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "输入物理属性显示范围"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,36,96,50,14
+    PUSHBUTTON      "取消",IDCANCEL,122,96,50,14
+    LTEXT           "最小值",IDC_STATIC,52,32,25,8
+    LTEXT           "最大值",IDC_STATIC,52,60,25,8
+    EDITTEXT        IDC_EDIT1,97,29,83,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT2,97,57,83,14,ES_AUTOHSCROLL
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2659,6 +2676,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 147
         HORZGUIDE, 140
+    END
+
+    IDD_DLG_PHYPARARANGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 206
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 127
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -3210,6 +3235,13 @@ END
 
 STRINGTABLE 
 BEGIN
+    ID_FILL                 "填充颜色\n填充颜色"
+    ID_EXPORT               "将图形保存为文件\n导出图形"
+    ID_PHYPARARANGESET      "设置显示物理参数的范围\n设置显示物理参数的范围"
+END
+
+STRINGTABLE 
+BEGIN
     ID_CHANGE_GENERAL       "转换为普通线\n转换为普通线"
     ID_CHANGE_INTERLAYER    "转换为夹层线\n转换为夹层线"
     ID_CHANGE_LINE          "转为直线\n转为直线"
@@ -3253,12 +3285,6 @@ BEGIN
     ID_SLICE_Y              "Y纵向切片\nY纵向切片"
     ID_INFILL_GRID          "加密网格\n加密网格"
     ID_WIREFRAME            "显示线框\n显示线框"
-END
-
-STRINGTABLE 
-BEGIN
-    ID_FILL                 "填充颜色\n填充颜色"
-    ID_EXPORT               "将图形保存为文件\n导出图形"
 END
 
 #endif    // 中文(中华人民共和国) resources

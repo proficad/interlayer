@@ -136,6 +136,7 @@ public:
 	afx_msg void OnVerticalModel();
 	afx_msg void OnGenerateLayer();
 	afx_msg void OnInterlayerSpaceSet();
+	afx_msg void OnPhyPararangeSet();
 	afx_msg LRESULT OnGetItemTitleOfFile(WPARAM wp, LPARAM lp);
 	afx_msg LRESULT OnGetItemTitleOfModel(WPARAM wp, LPARAM lp);
 	afx_msg LRESULT OnGetItemTitleOfGraph(WPARAM wp, LPARAM lp);

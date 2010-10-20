@@ -71,6 +71,9 @@ BEGIN_MESSAGE_MAP(CModelView, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_RENAME, &CModelView::OnUpdateEditRename)
 	ON_COMMAND(ID_IMPORT_MODEL, &CModelView::OnImportModel)
 	ON_UPDATE_COMMAND_UI(ID_IMPORT_MODEL, &CModelView::OnUpdateImportModel)
+	ON_COMMAND(ID_SEARCH_MODEL, &CModelView::OnSearchModel)
+	ON_UPDATE_COMMAND_UI(ID_SEARCH_MODEL, &CModelView::OnUpdateSearchModel)
+	//ID_SEARCH_MODEL
 	ON_COMMAND(ID_IMPORT_FIELD, &CModelView::OnImportField)
 	ON_UPDATE_COMMAND_UI(ID_IMPORT_FIELD, &CModelView::OnUpdateImportField)
 	ON_COMMAND(IDC_EXPAND_ALL_TREE, &CModelView::OnExpandAllTree)
@@ -512,7 +515,7 @@ void CModelView::SaveTree(CArchive& ar)
 	CString strDirectory = pMF->GetProjectDatPath();
 	CString strTmp = strDirectory;
 	strTmp += _T("\\models");
-	m_wndModelView.DeleteUnusedFile(strTmp);
+	//m_wndModelView.DeleteUnusedFile(strTmp);
 }
 
 void CModelView::EmptyTree()
@@ -649,11 +652,11 @@ void CModelView::OnImportField()
 		CString strFileName = dlg.GetPathName();
 		switch( dlg.m_nFileType )
 		{
-		case 0:			// PBRS文件格式
+		case 2:			// PBRS文件格式
 		case 1:
 			ReadGridPBRS(strFileName, strModelFileName, hItem);
 			break;
-		case 2:
+		case 0:
 			ReadGridEclipse(strFileName, strModelFileName, hItem);
 			break;
 		default:
@@ -2412,4 +2415,51 @@ bool CModelView::OnImportInterlayer( LPCSTR strFileName, LPCSTR strFileTitle)
 	m_wndModelView.EditLabel(h);
 
 	return true;
+}
+//
+void CModelView::OnSearchModel()
+{
+	//std::string filename;
+	HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+
+	CString filename;
+	CString titlename;
+	if( hItem != NULL)
+	{
+		CTreeNodeDat *pNote = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
+		filename = pNote->m_strFileName;
+	}
+
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	pMF->GetSearchBar()->SetGrid(filename.GetBuffer());
+	CString strTargePathName = pMF->GetProjectDatPath();
+	strTargePathName += _T("\\models\\");
+	strTargePathName += filename;
+	CIntersectSearchManager::Instance()->SetGridModelName(strTargePathName.GetBuffer());
+}
+
+void CModelView::OnUpdateSearchModel( CCmdUI *pCmdUI )
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
+	if( pMF->m_strPrjFileName.IsEmpty() )
+		pCmdUI->Enable(FALSE);
+	else
+	{
+		HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+
+		if( hItem != NULL)
+		{
+			CTreeNodeDat *pNote = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
+			if(pNote->m_nType == GRID_DAT)
+			{
+				pCmdUI->Enable(TRUE);
+			}
+			else
+				pCmdUI->Enable(FALSE);
+		}
+		else
+			pCmdUI->Enable(FALSE);
+	}
 }

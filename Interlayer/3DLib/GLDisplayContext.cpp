@@ -338,7 +338,6 @@ void CGLDisplayContext::AddGLObj(CGLObject* aObj)
 				m_dVertical = GetVerticalOriginal();
 
 			m_listDisplay->push_back(pObj);				// 添加到显示链表
-			pSearchbar->m_wndTree.SetModel(pObj);
 		}
 		break;
 	case GLINTERLAYERCELL:
@@ -354,7 +353,6 @@ void CGLDisplayContext::AddGLObj(CGLObject* aObj)
 				m_dVertical = GetVerticalOriginal();
 
 			m_listDisplay->push_back(pObj);				// 添加到显示链表
-			//pSearchbar->m_wndTree.SetModel(pObj);
 		}
 		break;
 	case GLPLANE:

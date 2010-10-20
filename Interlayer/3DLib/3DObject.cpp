@@ -2020,3 +2020,31 @@ void C3DObject::SaveSurface( const std::string& filename )
 		art << m_indexs[i];
 	art.Close();
 }
+
+void C3DObject::SaveDivideSurface( const CVector3D& size, const std::string& filename )
+{
+	if(size.GetNormL2()<0.0001)
+	{
+		AfxMessageBox("三角形过细");
+	}
+	if(filename.empty())
+	{
+		AfxMessageBox("文件名为空");
+	}
+	std::vector<CVector3D>	t_positions;
+	std::vector<int>				t_indies;
+	CFile file(filename.c_str(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+	CArchive art(&file, CArchive::store);
+
+	//int size = m_pointList.size();
+	//art << size;
+
+	//for (int i= 0; i < size; i++)
+	//	art << m_pointList[i];
+
+	//size = m_indexs.size();
+	//art << size;
+	//for (int i=0; i<size; i++)
+	//	art << m_indexs[i];
+	art.Close();
+}

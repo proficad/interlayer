@@ -17,10 +17,13 @@ public:
 	CImageList m_Images;
 	CImageList m_TreeStateImages;
 
+	std::vector<CString> m_PhyParaName;
+	std::vector<CString> m_PhyParaNamefilename;
 	HTREEITEM AddTreeItem(LPCTSTR lpszItem, int nImage = 0, int nSelectedImage = 0, 
 		HTREEITEM hParent = TVI_ROOT, 
 		HTREEITEM hInsertAfter = TVI_LAST);
-
+protected:
+	void ReadEclipseGrid(LPCTSTR filename);
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -39,7 +42,12 @@ protected:
 	afx_msg void OnUpdateSetMaterial(CCmdUI *pCmdUI);
 	afx_msg void OnSetColor();
 	afx_msg void OnUpdateSetColor(CCmdUI *pCmdUI);
-	
+	afx_msg void OnAddPhyPara();
+	afx_msg void OnUpdateAddPhyPara(CCmdUI *pCmdUI);
+	afx_msg void OnCalcPhyPara();
+	afx_msg void OnUpdateCalcPhyPara(CCmdUI *pCmdUI);
+	afx_msg void OnAdjPhyPara();
+	afx_msg void OnUpdateAdjPhyPara(CCmdUI *pCmdUI);
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -52,6 +60,7 @@ public:
 	void AdjustLayout();
 	void OnChangeVisualStyle();	
 
+	void SetGrid(const std::string& gridname);
 	CIntersectSearchTree m_wndTree;
 	CImageList m_Images;
 	CImageList m_TreeStateImages;

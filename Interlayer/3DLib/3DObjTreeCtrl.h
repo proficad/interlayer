@@ -57,7 +57,7 @@ class CIntersectSearchTree : public C3DObjTreeCtrl
 public:
 	virtual void FillTreeCtrl();
 	virtual void AddObj(CGLObject *pObj);
-	void	SetModel(CGLObject* pObj);
+	void	SetModel(const std::string&  pObj);
 	void AddLayer(CGLObject* pObj);
 protected:
 };

@@ -11,13 +11,14 @@ class CPhyPara			// 物性参数
 {
 public:
 	CString m_strName;
-	bool m_bShow;
+	int m_bShow;
 	std::vector<double>	m_dValue;
 	double m_dMinValue, m_dMaxValue;
+	int		I,J,K;
 public:
 	CPhyPara()
 	{
-		m_bShow = false;
+		m_bShow = 0;
 		m_dMinValue = DBL_MAX;
 		m_dMaxValue = -DBL_MAX;
 	};
@@ -32,6 +33,9 @@ public:
 		ar << param.m_bShow;	
 		ar << param.m_dMinValue;
 		ar << param.m_dMaxValue;
+		ar << param.I;
+		ar << param.J;
+		ar << param.K;
 		int nSize = param.m_dValue.size();
 		ar << nSize;
 		for (int i=0; i<nSize; i++)
@@ -46,6 +50,9 @@ public:
 		ar >> param.m_bShow;	
 		ar >> param.m_dMinValue;
 		ar >> param.m_dMaxValue;
+		ar >> param.I;
+		ar >> param.J;
+		ar >> param.K;
 		int nSize;
 		ar >> nSize;
 		if( param.m_dValue.capacity()<nSize)
@@ -69,6 +76,7 @@ public:
 		if( dValue < m_dMinValue )
 			m_dMinValue = dValue;
 	}
+	void SavePara(const std::string& filename);
 };
 
 CArchive& AFXAPI operator << (CArchive& ar, const CPhyPara& param);
@@ -147,6 +155,8 @@ public:
 	// 保存
 	virtual void Serialize(CArchive& ar);
 	void	LoadLayer(const std::string& filename);
+
+	void Add(LPCTSTR lpszName, double dValue);
 
 	int I, J, K;
 

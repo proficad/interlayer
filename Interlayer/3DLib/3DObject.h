@@ -32,6 +32,7 @@ public:
 	virtual void Hilight(const GLSelectedMode&);
 	void ReversePoints();
 	void SaveSurface(const std::string& filename);
+	void SaveDivideSurface(const CVector3D& size, const std::string& filename);
 
 	int m_iSelectedPoint;
 	std::vector<CVertex3D>* GetPointList() { return &m_pointList; }

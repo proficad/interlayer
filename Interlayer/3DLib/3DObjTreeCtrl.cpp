@@ -144,6 +144,14 @@ void C3DObjTreeCtrl::FillTreeCtrl()
 				hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage,hItem4, TVI_FIRST);
 			}
 			break;
+		case GLINTERLAYERCELL:
+			{
+				nImage = 10;
+				nSelectImage =10;
+				hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage,hItem44, TVI_FIRST);
+
+			}
+			break;
 		case GLPLANE:
 			{
 				nImage = 10;
@@ -181,7 +189,7 @@ void C3DObjTreeCtrl::FillTreeCtrl()
 		if( nImage == 7 ) // 如果是网格模型
 		{
 			CGridObject *pGrid = (CGridObject *)pObj;
-			
+
 			HTREEITEM h = InsertItem(_T("X"),8,8,hItem);
 			int n = 0;
 			for (int i = 0; i < pGrid->I; i++)
@@ -250,6 +258,23 @@ void C3DObjTreeCtrl::FillTreeCtrl()
 
 
 			h = InsertItem(_T("属性"),8,8,hItem);
+			SetCheck(h, 6);
+			for (int i=0; i<pGrid->m_vecPhyPara.GetSize(); i++)
+			{				
+				HTREEITEM hh = InsertItem(pGrid->m_vecPhyPara[i].m_strName,9,9,h);
+				SetCheck(hh, 6);
+				if( pGrid->m_vecPhyPara[i].m_bShow )
+				{
+					SetCheck(hh, 7);
+					SetCheck(h, 7);
+				}
+			}
+		}
+
+		if(pObj->GetGLObjType()==GLINTERLAYERCELL)
+		{
+			InterLayerGridObject * pGrid = dynamic_cast<InterLayerGridObject*>(pObj);
+			HTREEITEM h = InsertItem(_T("属性"),8,8,hItem);
 			SetCheck(h, 6);
 			for (int i=0; i<pGrid->m_vecPhyPara.GetSize(); i++)
 			{				
@@ -1875,14 +1900,16 @@ void CIntersectSearchTree::AddObj( CGLObject *pObj )
 	else*/
 }
 
-void CIntersectSearchTree::SetModel( CGLObject* pObj )
+void CIntersectSearchTree::SetModel( const std::string& pObj )
 {
 	HTREEITEM hSrc = GetChildNode(TVI_ROOT, _T("网格模型"));
+	DeleteItem(hSrc);
+	HTREEITEM hItem1 = InsertItem(_T("网格模型"),0,0);
 	int nImage = 0, nSelectImage = 0;
 	nImage = 10;
 	nSelectImage = 10;
-	HTREEITEM hItem = InsertItem(pObj->GetObjName(),nImage,nSelectImage,hSrc);
-	CIntersectSearchManager::Instance()->SetGridModel(dynamic_cast<CGridObject*>(pObj));
+	HTREEITEM hItem = InsertItem(pObj.c_str(),nImage,nSelectImage,hSrc);
+	//CIntersectSearchManager::Instance()->SetGridModel(dynamic_cast<CGridObject*>(pObj));
 }
 
 void CIntersectSearchTree::AddLayer( CGLObject* pObj )

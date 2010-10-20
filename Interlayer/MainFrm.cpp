@@ -15,6 +15,7 @@
 #include "GenerateLayerDoc.h"
 #include "FormGenerateLayer.h"
 #include "DispLogCurve/DispLogCurve.h"
+#include "DlgInterlayerParaRange.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -54,6 +55,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND(ID_Vertical_Model, &CMainFrame::OnVerticalModel)
 	ON_COMMAND(ID_Generate_Layer, &CMainFrame::OnGenerateLayer)
 	ON_COMMAND(ID_INTERLAYER_SPACE_SET, &CMainFrame::OnInterlayerSpaceSet)
+	ON_COMMAND(ID_PHYPARARANGESET, &CMainFrame::OnPhyPararangeSet)
 	ON_MESSAGE(WM_GETITEMTITLE_FILE,OnGetItemTitleOfFile)
 	ON_MESSAGE(WM_GETITEMTITLE_MODEL,OnGetItemTitleOfModel)
 	ON_MESSAGE(WM_GETITEMTITLE_GRAPH,OnGetItemTitleOfGraph)
@@ -1679,4 +1681,13 @@ LRESULT CMainFrame::OnCreateFileLog(WPARAM wp, LPARAM lp)
 	strcpy_s((LPSTR)lp,255,(LPCTSTR)strTargePathName);
 
 	return -1;
+}
+
+void CMainFrame::OnPhyPararangeSet()
+{
+	CDlgInterlayerParaRange dlg;
+	if( dlg.DoModal() == IDOK )
+	{
+
+	}
 }

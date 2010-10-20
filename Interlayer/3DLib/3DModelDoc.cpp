@@ -234,7 +234,7 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 	CGridModel gridModel;
 	if( gridfile.Open(lpszFileName, CFile::modeRead | CFile::typeBinary ) )
 	{
-		CIntersectSearchManager::Instance()->SetGridModelName(lpszFileName);
+		//CIntersectSearchManager::Instance()->SetGridModelName(lpszFileName);
 		CArchive ar(&gridfile,CArchive::load);
 		gridModel.Serialize(ar);
 		ar.Close();
