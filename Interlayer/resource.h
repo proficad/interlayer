@@ -280,6 +280,8 @@
 #define IDD_DLG_SLICE_XY                508
 #define IDD_DIALOG1                     509
 #define IDD_DLG_PHYPARARANGE            509
+#define IDD_TRANGLEEXPORT               510
+#define IDD_DLG_PHY_CALC                512
 #define IDC_EDIT_MINV                   1000
 #define IDC_EDIT_MAXV                   1001
 #define IDC_EDIT_MINDV                  1002
@@ -420,6 +422,22 @@
 #define IDC_EDIT_X2                     1136
 #define IDC_EDIT1                       1137
 #define IDC_EDIT2                       1138
+#define IDC_EDIT3                       1139
+#define IDC_BUTTON1                     1140
+#define IDC_EDIT4                       1141
+#define IDC_EDIT5                       1142
+#define IDC_COMBO_PHY1                  1146
+#define IDC_COMBO_PHY2                  1147
+#define IDC_COMBO_OPERATOR              1148
+#define IDC_EDIT_PARA1                  1149
+#define IDC_EDIT_PHY_NEWNAME            1150
+#define IDC_EDIT_PHY2                   1151
+#define IDC_COMBO_OPERATOR1             1152
+#define IDC_COMBO_OPERATOR2             1153
+#define IDC_RADIO3                      1155
+#define IDC_RADIO4                      1156
+#define IDC_GROUP1                      1157
+#define IDC_GROUP2                      1158
 #define IDC_EDIT_NAME                   3016
 #define IDC_EDIT_SCALE                  3017
 #define IDC_EDIT_HPAGE                  3020
@@ -645,9 +663,8 @@
 #define ID_OBJECT_SORT                  33080
 #define ID_OLE_VERB_POPUP               33081
 #define ID_ATTRIBUTE_BRUSH              33082
-#define ID_33083                        33083
+#define ID_TRIANGLE_EXPORT              33083
 #define ID_FILE_EXPORT                  33084
-#define ID_                             33085
 #define ID_Vertical_Model               33085
 #define ID_CANCEL_EDIT                  33086
 #define ID_ADD_LAYER                    33090
@@ -755,9 +772,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        510
+#define _APS_NEXT_RESOURCE_VALUE        513
 #define _APS_NEXT_COMMAND_VALUE         33208
-#define _APS_NEXT_CONTROL_VALUE         1139
+#define _APS_NEXT_CONTROL_VALUE         1159
 #define _APS_NEXT_SYMED_VALUE           450
 #endif
 #endif

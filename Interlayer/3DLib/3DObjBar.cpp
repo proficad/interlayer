@@ -10,6 +10,7 @@
 #include "../3DLib/3DModelView.h"
 #include "../3DLib/GridObject.h"
 #include "../DlgImportModel.h"
+#include "../DlgPhyParaCalc.h"
 
 // C3DObjBar
 
@@ -311,190 +312,191 @@ void C3DObjBar::OnAddPhyPara()
 	if( dlg.DoModal() == IDOK )
 	{
 		strFileName = dlg.GetPathName();
-	}
 
-	ReadEclipseGrid(strFileName);
 
-	if( hItem != NULL )
-	{
-		CGLObject *pObj = (CGLObject*)(m_wndTree.GetItemData(hItem));
-		if( pObj == NULL )
-			return;
-		else
+		ReadEclipseGrid(strFileName);
+
+		if( hItem != NULL )
 		{
-			switch(pObj->GetGLObjType())
+			CGLObject *pObj = (CGLObject*)(m_wndTree.GetItemData(hItem));
+			if( pObj == NULL )
+				return;
+			else
 			{
-			case GLINTERLAYERCELL:
+				switch(pObj->GetGLObjType())
 				{
-					bool bIsExist = false;
-					InterLayerGridObject * pGrid = dynamic_cast<InterLayerGridObject*>(pObj);
-					//for(int i=0; i<m_PhyParaName.size(); i++)
-					//{
-					int nSize = pGrid->m_vecPhyPara.GetSize();
-
-					
-					for (int i=0; i<nSize;i++)
+				case GLINTERLAYERCELL:
 					{
-						strName = m_PhyParaName[i];
-						if( strName == pGrid->m_vecPhyPara[i].m_strName)
+						bool bIsExist = false;
+						InterLayerGridObject * pGrid = dynamic_cast<InterLayerGridObject*>(pObj);
+						//for(int i=0; i<m_PhyParaName.size(); i++)
+						//{
+						int nSize = pGrid->m_vecPhyPara.GetSize();
+
+
+						for (int i=0; i<nSize;i++)
 						{
-							bIsExist = true;
-							break;
-						}
-					}
-					//}
-
-					if( bIsExist )
-					{
-						strName.Format(_T("网格模型中已经存在[%s]属性数据了"), strName.GetBuffer());
-						AfxMessageBox(strName, MB_OK|MB_ICONINFORMATION);
-						return;
-					}
-
-					CWaitCursor wait;
-					CFile file;
-					for(int i=0; i<m_PhyParaNamefilename.size(); i++)
-					{
-						if( file.Open(m_PhyParaNamefilename[i].GetBuffer(), CFile::modeRead | CFile::typeBinary ) )
-						{
-							CArchive ar(&file,CArchive::load);
-
-							CString str;
-							ar >> str;
-
-							int nSize;
-							ar >> nSize;
-							if( nSize != (pGrid->I*pGrid->J*pGrid->K))
+							strName = m_PhyParaName[i];
+							if( strName == pGrid->m_vecPhyPara[i].m_strName)
 							{
+								bIsExist = true;
+								break;
+							}
+						}
+						//}
+
+						if( bIsExist )
+						{
+							strName.Format(_T("网格模型中已经存在[%s]属性数据了"), strName.GetBuffer());
+							AfxMessageBox(strName, MB_OK|MB_ICONINFORMATION);
+							return;
+						}
+
+						CWaitCursor wait;
+						CFile file;
+						for(int i=0; i<m_PhyParaNamefilename.size(); i++)
+						{
+							if( file.Open(m_PhyParaNamefilename[i].GetBuffer(), CFile::modeRead | CFile::typeBinary ) )
+							{
+								CArchive ar(&file,CArchive::load);
+
+								CString str;
+								ar >> str;
+
+								int nSize;
+								ar >> nSize;
+								if( nSize != (pGrid->I*pGrid->J*pGrid->K))
+								{
+									ar.Close();
+									file.Close();
+									AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
+									return;
+								}
+
+								for( int j = 0; j< nSize; j++)
+								{
+									double tmp;
+									ar >> tmp;
+									pGrid->Add(m_PhyParaName[i],tmp);
+								}
+
 								ar.Close();
 								file.Close();
-								AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
-								return;
-							}
 
-							for( int j = 0; j< nSize; j++)
-							{
-								double tmp;
-								ar >> tmp;
-								pGrid->Add(m_PhyParaName[i],tmp);
-							}
+								CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
 
-							ar.Close();
-							file.Close();
-
-							CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
-
-							CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
-							if( pWnd )
-							{
-								C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
-								if(pView)
+								CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+								if( pWnd )
 								{
-									if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+									C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+									if(pView)
 									{
-										C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
-										pDoc->GetContext()->SetModifiedFlag();
+										if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+										{
+											C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+											pDoc->GetContext()->SetModifiedFlag();
+										}
 									}
-								}
-							}	
+								}	
 
+							}
 						}
+
+						CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+						C3DObjBar*pBar = pMF->Get3DBar();
+						pBar->m_wndTree.FillTreeCtrl();
 					}
-
-					CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
-					C3DObjBar*pBar = pMF->Get3DBar();
-					pBar->m_wndTree.FillTreeCtrl();
-				}
-				break;
-			case GLSURFACE:
-				{
-					bool bIsExist = false;
-					CGridObject * pGrid = dynamic_cast<CGridObject*>(pObj);
-					//for(int i=0; i<m_PhyParaName.size(); i++)
-					//{
-					int nSize = pGrid->m_vecPhyPara.GetSize();
-
-					
-					for (int i=0; i<nSize;i++)
+					break;
+				case GLSURFACE:
 					{
-						strName = m_PhyParaName[i];
-						if( strName == pGrid->m_vecPhyPara[i].m_strName)
+						bool bIsExist = false;
+						CGridObject * pGrid = dynamic_cast<CGridObject*>(pObj);
+						//for(int i=0; i<m_PhyParaName.size(); i++)
+						//{
+						int nSize = pGrid->m_vecPhyPara.GetSize();
+
+
+						for (int i=0; i<nSize;i++)
 						{
-							bIsExist = true;
-							break;
-						}
-					}
-					//}
-
-					if( bIsExist )
-					{
-						strName.Format(_T("网格模型中已经存在[%s]属性数据了"), strName.GetBuffer());
-						AfxMessageBox(strName, MB_OK|MB_ICONINFORMATION);
-						return;
-					}
-
-					CWaitCursor wait;
-					CFile file;
-					for(int i=0; i<m_PhyParaNamefilename.size(); i++)
-					{
-						if( file.Open(m_PhyParaNamefilename[i].GetBuffer(), CFile::modeRead | CFile::typeBinary ) )
-						{
-							CArchive ar(&file,CArchive::load);
-
-							CString str;
-							ar >> str;
-
-							int nSize;
-							ar >> nSize;
-							if( nSize != (pGrid->I*pGrid->J*pGrid->K))
+							strName = m_PhyParaName[i];
+							if( strName == pGrid->m_vecPhyPara[i].m_strName)
 							{
+								bIsExist = true;
+								break;
+							}
+						}
+						//}
+
+						if( bIsExist )
+						{
+							strName.Format(_T("网格模型中已经存在[%s]属性数据了"), strName.GetBuffer());
+							AfxMessageBox(strName, MB_OK|MB_ICONINFORMATION);
+							return;
+						}
+
+						CWaitCursor wait;
+						CFile file;
+						for(int i=0; i<m_PhyParaNamefilename.size(); i++)
+						{
+							if( file.Open(m_PhyParaNamefilename[i].GetBuffer(), CFile::modeRead | CFile::typeBinary ) )
+							{
+								CArchive ar(&file,CArchive::load);
+
+								CString str;
+								ar >> str;
+
+								int nSize;
+								ar >> nSize;
+								if( nSize != (pGrid->I*pGrid->J*pGrid->K))
+								{
+									ar.Close();
+									file.Close();
+									AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
+									return;
+								}
+
+								for( int j = 0; j< nSize; j++)
+								{
+									double tmp;
+									ar >> tmp;
+									pGrid->Add(m_PhyParaName[i],tmp);
+								}
+
 								ar.Close();
 								file.Close();
-								AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
-								return;
-							}
 
-							for( int j = 0; j< nSize; j++)
-							{
-								double tmp;
-								ar >> tmp;
-								pGrid->Add(m_PhyParaName[i],tmp);
-							}
+								pGrid->m_vecPhyPara[0].I = pGrid->I;
+								pGrid->m_vecPhyPara[0].J = pGrid->J;
+								pGrid->m_vecPhyPara[0].K = pGrid->K;
+								pGrid->m_vecPhyPara[0].SavePara("f:\\grid.grd");
 
-							ar.Close();
-							file.Close();
+								CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
 
-							pGrid->m_vecPhyPara[0].I = pGrid->I;
-							pGrid->m_vecPhyPara[0].J = pGrid->J;
-							pGrid->m_vecPhyPara[0].K = pGrid->K;
-							pGrid->m_vecPhyPara[0].SavePara("f:\\grid.grd");
-
-							CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
-
-							CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
-							if( pWnd )
-							{
-								C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
-								if(pView)
+								CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+								if( pWnd )
 								{
-									if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+									C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+									if(pView)
 									{
-										C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
-										pDoc->GetContext()->SetModifiedFlag();
+										if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+										{
+											C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+											pDoc->GetContext()->SetModifiedFlag();
+										}
 									}
-								}
-							}	
+								}	
 
+							}
 						}
+
+						CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+						C3DObjBar*pBar = pMF->Get3DBar();
+						pBar->m_wndTree.FillTreeCtrl();
 					}
-		
-					CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
-					C3DObjBar*pBar = pMF->Get3DBar();
-					pBar->m_wndTree.FillTreeCtrl();
+					break;
+				default:
+					break;
 				}
-				break;
-			default:
-				break;
 			}
 		}
 	}
@@ -747,6 +749,162 @@ void C3DObjBar::ReadEclipseGrid( LPCTSTR filename )
 
 void C3DObjBar::OnCalcPhyPara()
 {
+	CDlgPhyParaCalc dlg;
+
+	dlg.m_phy1 = 1;
+	dlg.m_phy2 = 1;
+	dlg.m_new_phyname = "属性新";
+
+	HTREEITEM hItem = m_wndTree.GetSelectedItem();
+	CGLObject *pObj;
+	if( hItem != NULL )
+	{
+		pObj = (CGLObject*)(m_wndTree.GetItemData(hItem));
+		if( pObj == NULL )
+			return;
+		else
+		{
+			dlg.SetGLObj(pObj);
+		}
+	}
+	
+	if(dlg.DoModal()==IDOK)
+	{
+		CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+		CString strName1 = newGUID();
+		strName1 += _T(".pro");
+		CString strName2 = newGUID();
+		strName2 += _T(".pro");
+		CString strName3 = newGUID();
+		strName3 += _T(".pro");
+
+		CString strNewFileName1 = pMF->GetProjectDatPath();
+		strNewFileName1 += _T("\\files\\");
+		strNewFileName1 += strName1;
+		CString strNewFileName2 = pMF->GetProjectDatPath();
+		strNewFileName2 += _T("\\files\\");
+		strNewFileName2 += strName2;
+		CString strNewFileName3 = pMF->GetProjectDatPath();
+		strNewFileName3 += _T("\\files\\");
+		strNewFileName3 += strName3;
+		
+		
+		CString strMsg;
+		strMsg = _T("正在分析静态场数据文件，请稍等...");
+		pMF->GetStatusBar().SetPaneText(0, strMsg);
+
+		switch(pObj->GetGLObjType())
+		{
+		case GLINTERLAYERCELL:
+			{
+				bool bIsExist = false;
+				InterLayerGridObject * pGrid = dynamic_cast<InterLayerGridObject*>(pObj);
+
+				if(dlg.m_singleOperator)
+				{
+					pGrid->m_vecPhyPara[dlg.m_index_phyname1].SavePara(strNewFileName1.GetBuffer());
+
+					CIntersectSearchManager::Instance()->ComputePara1(strNewFileName1.GetBuffer(),dlg.m_phy1, strNewFileName3.GetBuffer(), dlg.m_op1.GetBuffer());
+				}
+				else
+				{
+					pGrid->m_vecPhyPara[dlg.m_index_phyname1].SavePara(strNewFileName1.GetBuffer());
+					pGrid->m_vecPhyPara[dlg.m_index_phyname2].SavePara(strNewFileName2.GetBuffer());
+
+					CIntersectSearchManager::Instance()->ComputePara2(strNewFileName1.GetBuffer(), strNewFileName2.GetBuffer(), strNewFileName3.GetBuffer(), 
+						dlg.m_op1.GetBuffer(), dlg.m_op2.GetBuffer(), dlg.m_op0.GetBuffer(),
+						dlg.m_phy1, dlg.m_phy2);
+				}
+				
+				int nSize = pGrid->m_vecPhyPara.GetSize();
+
+				int i;
+				for (i=0; i<nSize; i++)
+				{
+					if( dlg.m_new_phyname == pGrid->m_vecPhyPara[i].m_strName)
+					{
+						bIsExist = true;
+						break;
+					}
+				}
+				if( bIsExist )
+				{
+					pGrid->m_vecPhyPara[i].LoadPara(strNewFileName3.GetBuffer());
+				}
+				else
+				{
+					CPhyPara tmpara;
+					tmpara.LoadPara(strNewFileName3.GetBuffer());
+					tmpara.m_strName = dlg.m_new_phyname;
+					pGrid->m_vecPhyPara.Add(tmpara);
+				}
+			}
+			break;
+		case GLSURFACE:
+			{
+				bool bIsExist = false;
+				CGridObject * pGrid = dynamic_cast<CGridObject*>(pObj);
+
+				if(dlg.m_singleOperator)
+				{
+					pGrid->m_vecPhyPara[dlg.m_index_phyname1].SavePara(strNewFileName1.GetBuffer());
+
+					CIntersectSearchManager::Instance()->ComputePara1(strNewFileName1.GetBuffer(),dlg.m_phy1, strNewFileName3.GetBuffer(), dlg.m_op1.GetBuffer());
+				}
+				else
+				{
+					pGrid->m_vecPhyPara[dlg.m_index_phyname1].SavePara(strNewFileName1.GetBuffer());
+					pGrid->m_vecPhyPara[dlg.m_index_phyname2].SavePara(strNewFileName2.GetBuffer());
+
+					CIntersectSearchManager::Instance()->ComputePara2(strNewFileName1.GetBuffer(), strNewFileName2.GetBuffer(), strNewFileName3.GetBuffer(), 
+						dlg.m_op1.GetBuffer(), dlg.m_op2.GetBuffer(), dlg.m_op0.GetBuffer(),
+						dlg.m_phy1, dlg.m_phy2);
+				}
+				int nSize = pGrid->m_vecPhyPara.GetSize();
+
+				int i;
+				for (i=0; i<nSize; i++)
+				{
+					if( dlg.m_new_phyname == pGrid->m_vecPhyPara[i].m_strName)
+					{
+						bIsExist = true;
+						break;
+					}
+				}
+				if( bIsExist )
+				{
+					pGrid->m_vecPhyPara[i].LoadPara(strNewFileName3.GetBuffer());
+				}
+				else
+				{
+					CPhyPara tmpara;
+					tmpara.LoadPara(strNewFileName3.GetBuffer());
+					tmpara.m_strName = dlg.m_new_phyname;
+					pGrid->m_vecPhyPara.Add(tmpara);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	
+		C3DObjBar*pBar = pMF->Get3DBar();
+		pBar->m_wndTree.FillTreeCtrl();
+
+	//	CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+	//	if( pWnd )
+	//	{
+	//		C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+	//		if(pView)
+	//		{
+	//			if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+	//			{
+	//				C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+	//				pDoc->GetContext()->SetModifiedFlag();
+	//			}
+	//		}
+	//	}	
+	}
 
 }
 
@@ -760,7 +918,10 @@ void C3DObjBar::OnUpdateCalcPhyPara( CCmdUI *pCmdUI )
 		if( pObj!=NULL
 			&&( pObj->GetGLObjType() == GLSURFACE 
 			|| pObj->GetGLObjType() == GLINTERLAYERCELL) )
-			pCmdUI->Enable(TRUE);
+			if( !dynamic_cast<CGridObject*>(pObj)->m_vecPhyPara.IsEmpty() )
+				pCmdUI->Enable(TRUE);
+			else
+				pCmdUI->Enable(FALSE);
 		else
 			pCmdUI->Enable(FALSE);
 	}
@@ -770,7 +931,169 @@ void C3DObjBar::OnUpdateCalcPhyPara( CCmdUI *pCmdUI )
 
 void C3DObjBar::OnAdjPhyPara()
 {
+	HTREEITEM hItem = m_wndTree.GetSelectedItem();
 
+	CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+
+	CString strFileName;
+	CString strName;
+	CDlgImportModel dlg(TRUE,0,0,4|2|64,_T("所有文件 (*.*)|*.*||")); // 导入模型及场数据
+	dlg.m_ofn.lpstrTitle = _T("导入场数据");
+	if( dlg.DoModal() == IDOK )
+	{
+		strFileName = dlg.GetPathName();
+
+		CPhyPara tmpPhyPara;
+		tmpPhyPara.LoadPara(strFileName.GetBuffer());
+
+		if( hItem != NULL )
+		{
+			CGLObject *pObj = (CGLObject*)(m_wndTree.GetItemData(hItem));
+			if( pObj == NULL )
+				return;
+			else
+			{
+				switch(pObj->GetGLObjType())
+				{
+				case GLINTERLAYERCELL:
+					{
+						//bool bIsExist = false;
+						//InterLayerGridObject * pGrid = dynamic_cast<InterLayerGridObject*>(pObj);
+						////for(int i=0; i<m_PhyParaName.size(); i++)
+						////{
+						//int nSize = pGrid->m_vecPhyPara.GetSize();
+
+
+						//for (int i=0; i<nSize;i++)
+						//{
+						//	strName = m_PhyParaName[i];
+						//	if( strName == pGrid->m_vecPhyPara[i].m_strName)
+						//	{
+						//		bIsExist = true;
+						//		break;
+						//	}
+						//}
+						////}
+
+						//if( bIsExist )
+						//{
+						//	strName.Format(_T("网格模型中已经存在[%s]属性数据了"), strName.GetBuffer());
+						//	AfxMessageBox(strName, MB_OK|MB_ICONINFORMATION);
+						//	return;
+						//}
+
+						//CWaitCursor wait;
+						//CFile file;
+						//for(int i=0; i<m_PhyParaNamefilename.size(); i++)
+						//{
+						//	if( file.Open(m_PhyParaNamefilename[i].GetBuffer(), CFile::modeRead | CFile::typeBinary ) )
+						//	{
+						//		CArchive ar(&file,CArchive::load);
+
+						//		CString str;
+						//		ar >> str;
+
+						//		int nSize;
+						//		ar >> nSize;
+						//		if( nSize != (pGrid->I*pGrid->J*pGrid->K))
+						//		{
+						//			ar.Close();
+						//			file.Close();
+						//			AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
+						//			return;
+						//		}
+
+						//		for( int j = 0; j< nSize; j++)
+						//		{
+						//			double tmp;
+						//			ar >> tmp;
+						//			pGrid->Add(m_PhyParaName[i],tmp);
+						//		}
+
+						//		ar.Close();
+						//		file.Close();
+
+						//		CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+
+						//		CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+						//		if( pWnd )
+						//		{
+						//			C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+						//			if(pView)
+						//			{
+						//				if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+						//				{
+						//					C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+						//					pDoc->GetContext()->SetModifiedFlag();
+						//				}
+						//			}
+						//		}	
+
+						//	}
+						//}
+
+						//CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+						//C3DObjBar*pBar = pMF->Get3DBar();
+						//pBar->m_wndTree.FillTreeCtrl();
+					}
+					break;
+				case GLSURFACE:
+					{
+						bool bIsExist = false;
+						CGridObject * pGrid = dynamic_cast<CGridObject*>(pObj);
+						//for(int i=0; i<m_PhyParaName.size(); i++)
+						//{
+						int nSize = pGrid->m_vecPhyPara.GetSize();
+
+
+						for (int i=0; i<nSize;i++)
+						{
+							strName = tmpPhyPara.m_strName;
+							if( strName == pGrid->m_vecPhyPara[i].m_strName)
+							{
+								bIsExist = true;
+								break;
+							}
+						}
+						//}
+
+						if( bIsExist )
+						{
+							strName.Format(_T("网格模型中已经存在[%s]属性数据了"), strName.GetBuffer());
+							AfxMessageBox(strName, MB_OK|MB_ICONINFORMATION);
+							return;
+						}
+
+						CWaitCursor wait;
+
+						pGrid->m_vecPhyPara.Add(tmpPhyPara);
+
+						CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+
+						CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+						if( pWnd )
+						{
+							C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+							if(pView)
+							{
+								if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+								{
+									C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+									pDoc->GetContext()->SetModifiedFlag();
+								}
+							}
+						}	
+
+						C3DObjBar*pBar = pMF->Get3DBar();
+						pBar->m_wndTree.FillTreeCtrl();
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
 }
 
 void C3DObjBar::OnUpdateAdjPhyPara( CCmdUI *pCmdUI )
@@ -783,7 +1106,10 @@ void C3DObjBar::OnUpdateAdjPhyPara( CCmdUI *pCmdUI )
 		if( pObj!=NULL
 			&&( pObj->GetGLObjType() == GLSURFACE 
 			|| pObj->GetGLObjType() == GLINTERLAYERCELL) )
-			pCmdUI->Enable(TRUE);
+			if( !dynamic_cast<CGridObject*>(pObj)->m_vecPhyPara.IsEmpty() )
+				pCmdUI->Enable(TRUE);
+			else
+				pCmdUI->Enable(FALSE);
 		else
 			pCmdUI->Enable(FALSE);
 	}

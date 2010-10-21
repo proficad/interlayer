@@ -17,6 +17,8 @@
 CIntersectSearchManager::CIntersectSearchManager()
 {
 	m_model = NULL;
+	m_phyparaMin = -1.7e+308;
+	m_phyparaMax = 1.7e+308;
 	m_interlayers.clear();
 }
 
@@ -170,4 +172,25 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index )
 	}
 	END_CATCH 
 		
+}
+
+bool CIntersectSearchManager::ExportTriangle( const std::string& file, const std::string& out, int size, int index )
+{
+	bool rl = false;
+	rl = cExportTriangle(file, out, size, index);
+	return rl;
+}
+
+bool CIntersectSearchManager::ComputePara2( const std::string& file1, const std::string& file2, const std::string& savefile, const std::string& op1, const std::string& op2, const std::string& op, float para1, float para2 )
+{
+	bool rl = false;
+	rl = Operation2(file1, file2, savefile, op1, op2, op, para1, para2);
+	return rl;
+}
+
+bool CIntersectSearchManager::ComputePara1( const std::string& file, float para, const std::string& savefile, const std::string& op )
+{
+	bool rl = false;
+	rl = Operation1(file, para, savefile,op);
+	return rl;
 }

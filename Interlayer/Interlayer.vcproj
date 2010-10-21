@@ -1306,6 +1306,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\DlgPhyParaCalc.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GeoMap\DlgRectSet.h"
 					>
 				</File>
@@ -1319,6 +1323,10 @@
 				</File>
 				<File
 					RelativePath=".\GeoMap\DlgSetPoly.h"
+					>
+				</File>
+				<File
+					RelativePath=".\DlgTrangleExport.h"
 					>
 				</File>
 				<File
@@ -1566,11 +1574,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\RgnClipping.h"
+					RelativePath=".\GeoMap\RgnClipping.h"
 					>
 				</File>
 				<File
-					RelativePath=".\GeoMap\RgnClipping.h"
+					RelativePath=".\RgnClipping.h"
 					>
 				</File>
 				<File
@@ -1832,6 +1840,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\DlgPhyParaCalc.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\GeoMap\DlgRectSet.cpp"
 					>
 				</File>
@@ -1845,6 +1857,10 @@
 				</File>
 				<File
 					RelativePath=".\GeoMap\DlgSetPoly.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DlgTrangleExport.cpp"
 					>
 				</File>
 				<File

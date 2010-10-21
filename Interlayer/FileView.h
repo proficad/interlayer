@@ -143,6 +143,8 @@ public:
 	afx_msg void OnEditCut();
 	afx_msg void OnUpdateEditCut(CCmdUI *pCmdUI);
 	afx_msg void OnEditPaste();
-	afx_msg void OnUpdateEditPaste(CCmdUI *pCmdUI);	
+	afx_msg void OnUpdateEditPaste(CCmdUI *pCmdUI);
+	afx_msg void OnExportTriangle();
+	afx_msg void OnUpdateExportTriangle(CCmdUI *pCmdUI);
 };
 

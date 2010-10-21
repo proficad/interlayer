@@ -10,6 +10,7 @@
 #include "C3DDice.h"
 #include "C3DSlice.h"
 #include "../MainFrm.h"
+#include "../IntersectSearchManager.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -2021,9 +2022,9 @@ void C3DObject::SaveSurface( const std::string& filename )
 	art.Close();
 }
 
-void C3DObject::SaveDivideSurface( const CVector3D& size, const std::string& filename )
+void C3DObject::SaveDivideSurface( const std::string& filename, const std::string& newfilename, const CVector3D& size, int index )
 {
-	if(size.GetNormL2()<0.0001)
+	if(size.GetNormL2()<0.00001)
 	{
 		AfxMessageBox("三角形过细");
 	}
@@ -2031,20 +2032,38 @@ void C3DObject::SaveDivideSurface( const CVector3D& size, const std::string& fil
 	{
 		AfxMessageBox("文件名为空");
 	}
-	std::vector<CVector3D>	t_positions;
-	std::vector<int>				t_indies;
-	CFile file(filename.c_str(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
-	CArchive art(&file, CArchive::store);
+	double x_min = MAX_DOUBLE;
+	double y_min = MAX_DOUBLE;
+	double z_min = MAX_DOUBLE;
+	for(int i=0; i<(m_indexs.size()/3); i++)
+	{
+		double dx1 = abs( m_pointList[ m_indexs[i*3] ].x - m_pointList[ m_indexs[i*3+1] ].x);
+		double dx2 = abs( m_pointList[ m_indexs[i*3+1] ].x - m_pointList[ m_indexs[i*3+2] ].x);
+		double dx3 = abs( m_pointList[ m_indexs[i*3+2] ].x - m_pointList[ m_indexs[i*3] ].x);
 
-	//int size = m_pointList.size();
-	//art << size;
+		double dy1 = abs( m_pointList[ m_indexs[i*3] ].y - m_pointList[ m_indexs[i*3+1] ].y);
+		double dy2 = abs( m_pointList[ m_indexs[i*3+1] ].y - m_pointList[ m_indexs[i*3+2] ].y);
+		double dy3 = abs( m_pointList[ m_indexs[i*3+2] ].y - m_pointList[ m_indexs[i*3] ].y);
 
-	//for (int i= 0; i < size; i++)
-	//	art << m_pointList[i];
+		double dz1 = abs( m_pointList[ m_indexs[i*3] ].z - m_pointList[ m_indexs[i*3+1] ].z);
+		double dz2 = abs( m_pointList[ m_indexs[i*3+1] ].z - m_pointList[ m_indexs[i*3+2] ].z);
+		double dz3 = abs( m_pointList[ m_indexs[i*3+2] ].z - m_pointList[ m_indexs[i*3] ].z);
 
-	//size = m_indexs.size();
-	//art << size;
-	//for (int i=0; i<size; i++)
-	//	art << m_indexs[i];
-	art.Close();
+		double dx = (dx1+dx2+dx3)/3;
+		double dy = (dy1+dy2+dy3)/3;
+		double dz = (dz1+dz2+dz3)/3;
+		if(dx < x_min)
+			x_min = dx;
+		if(dy < y_min)
+			y_min = dy;
+		if(dz < z_min)
+			z_min = dz;
+	}
+	int dx = x_min/size.GetX();
+	int dy = y_min/size.GetY();
+	int dz = z_min/size.GetZ();
+	int divide = max( max(dx, dy), dz );
+	if(divide<=0)
+		divide = 1;
+	CIntersectSearchManager::Instance()->ExportTriangle(filename, newfilename, divide, index);
 }

@@ -16,6 +16,7 @@
 #include "FormGenerateLayer.h"
 #include "DispLogCurve/DispLogCurve.h"
 #include "DlgInterlayerParaRange.h"
+#include "IntersectSearchManager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -1686,8 +1687,33 @@ LRESULT CMainFrame::OnCreateFileLog(WPARAM wp, LPARAM lp)
 void CMainFrame::OnPhyPararangeSet()
 {
 	CDlgInterlayerParaRange dlg;
+	dlg.m_rangeMin = CIntersectSearchManager::Instance()->GetPhyParaMin();
+	dlg.m_rangeMax = CIntersectSearchManager::Instance()->GetPhyParaMax();
 	if( dlg.DoModal() == IDOK )
 	{
-
+		if(dlg.m_rangeMin>=dlg.m_rangeMax)
+		{
+			AfxMessageBox("最小值大于等于最大值");
+			return ;
+		}
 	}
+
+	CIntersectSearchManager::Instance()->SetPhyParaMin(dlg.m_rangeMin);
+	CIntersectSearchManager::Instance()->SetPhyParaMax(dlg.m_rangeMax);
+
+	CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+
+	CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+	if( pWnd )
+	{
+		C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+		if(pView)
+		{
+			if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+			{
+				C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+				pDoc->GetContext()->SetModifiedFlag();
+			}
+		}
+	}	
 }

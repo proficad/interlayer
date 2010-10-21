@@ -17,6 +17,9 @@
 #include "Vertical_Model/VertModelView.h"
 #include "Vertical_Model/VertModelDoc.h"
 #include "FormGenerateLayer.h"
+#include "DlgTrangleExport.h"
+#include "3DLib/3DObject.h"
+#include "3DLib/PlaneReader.h"
 
 
 #ifdef _DEBUG
@@ -241,7 +244,9 @@ BEGIN_MESSAGE_MAP(CFileView, CDockablePane)
 	ON_COMMAND(ID_EDIT_CUT, OnEditCut)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_CUT, OnUpdateEditCut)
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE, OnUpdateEditPaste)	
+	ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE, OnUpdateEditPaste)
+	ON_COMMAND(ID_TRIANGLE_EXPORT, OnExportTriangle)
+	ON_UPDATE_COMMAND_UI(ID_TRIANGLE_EXPORT, OnUpdateExportTriangle)	
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2149,4 +2154,75 @@ void CFileView::OnUpdateEditPaste(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	m_wndFileView.OnUpdateEditPaste(pCmdUI);
+}
+
+void CFileView::OnExportTriangle()
+{
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	CString strSourcePathName = pMF->GetProjectDatPath();
+	CDlgTrangleExport dlg;
+	dlg.m_x = 1;
+	dlg.m_y = 1;
+	dlg.m_z = 1;
+	dlg.m_strFileName = strSourcePathName + "\\default.tri";
+	if(dlg.DoModal()==IDOK)
+	{
+		CString filename = dlg.m_strFileName;
+		double _x = dlg.m_x;
+		double _y = dlg.m_y;
+		double _z = dlg.m_z;
+		int index = dlg.m_index;
+		CWaitCursor wait;
+
+		HTREEITEM hItem = m_wndFileView.GetSelectedItem();
+
+		if(!hItem)
+		{
+			return;
+		}
+
+		CTreeNodeDat *lpData = (CTreeNodeDat *)m_wndFileView.GetItemData(hItem);
+		
+		CString strFileName = ((CFileViewObj*)lpData->m_pNodeDat)->m_strFileName;
+		strSourcePathName += _T("\\files\\");
+		strSourcePathName += strFileName;
+
+		CPlaneReader* pReader = new CPlaneReader(strSourcePathName);
+		C3DObject* pPlaneObj = new C3DObject(pReader);
+
+		CString strFileName1 = pMF->GetProjectDatPath();
+		strFileName1 += _T("\\models\\");
+		CString strNewtempFileName;
+		strNewtempFileName = strFileName1 + newGUID();
+
+
+		pPlaneObj->SaveSurface(strNewtempFileName.GetString());
+		pPlaneObj->SaveDivideSurface(strNewtempFileName.GetBuffer(), filename.GetBuffer(), CVector3DF(_x, _y, _z), index );
+
+		TRY
+		{
+			CFile::Remove( strNewtempFileName.GetBuffer() );
+		}
+		CATCH( CFileException, e )
+		{
+			assert(false&&"删除文件失败");
+		}
+		END_CATCH 
+	}
+}
+
+void CFileView::OnUpdateExportTriangle( CCmdUI *pCmdUI )
+{
+	HTREEITEM hti;
+	hti = m_wndFileView.GetSelectedItem();
+	CTreeNodeDat *lpNodeDat = (CTreeNodeDat*)m_wndFileView.GetItemData(hti);
+	if( hti != NULL )
+	{
+		if( lpNodeDat->m_nType == FILE_PLANE ) 
+			pCmdUI->Enable(TRUE);
+		else
+			pCmdUI->Enable(FALSE);
+	}
+	else
+		pCmdUI->Enable(FALSE);
 }

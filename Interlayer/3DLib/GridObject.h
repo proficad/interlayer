@@ -77,6 +77,7 @@ public:
 			m_dMinValue = dValue;
 	}
 	void SavePara(const std::string& filename);
+	void LoadPara(const std::string& filename);
 };
 
 CArchive& AFXAPI operator << (CArchive& ar, const CPhyPara& param);

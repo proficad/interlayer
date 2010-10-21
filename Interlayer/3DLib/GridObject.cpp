@@ -3,6 +3,7 @@
 #include "GLDisplayContext.h"
 #include "float.h"
 #include "../MainFrm.h"
+#include "../IntersectSearchManager.h"
 
 GLint faceindexes[24] =
 {
@@ -49,16 +50,14 @@ void CPhyPara::SavePara( const std::string& filename )
 
 	//ar << m_strName;
 	char *tmp = m_strName.GetBuffer();
-	for(int i=0; i<8; i++)
+	for(int i=0; i<16; i++)
 	{
 		if(i<=(m_strName.GetLength()-1))
 		{
 			ar << tmp[i];
-			ar << '\0';
 		}
 		else
 		{
-			ar << '\0';
 			ar << '\0';
 		}
 	}
@@ -73,6 +72,39 @@ void CPhyPara::SavePara( const std::string& filename )
 	for (int i=0; i<nSize; i++)
 	{
 		ar << m_dValue[i];
+	}
+
+	ar.Close();
+}
+
+void CPhyPara::LoadPara( const std::string& filename )
+{
+	//m_dValue.clear();
+	CFile file(filename.c_str(), CFile::modeRead|CFile::typeBinary);
+	CArchive ar(&file, CArchive::load);
+
+	//ar << m_strName;
+	char tmp[16];
+	for(int i=0; i<16; i++)
+	{
+		ar >> tmp[i];
+	}
+	m_strName = tmp;
+	ar >> m_bShow;	
+	ar >> m_dMinValue;
+	ar >> m_dMaxValue;
+	ar >> I;
+	ar >> J;
+	ar >> K;
+
+	int nSize;
+	ar >> nSize;
+	if( m_dValue.capacity()<nSize)
+		m_dValue.resize(nSize);
+
+	for (int i=0; i<nSize; i++)
+	{
+		ar >> m_dValue[i];
 	}
 
 	ar.Close();
@@ -630,6 +662,15 @@ void CGridObject::DrawWired()
 			for(int j=0; j<J; j++)
 			{
 				int k =m_layerIndex;
+				if(pParam)
+				{
+					double phypara = pParam->m_dValue[k*I*J + j*I + i];
+					double phymin = CIntersectSearchManager::Instance()->GetPhyParaMin();
+					double phymax = CIntersectSearchManager::Instance()->GetPhyParaMax();
+					if((phypara>phymax)||(phypara<phymin))
+						continue;
+				}
+
 				//for(int k=0; k<K; k++)
 				//{
 
@@ -669,6 +710,15 @@ void CGridObject::DrawWired()
 			for(int j=0; j<J; j++)
 			{
 				int k = m_layerIndex;
+				if(pParam)
+				{			
+					double phypara = pParam->m_dValue[k*I*J + j*I + i];
+					double phymin = CIntersectSearchManager::Instance()->GetPhyParaMin();
+					double phymax = CIntersectSearchManager::Instance()->GetPhyParaMax();
+					if((phypara>phymax)||(phypara<phymin))
+						continue;
+				}
+				
 				//for(int k=0; k<K; k++)
 				//{
 					if( !m_bShowI[i] 
@@ -846,8 +896,17 @@ void CGridObject::DrawShaded()
 			for(int j=0; j<J; j++)
 			{
 				//for(int k=0; k<K; k++)
-				//{
+				//{		
 				int k = m_layerIndex;
+				if(pParam)
+				{
+					double phypara = pParam->m_dValue[k*I*J + j*I + i];
+					double phymin = CIntersectSearchManager::Instance()->GetPhyParaMin();
+					double phymax = CIntersectSearchManager::Instance()->GetPhyParaMax();
+					if((phypara>phymax)||(phypara<phymin))
+						continue;
+				}
+
 				for(int index=0; index<24; index++)
 				{
 					postions[index*3] = m_gridCells->m_gridCells[i][j][k].m_cornerPoint[faceindexes[index]].GetX();
@@ -899,6 +958,15 @@ void CGridObject::DrawShaded()
 			for(int j=0; j<J; j++)
 			{
 				int k = m_layerIndex;
+				if(pParam)
+				{
+					double phypara = pParam->m_dValue[k*I*J + j*I + i];
+					double phymin = CIntersectSearchManager::Instance()->GetPhyParaMin();
+					double phymax = CIntersectSearchManager::Instance()->GetPhyParaMax();
+					if((phypara>phymax)||(phypara<phymin))
+						continue;
+				}
+				
 				//for(int k=0; k<K; k++)
 				//{
 					if( !m_bShowI[i] 
@@ -1367,11 +1435,32 @@ void InterLayerGridObject::DrawWired()
 	{
 		glEnableClientState(GL_COLOR_ARRAY);
 	}
-
+	CPhyPara *pParam = NULL;
+	int nSize = m_vecPhyPara.GetSize();
+	for (int i=0; i<nSize; i++)
+	{
+		if( m_vecPhyPara[i].m_bShow )
+		{
+			pParam = &m_vecPhyPara[i];
+			break;
+		}
+	}
 	//------------------------------------------------------------------------
 
 	for(int i=0; i<m_gridCells.size(); i++)
 	{
+		if(pParam)
+		{
+			int _i = m_gridCells[i]._x;
+			int _j = m_gridCells[i]._y;
+			int _k = m_gridCells[i]._z;
+			double phypara = pParam->m_dValue[_k*I*J + _j*I + _i];
+			double phymin = CIntersectSearchManager::Instance()->GetPhyParaMin();
+			double phymax = CIntersectSearchManager::Instance()->GetPhyParaMax();
+			if((phypara>phymax)||(phypara<phymin))
+				break;
+		}
+	
 		if( !m_gridCells[i].m_bIsGridRefinement)
 		{
 			for(int index=0; index<24; index++)
@@ -1552,6 +1641,18 @@ void InterLayerGridObject::DrawShaded()
 
 	for(int i=0; i<m_gridCells.size(); i++)
 	{
+		if(pParam)
+		{
+			int _i = m_gridCells[i]._x;
+			int _j = m_gridCells[i]._y;
+			int _k = m_gridCells[i]._z;
+			double phypara = pParam->m_dValue[_k*I*J + _j*I + _i];
+			double phymin = CIntersectSearchManager::Instance()->GetPhyParaMin();
+			double phymax = CIntersectSearchManager::Instance()->GetPhyParaMax();
+			if((phypara>phymax)||(phypara<phymin))
+				continue;
+		}
+	
 		if( !m_gridCells[i].m_bIsGridRefinement)
 		{
 			for(int index=0; index<24; index++)
@@ -1603,6 +1704,18 @@ void InterLayerGridObject::DrawShaded()
 		{
 			for(vector<tagGridModelCellNew>::iterator it=m_gridCells[i].m_subCells.begin(); it!=m_gridCells[i].m_subCells.end(); ++it )
 			{
+				if(pParam)
+				{
+					int _i = m_gridCells[i]._x;
+					int _j = m_gridCells[i]._y;
+					int _k = m_gridCells[i]._z;
+					double phypara = pParam->m_dValue[_k*I*J + _j*I + _i];
+					double phymin = CIntersectSearchManager::Instance()->GetPhyParaMin();
+					double phymax = CIntersectSearchManager::Instance()->GetPhyParaMax();
+					if((phypara>phymax)||(phypara<phymin))
+						continue;
+				}
+
 				tagGridModelCellNew cell = (*it);
 				for(int index=0; index<24; index++)
 				{
