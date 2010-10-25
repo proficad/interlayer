@@ -792,8 +792,8 @@ void C3DObjTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 				{
 					for (int i=0;i<pGridObj->K; i++)
 						pGridObj->m_bShowK[i] = TRUE;
-					for (int i=0;i<pGridObj->K;i++)
-						pGridObj->m_bChangeK[i] = TRUE;
+					//for (int i=0;i<pGridObj->K;i++)
+					//	pGridObj->m_bChangeK[i] = TRUE;
 				}
 				else
 				{
@@ -815,7 +815,7 @@ void C3DObjTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 						else if( str == _T("Z"))
 						{
 							pGridObj->m_bShowK[num] = TRUE;
-							pGridObj->m_bChangeK[num] = TRUE;
+							//pGridObj->m_bChangeK[num] = TRUE;
 						}
 					}
 				}
@@ -853,8 +853,8 @@ void C3DObjTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 				{
 					for (int i=0;i<pGridObj->K; i++)
 						pGridObj->m_bShowK[i] = FALSE;
-					for (int i=0;i<pGridObj->K; i++)
-						pGridObj->m_bChangeK[i] = TRUE;
+					//for (int i=0;i<pGridObj->K; i++)
+					//	pGridObj->m_bChangeK[i] = TRUE;
 				}
 				else
 				{
@@ -876,7 +876,7 @@ void C3DObjTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 						else if( str == _T("Z"))
 						{
 							pGridObj->m_bShowK[num] = FALSE;
-							pGridObj->m_bChangeK[num] = TRUE;
+							//pGridObj->m_bChangeK[num] = TRUE;
 						}
 					}
 
@@ -1724,6 +1724,36 @@ void C3DObjTreeCtrl::DeleteAllGlObjects()
 {
 	//TreeVisit(GetRootItem());
 	//CIntersectSearchManager
+}
+
+HTREEITEM C3DObjTreeCtrl::GetItemByGUID( CString guid )
+{
+	HTREEITEM root = GetRootItem();
+	if(!root)
+		return NULL;
+	return SearchItemByGUID(guid, root);
+}
+
+HTREEITEM C3DObjTreeCtrl::SearchItemByGUID( CString guid, HTREEITEM parent )
+{
+	HTREEITEM point = parent;
+	CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(point);
+	if(lpNodeDat)
+	{
+		if(lpNodeDat->m_strGUIDName==guid)
+		{
+			return point;
+		}
+	}
+	HTREEITEM son = GetChildItem( point);
+	do 
+	{
+		HTREEITEM result = SearchItemByGUID(guid, son);
+		if(result)
+			return result;
+		son = GetNextSiblingItem(son);
+	} while (son!=NULL);
+	return NULL;
 }
 
 void CIntersectSearchTree::FillTreeCtrl()

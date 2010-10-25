@@ -131,14 +131,12 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index )
 		bool rs = Tracking(strNewtempFileName.GetBuffer(),m_gridFilename,strNewFileName.GetBuffer());
 		if(!rs)
 			return ;
-		//InterLayerGridObject test;
-		//test.LoadLayer(strNewFileName.GetBuffer());
-
 		//相交网格的显示
 		CString title;
 		title.Format("%s%d","夹层网格", index);
 		CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
-		pMF->GetTreeModelView()->OnImportInterlayer(strNewFileName, title);
+		pMF->GetTreeModelView()->OnImportInterlayer(strNewFileName, title, m_gridModelTreeItemGuid.c_str());
+
 		//CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
 		//if( pWnd )
 		//{
@@ -193,4 +191,17 @@ bool CIntersectSearchManager::ComputePara1( const std::string& file, float para,
 	bool rl = false;
 	rl = Operation1(file, para, savefile,op);
 	return rl;
+}
+
+void CIntersectSearchManager::RunCommond( const std::string& command )
+{
+
+	WinExec(_T("f:\\release\\WindowsFormsApplication5.exe test"), SW_SHOW);
+}
+
+bool CIntersectSearchManager::AveragePara( const std::string& filename, const std::string& savename )
+{
+	bool IsTrue = false;
+	IsTrue = Average(filename, savename);
+	return IsTrue;
 }

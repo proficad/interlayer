@@ -220,7 +220,7 @@ void C3DModelDoc::AddPlane(LPCTSTR lpszFileName, LPCTSTR lpszName)
 	UpdateAllViews(NULL);
 }
 
-void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CStringArray &arParamName, const CStringArray &arFileName)
+void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CStringArray &arParamName, const CStringArray &arFileName, CString guid)
 {
 	CWaitCursor wait;
 
@@ -251,6 +251,8 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 	pGridObj->SetContext(m_pDisplayContext);
 	pGridObj->SetGLObjType(GLSURFACE);
 	pGridObj->SetObjName(lpszName);
+
+	pGridObj->m_strGUID = guid;
 
 	pGridObj->I = gridModel.m_nGridX;
 	pGridObj->J = gridModel.m_nGridY;
@@ -289,8 +291,8 @@ void C3DModelDoc::AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CSt
 		pGridObj->m_bShowJ.Add(FALSE);
 	for (int i=0;i<gridModel.m_nGridZ;i++)
 		pGridObj->m_bShowK.Add(FALSE);
-	for (int i=0;i<gridModel.m_nGridZ;i++)
-		pGridObj->m_bChangeK.Add(TRUE);
+	//for (int i=0;i<gridModel.m_nGridZ;i++)
+	//	pGridObj->m_bChangeK.Add(TRUE);
 
 	int nSize = arParamName.GetSize();
 	for (int i=0;i<nSize; i++)
@@ -381,40 +383,44 @@ void C3DModelDoc::AddPhyParam(LPCTSTR lpszFileName, LPCTSTR lpszName)
 
 	StatusBarMessage(_T("正在读取数据，请稍等..."));
 	CWaitCursor wait;
-	CFile file;
-	if( file.Open(lpszFileName, CFile::modeRead | CFile::typeBinary ) )
-	{
-		CArchive ar(&file,CArchive::load);
+	CPhyPara tmpara;
+	tmpara.LoadPara(lpszFileName);
+	tmpara.m_bShow = FALSE;
+	pGrid->m_vecPhyPara.Add(tmpara);
+	//CFile file;
+	//if( file.Open(lpszFileName, CFile::modeRead | CFile::typeBinary ) )
+	//{
+	//	CArchive ar(&file,CArchive::load);
 
-		CString str;
-		ar >> str;
+	//	CString str;
+	//	ar >> str;
 
-		int nSize;
-		ar >> nSize;
-		if( nSize != (pGrid->I*pGrid->J*pGrid->K))
-		{
-			ar.Close();
-			file.Close();
-			AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
-			return;
-		}
+	//	int nSize;
+	//	ar >> nSize;
+	//	if( nSize != (pGrid->I*pGrid->J*pGrid->K))
+	//	{
+	//		ar.Close();
+	//		file.Close();
+	//		AfxMessageBox(_T("此属性数据个数与网格模型单元个数不符!"), MB_OK|MB_ICONWARNING);
+	//		return;
+	//	}
 
-		for( int j = 0; j< nSize; j++)
-		{
-			double tmp;
-			ar >> tmp;
-			pGrid->Add(strName,tmp);
-		}
+	//	for( int j = 0; j< nSize; j++)
+	//	{
+	//		double tmp;
+	//		ar >> tmp;
+	//		pGrid->Add(strName,tmp);
+	//	}
 
-		ar.Close();
-		file.Close();
-		SetModifiedFlag();
+	//	ar.Close();
+	//	file.Close();
+	SetModifiedFlag();
 
-		CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+	CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
 
-		C3DObjBar*pBar = pMF->Get3DBar();
-		pBar->m_wndTree.FillTreeCtrl();
-	}
+	C3DObjBar*pBar = pMF->Get3DBar();
+	pBar->m_wndTree.FillTreeCtrl();
+	//}
 }
 
 void C3DModelDoc::AddWellPath(HTREEITEM hItem)
@@ -732,11 +738,13 @@ void C3DModelDoc::AddWellPath(HTREEITEM hItem)
 	UpdateAllViews(NULL);
 }
 
-void C3DModelDoc::AddInterlayer( LPCTSTR lpszFileName, LPCTSTR lpszName )
+void C3DModelDoc::AddInterlayer( LPCTSTR lpszFileName, LPCTSTR lpszName,CString guid, CString modelguid )
 {
 	InterLayerGridObject* playerObj = new InterLayerGridObject();
 	//pPlaneObj->ReversePoints();
 	playerObj->LoadLayer(lpszFileName);
+	playerObj->m_strGUID = guid;
+	playerObj->m_strModelGUID = modelguid;
 	playerObj->SetContext(m_pDisplayContext);
 	playerObj->SetGLObjType(GLINTERLAYERCELL);
 	playerObj->SetObjName(lpszName);

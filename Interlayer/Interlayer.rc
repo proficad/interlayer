@@ -918,7 +918,8 @@ BEGIN
         MENUITEM "添加子文件夹",                      ID_ADD_CHILD
         MENUITEM SEPARATOR
         MENUITEM "导入模型...",                     ID_IMPORT_MODEL
-        MENUITEM "导入场数据...",                    ID_IMPORT_FIELD
+        //MENUITEM "导入场数据...",                    ID_IMPORT_FIELD
+		MENUITEM "查找模型相交网格"				ID_SEARCH_MODEL
         MENUITEM SEPARATOR
         MENUITEM "导出模型...",                     32990
         MENUITEM SEPARATOR
@@ -2396,6 +2397,19 @@ BEGIN
     COMBOBOX        IDC_COMBO_OPERATOR2,79,134,70,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_GROUP | WS_TABSTOP
 END
 
+IDD_DLG_PHY_ADJ DIALOGEX 0, 0, 148, 111
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "调整属性"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,12,77,50,14
+    PUSHBUTTON      "取消",IDCANCEL,73,77,50,14
+    COMBOBOX        IDC_COMBO1,58,23,71,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "调整属性",IDC_STATIC,19,24,33,8
+    LTEXT           "新属性名",IDC_STATIC,19,54,33,8
+    EDITTEXT        IDC_EDIT1,58,52,71,14,ES_AUTOHSCROLL
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2750,6 +2764,14 @@ BEGIN
         RIGHTMARGIN, 203
         TOPMARGIN, 7
         BOTTOMMARGIN, 217
+    END
+
+    IDD_DLG_PHY_ADJ, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 141
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 104
     END
 END
 #endif    // APSTUDIO_INVOKED

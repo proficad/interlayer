@@ -40,6 +40,7 @@ CTreeNodeDat::CTreeNodeDat()
 	m_nType				= FOLDER;
 	m_pNodeDat			= NULL;
 	m_strFileName		= _T("");
+	m_strGUIDName	= newGUID();
 }
 
 CTreeNodeDat::~CTreeNodeDat()
@@ -58,6 +59,7 @@ void CTreeNodeDat::Serialize(CArchive& ar)
 		ar << m_nSelectedImage;
 		ar << (WORD)m_nType;
 		ar << m_strFileName;
+		ar << m_strGUIDName;
 
 		BOOL bExist;
 		if( m_pNodeDat )
@@ -93,6 +95,7 @@ void CTreeNodeDat::Serialize(CArchive& ar)
 				m_nType = (NODE_STYLE)wdTmp;
 
 				ar >> m_strFileName;
+				ar >> m_strGUIDName;
 
 				BOOL bExist;
 				ar >> bExist;
@@ -121,6 +124,7 @@ CArchive& operator <<(CArchive& ar, const CTreeNodeDat& dat)
 	ar << dat.m_nSelectedImage;
 	ar << (WORD)dat.m_nType;
 	ar << dat.m_strFileName;
+	ar << dat.m_strGUIDName;
 
 	BOOL bExist;
 	if( dat.m_pNodeDat )
@@ -160,6 +164,7 @@ CArchive& operator >>(CArchive& ar, CTreeNodeDat& dat)
 			dat.m_nType = (NODE_STYLE)wdTmp;
 
 			ar >> dat.m_strFileName;
+			ar >> dat.m_strGUIDName;
 
 			BOOL bExist;
 			ar >> bExist;
@@ -2187,9 +2192,9 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 										strSourcePathName += strFileName;
 
 										CString strText = GetItemText(m_hitemDrag);
-
+										CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(m_hitemDrag);
 										CStringArray ar1, ar2;
-										pDoc->AddGridModel(strSourcePathName, strText, ar1, ar2);
+										pDoc->AddGridModel(strSourcePathName, strText, ar1, ar2, lpNodeDat->m_strGUIDName);
 									}
 								}
 								break;
@@ -2208,8 +2213,10 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 
 										CString strText = GetItemText(m_hitemDrag);
 
+										CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(m_hitemDrag);
+										CTreeNodeDat *lpNodeDatModel = (CTreeNodeDat *)GetItemData(GetParentItem(m_hitemDrag));
 										//CStringArray ar1, ar2;
-										pDoc->AddInterlayer(strFileName, strText);
+										pDoc->AddInterlayer(strFileName, strText,lpNodeDat->m_strGUIDName,lpNodeDatModel->m_strGUIDName);
 									}
 								}
 								break;
@@ -2223,7 +2230,7 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 
 									CString strText = GetItemText(m_hitemDrag);
 									C3DModelDoc *pDoc = ((C3DModelView*)pDropWnd)->GetDocument();
-									pDoc->AddPhyParam(strSourcePathName, strText);
+									pDoc->AddPhyParam(strFileName, strText);
 								}
 								break;
 
@@ -2274,8 +2281,10 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 
 														CString strText = GetItemText(m_hitemDrag);
 
+														CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(m_hitemDrag);
+														CTreeNodeDat *lpNodeDatModel = (CTreeNodeDat *)GetItemData(GetParentItem(m_hitemDrag));
 														//CStringArray ar1, ar2;
-														pDoc->AddInterlayer(strFileName, strText);
+														pDoc->AddInterlayer(strFileName, strText,lpNodeDat->m_strGUIDName,lpNodeDatModel->m_strGUIDName);
 													}
 												}
 												break;
@@ -3807,4 +3816,34 @@ HTREEITEM CViewTree::LoadTreeData(HGLOBAL hMem, HTREEITEM hItem)
 	ar.Close();
 
 	return hItemRet;
+}
+
+HTREEITEM CViewTree::GetItemByGUID( CString guid )
+{
+	HTREEITEM root = GetRootItem();
+	if(!root)
+		return NULL;
+	return SearchItemByGUID(guid, root);
+}
+
+HTREEITEM CViewTree::SearchItemByGUID( CString guid, HTREEITEM parent )
+{
+	HTREEITEM point = parent;
+	CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(point);
+	if(lpNodeDat)
+	{
+		if(lpNodeDat->m_strGUIDName==guid)
+		{
+			return point;
+		}
+	}
+	HTREEITEM son = GetChildItem( point);
+	do 
+	{
+		HTREEITEM result = SearchItemByGUID(guid, son);
+		if(result)
+			return result;
+		son = GetNextSiblingItem(son);
+	} while (son!=NULL);
+	return NULL;
 }

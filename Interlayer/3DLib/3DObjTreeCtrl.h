@@ -28,6 +28,9 @@ public:
 
 	HTREEITEM GetChildNode(HTREEITEM hti, LPCSTR lpszNodeName, BOOL bCase = TRUE);
 
+	HTREEITEM GetItemByGUID(CString guid);
+	HTREEITEM SearchItemByGUID(CString guid, HTREEITEM parent);
+
 	void OnNew();
 	void OnUpdateNew(CCmdUI *pCmdUI);
 

@@ -138,6 +138,8 @@ public:
 	GLubyte itsShadeRed;
 	GLubyte itsShadeGreen;
 	GLubyte itsShadeBlue;
+
+	CString							m_strGUID;
 protected:
 	GLObjectType		m_glObjType;		// 图素类型
 	static int			m_glObjCount;		// 图素计数

@@ -101,10 +101,15 @@ void CPhyPara::LoadPara( const std::string& filename )
 	ar >> nSize;
 	if( m_dValue.capacity()<nSize)
 		m_dValue.resize(nSize);
-
+	//m_dMinValue = 1.7e+308;
+	//m_dMaxValue = -1.7e+308;
 	for (int i=0; i<nSize; i++)
 	{
 		ar >> m_dValue[i];
+		//if(m_dValue[i]>m_dMaxValue)
+		//	m_dMaxValue = m_dValue[i];
+		//if(m_dValue[i]<m_dMinValue)
+		//	m_dMinValue = m_dValue[i];
 	}
 
 	ar.Close();
@@ -134,6 +139,7 @@ CGridObject::CGridObject(void)
 	I = 0; 
 	J = 0;
 	K = 0;
+	//m_modelItem = NULL;
 
 	SetMaterial(White);
 }
@@ -202,6 +208,7 @@ void CGridObject::Serialize(CArchive &ar)
 		}
 
 		//int size = m_pointList.GetSize();
+		ar << m_strGUID;
 		int size;
 		//ar << size;
 
@@ -252,7 +259,7 @@ void CGridObject::Serialize(CArchive &ar)
 			ar >> b;
 			m_bShowK.Add(b);
 		}
-
+		ar >> m_strGUID;
 		int size;
 		//ar >> size;
 		//m_pointList.SetSize(size);
@@ -1358,6 +1365,8 @@ void InterLayerGridObject::Serialize( CArchive& ar )
 
 	if( ar.IsStoring() )
 	{
+		ar << m_strGUID;
+		ar << m_strModelGUID;
 		ar << I;
 		ar << J;
 		ar << K;
@@ -1378,6 +1387,8 @@ void InterLayerGridObject::Serialize( CArchive& ar )
 	}
 	else
 	{		
+		ar >> m_strGUID;
+		ar >> m_strModelGUID;
 		ar >> I;
 		ar >> J;
 		ar >> K;
@@ -1805,7 +1816,6 @@ void InterLayerGridObject::LoadLayer( const std::string& filename )
 {
 	CFile file(filename.c_str(), CFile::modeRead|CFile::typeBinary|CFile::modeRead);
 	CArchive art(&file, CArchive::load);
-
 	art >> I;
 	art >> J;
 	art >> K;

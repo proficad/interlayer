@@ -150,12 +150,16 @@ public:
 	CArray<CPhyPara, CPhyPara&>	m_vecPhyPara;
 	//CArray<CVertex3D,CVertex3D&> m_pointList;
 
+	CString							m_strModelGUID;
+
 	VECTOR_ARRAY			m_gridCells;
 	vector<std::string>		m_layerNames;
 	int								m_layerIndex;
+	HTREEITEM					m_modelItem;
 	// ±£´æ
 	virtual void Serialize(CArchive& ar);
 	void	LoadLayer(const std::string& filename);
+	void AddGridGUID(const std::string& filename,CString guid);
 
 	void Add(LPCTSTR lpszName, double dValue);
 

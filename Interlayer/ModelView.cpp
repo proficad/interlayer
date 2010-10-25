@@ -222,7 +222,8 @@ bool CModelView::OpenTree(CTreeNodeDat *lpNodeDat, void *lpVoid)
 
 					if( pDoc != NULL )
 					{
-						pDoc->AddGridModel(strFileName, strTitle, m_arParamName, m_arFileName);
+						CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)m_wndModelView.GetItemData(hSrc);
+						pDoc->AddGridModel(strFileName, strTitle, m_arParamName, m_arFileName, lpNodeDat->m_strGUIDName);
 					}
 
 					pMF->GetTreeGraphView()->GetTreeCtrl()->m_bNew3D = false;
@@ -2385,9 +2386,9 @@ void CModelView::OnUpdateEditPaste(CCmdUI *pCmdUI)
 	m_wndModelView.OnUpdateEditPaste(pCmdUI);
 }
 
-bool CModelView::OnImportInterlayer( LPCSTR strFileName, LPCSTR strFileTitle)
+bool CModelView::OnImportInterlayer( LPCSTR strFileName, LPCSTR strFileTitle, CString modelGUID )
 {
-	HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+	HTREEITEM hItem = m_wndModelView.GetItemByGUID(modelGUID);
 	if( hItem == NULL )
 		hItem = TVI_ROOT;
 
@@ -2424,10 +2425,12 @@ void CModelView::OnSearchModel()
 
 	CString filename;
 	CString titlename;
+	CString guid;
 	if( hItem != NULL)
 	{
 		CTreeNodeDat *pNote = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
 		filename = pNote->m_strFileName;
+		guid = pNote->m_strGUIDName;
 	}
 
 	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
@@ -2435,7 +2438,7 @@ void CModelView::OnSearchModel()
 	CString strTargePathName = pMF->GetProjectDatPath();
 	strTargePathName += _T("\\models\\");
 	strTargePathName += filename;
-	CIntersectSearchManager::Instance()->SetGridModelName(strTargePathName.GetBuffer());
+	CIntersectSearchManager::Instance()->SetGridModelName(strTargePathName.GetBuffer(),guid.GetBuffer());
 }
 
 void CModelView::OnUpdateSearchModel( CCmdUI *pCmdUI )
@@ -2462,4 +2465,84 @@ void CModelView::OnUpdateSearchModel( CCmdUI *pCmdUI )
 		else
 			pCmdUI->Enable(FALSE);
 	}
+}
+
+bool CModelView::AddGridEclipse( LPCSTR lpszGridFileName, LPCSTR lpszParaName, HTREEITEM hItem )
+{
+	CStdioFile fileOld;
+	if( !fileOld.Open(lpszGridFileName, CFile::modeRead | CFile::typeText) )
+		return false;
+	if( fileOld.GetLength() < 1 ) // 如果文件长度为0 返回空的文件名
+	{
+		fileOld.Close();
+		return false;
+	}
+
+	fileOld.Close();
+
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
+	CWaitCursor wait;
+
+	HTREEITEM htiSon = m_wndModelView.GetChildNode(hItem,  lpszParaName);
+	if( htiSon == NULL )
+	{
+		//CTreeNodeDat *lpData = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
+		//m_wndModelView.AddChildFolder(lpData);
+
+		HTREEITEM htiSon = m_wndModelView.GetChildNode(hItem, lpszParaName);
+
+		htiSon = AddTreeItem(lpszParaName, 2, 2, hItem);
+
+		CTreeNodeDat *lpNodeDat = new CTreeNodeDat;
+
+		CFileViewObj *pObj = new CFileViewObj;
+		pObj->m_strFileName = lpszGridFileName;
+
+		lpNodeDat->m_nImage			= 2;
+		lpNodeDat->m_nSelectedImage	= 2;
+		lpNodeDat->m_nType			= FARM_DAT;
+		lpNodeDat->m_pNodeDat		= pObj;
+		lpNodeDat->m_uState			= TVIS_EXPANDED;
+		CString filename = lpszGridFileName;
+		filename.MakeUpper();
+		lpNodeDat->m_strFileName = filename;
+
+		m_wndModelView.SetItemData(htiSon, (DWORD)lpNodeDat);
+
+		m_wndModelView.Expand(hItem, TVE_EXPAND);
+	}
+	else
+	{
+		CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)m_wndModelView.GetItemData(htiSon);
+
+		if( lpNodeDat != NULL )
+		{
+			delete lpNodeDat;
+			lpNodeDat = NULL;
+		}
+
+		lpNodeDat = new CTreeNodeDat;
+
+		CFileViewObj *pObj = new CFileViewObj;
+		pObj->m_strFileName = lpszGridFileName;
+
+		lpNodeDat->m_nImage			= 2;
+		lpNodeDat->m_nSelectedImage	= 2;
+		lpNodeDat->m_nType			= FARM_DAT;
+		lpNodeDat->m_pNodeDat		= pObj;
+		lpNodeDat->m_uState			= TVIS_EXPANDED;
+		CString filename = lpszGridFileName;
+		filename.MakeUpper();
+		lpNodeDat->m_strFileName = filename;
+
+		m_wndModelView.SetItemData(htiSon, (DWORD)lpNodeDat);
+	}					
+
+	return true;
+}
+
+HTREEITEM CModelView::GetItemByGUID( CString guid )
+{
+	return m_wndModelView.GetItemByGUID(guid);
 }

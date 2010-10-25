@@ -282,6 +282,8 @@
 #define IDD_DLG_PHYPARARANGE            509
 #define IDD_TRANGLEEXPORT               510
 #define IDD_DLG_PHY_CALC                512
+#define IDD_DIALOG2                     513
+#define IDD_DLG_PHY_ADJ                 513
 #define IDC_EDIT_MINV                   1000
 #define IDC_EDIT_MAXV                   1001
 #define IDC_EDIT_MINDV                  1002
@@ -438,6 +440,7 @@
 #define IDC_RADIO4                      1156
 #define IDC_GROUP1                      1157
 #define IDC_GROUP2                      1158
+#define IDC_COMBO1                      1159
 #define IDC_EDIT_NAME                   3016
 #define IDC_EDIT_SCALE                  3017
 #define IDC_EDIT_HPAGE                  3020
@@ -772,9 +775,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        513
+#define _APS_NEXT_RESOURCE_VALUE        514
 #define _APS_NEXT_COMMAND_VALUE         33208
-#define _APS_NEXT_CONTROL_VALUE         1159
+#define _APS_NEXT_CONTROL_VALUE         1160
 #define _APS_NEXT_SYMED_VALUE           450
 #endif
 #endif

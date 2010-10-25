@@ -22,7 +22,7 @@ public:
 	bool SearchInterSect();
 
 	//void SetGridModel(CGridObject* model){ m_model = model; }
-	void SetGridModelName(const std::string& filename){m_gridFilename=filename;}
+	void SetGridModelName(const std::string& filename,const std::string& guid){m_gridFilename=filename;m_gridModelTreeItemGuid=guid;}
 	std::string GetGridModelName(){return m_gridFilename;}
 
 	void AddLayerModel(CGLObject* layer);
@@ -43,9 +43,13 @@ public:
 											const std::string& op1, const std::string& op2, const std::string& op,
 											float para1, float para2);
 	bool			ComputePara1(const std::string& file, float para, const std::string& savefile, const std::string& op);
+	//参数柔化
+	bool			AveragePara(const std::string& filename, const std::string& savename);
 	//导出加密三角形
 	bool			ExportTriangle(const std::string& input, const std::string& output, int size, int index);
-	
+	//命令行
+	void			RunCommond(const std::string& command);
+
 	void			ReleaseAll();
 protected:
 	CIntersectSearchManager();
@@ -53,6 +57,7 @@ protected:
 	void SearchALayer(CGLObject* gird, int index);
 	CGridObject* m_model;
 	std::string		 m_gridFilename;
+	std::string		 m_gridModelTreeItemGuid;
 	std::vector<std::string>  	 m_interlayerNames;
 	std::vector<CGLObject*>   m_interlayers;
 

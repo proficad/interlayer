@@ -75,6 +75,8 @@ public:
 
 	CString m_strFileName;	// 文件名
 
+	CString m_strGUIDName;
+
 	CObject *m_pNodeDat;	// 结点数据
 
 	//------------------------------------------------------------------------
@@ -164,6 +166,8 @@ public:
 	BOOL AddSiblingFolder(CObject *pNodeDat = NULL, int iImage = 0);
 	BOOL AddChildFolder(CObject *pNodeDat = NULL, int iImage = 0);
 	//------------------------------------------------------------------------
+	HTREEITEM GetItemByGUID(CString guid);
+	HTREEITEM SearchItemByGUID(CString guid, HTREEITEM parent);
 	// bCase 区分大小写
 	HTREEITEM GetChildNode(HTREEITEM hti, LPCSTR lpszNodeName, BOOL bCase = TRUE);
 	BOOL IsExistChildNode(HTREEITEM hti, LPCSTR lpszNodeName, BOOL bCase = TRUE);
