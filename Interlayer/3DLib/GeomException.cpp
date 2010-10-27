@@ -40,7 +40,7 @@ CGeomException::CGeomException(ErrorType type)
 
 CGeomException::~CGeomException()
 {
-	delete[] msg;
+	//delete[] msg;
 }
 
 char* CGeomException::ErrorMessage() const

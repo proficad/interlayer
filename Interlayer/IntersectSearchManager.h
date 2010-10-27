@@ -65,4 +65,37 @@ protected:
 	double			m_phyparaMax;
 };
 
+
+class CExportManager
+{
+public:
+	static CExportManager* Instance()
+	{
+		static CExportManager instance;
+		return &instance;
+	}
+	// Ù–‘
+	bool SetExportGridFileName(const std::string& filename);
+
+	bool SetRedefine(bool isRedefine);
+	bool SetWriteProperty(bool isWrite);
+	bool SetRedefineProperty(bool isWrite);
+
+	bool AddProName(const std::string& filename);
+	bool	ClearProNames();
+	int	GetProNameNums();
+	bool	RemoveProNameAt(int index);
+
+	bool AddTrackName(const std::string& filename);
+	bool	ClearTrackNames();
+	int	GetTrackNameNums();
+	bool	RemoveTrackNameAt(int index);
+
+	bool	WriteExport(const std::string& filename);
+	bool WriteCenterPoints(const std::string& filename, const std::string& saveFileName, bool isWriteTick, int number);
+
+protected:
+	CExportManager(){}
+	~CExportManager(){}
+};
 #endif

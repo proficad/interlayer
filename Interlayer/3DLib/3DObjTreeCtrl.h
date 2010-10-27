@@ -22,7 +22,6 @@ public:
 	virtual void FillTreeCtrl();
 
 	void TreeVisit(HTREEITEM hItem);
-	void	DeleteAllGlObjects();
 	void OnDeleteItem();
 	void AddObj(CGLObject *pObj);
 
@@ -30,6 +29,7 @@ public:
 
 	HTREEITEM GetItemByGUID(CString guid);
 	HTREEITEM SearchItemByGUID(CString guid, HTREEITEM parent);
+	void			  DeleteItemByGUID(CString guid);
 
 	void OnNew();
 	void OnUpdateNew(CCmdUI *pCmdUI);

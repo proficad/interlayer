@@ -108,6 +108,7 @@ bool CIntersectSearchManager::SearchInterSect()
 	//art.Close();
 	m_interlayerNames.clear();
 	m_interlayers.clear();
+	return true;
 }
 
 void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index )
@@ -203,5 +204,99 @@ bool CIntersectSearchManager::AveragePara( const std::string& filename, const st
 {
 	bool IsTrue = false;
 	IsTrue = Average(filename, savename);
+	return IsTrue;
+}
+
+bool CExportManager::SetExportGridFileName(const std::string& filename)
+{
+	bool IsTrue = false;
+	IsTrue = SetGridFileNameNet(filename);
+	return IsTrue;
+}
+
+bool CExportManager::AddProName( const std::string& filename )
+{
+	bool IsTrue = false;
+	IsTrue = AddPropertyFileNameNet(filename);
+	return IsTrue;
+}
+
+bool CExportManager::ClearProNames()
+{
+	bool IsTrue = false;
+	IsTrue = ClearPropertyFileNameNet();
+	return IsTrue;
+}
+
+int CExportManager::GetProNameNums()
+{
+	return  GetPropertyFileNameCountNet();
+}
+
+bool CExportManager::RemoveProNameAt( int index )
+{
+	bool IsTrue = false;
+	IsTrue = PropertyFileNameRemoveAtNet(index);
+	return IsTrue;
+}
+
+bool CExportManager::AddTrackName( const std::string& filename )
+{
+	bool IsTrue = false;
+	IsTrue = AddTrackFileNameNet(filename);
+	return IsTrue;
+}
+
+bool CExportManager::ClearTrackNames()
+{
+	bool IsTrue = false;
+	IsTrue = ClearTrackFileNameNet();
+	return IsTrue;
+}
+
+int CExportManager::GetTrackNameNums()
+{
+	return  GetTrackFileNameCountNet();
+}
+
+bool CExportManager::RemoveTrackNameAt( int index )
+{
+	bool IsTrue = false;
+	IsTrue = TrackFileNameRemoveAtNet(index);
+	return IsTrue;
+}
+
+bool CExportManager::WriteExport( const std::string& filename )
+{
+	bool IsTrue = false;
+	IsTrue = WriteNet(filename);
+	return IsTrue;
+}
+
+bool CExportManager::WriteCenterPoints( const std::string& filename, const std::string& saveFileName, bool isWriteTick, int number )
+{
+	bool IsTrue = false;
+	IsTrue = WriteCenterPointNet(filename, saveFileName, isWriteTick, number);
+	return IsTrue;
+}
+
+bool CExportManager::SetRedefine( bool isRedefine )
+{
+	bool IsTrue = false;
+	IsTrue = SetRedefineNet(isRedefine);
+	return IsTrue;
+}
+
+bool CExportManager::SetWriteProperty( bool isWrite )
+{
+	bool IsTrue = false;
+	IsTrue = SetWritePropertyNet(isWrite);
+	return IsTrue;
+}
+
+bool CExportManager::SetRedefineProperty( bool isWrite )
+{
+	bool IsTrue = false;
+	IsTrue = SetRedefinePropertyNet(isWrite);
 	return IsTrue;
 }

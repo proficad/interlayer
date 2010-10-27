@@ -37,7 +37,7 @@ CAxisSystem::CAxisSystem(const CVertex3D& Pos, const CVector3D& Dir, const CVect
 	{
 		try
 		{
-			throw CGeomException(ConstructionFailure);
+			//throw CGeomException(ConstructionFailure);
 		}
 
 		catch(...)

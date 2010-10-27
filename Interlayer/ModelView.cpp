@@ -13,6 +13,7 @@
 #include "3DLib/3DModelView.h"
 #include "3DLib/3DModelDoc.h"
 #include "IntersectSearchManager.h"
+#include "DlgExportGridData.h"
 using namespace GridModel;
 
 class CModelViewMenuButton : public CMFCToolBarMenuButton
@@ -708,11 +709,18 @@ void CModelView::OnExportModel()
 {
 	// TODO: 在此添加命令处理程序代码
 
-	CDlgImportModel dlg(FALSE); // 导出模型及场数据
-	dlg.m_ofn.lpstrTitle = _T("导出模型数据");
-	if( dlg.DoModal() == IDOK )
-	{
+	//CDlgImportModel dlg(FALSE); // 导出模型及场数据
+	//dlg.m_ofn.lpstrTitle = _T("导出模型数据");
+	//if( dlg.DoModal() == IDOK )
+	//{
 
+	//}
+	CDlgExportGridData dlg;
+	dlg.m_strFilePath = "default";
+	dlg.SetModelItem( m_wndModelView.GetSelectedItem() );
+	if(dlg.DoModal()==IDOK)
+	{
+		dlg.SaveExport();
 	}
 }
 
@@ -2545,4 +2553,9 @@ bool CModelView::AddGridEclipse( LPCSTR lpszGridFileName, LPCSTR lpszParaName, H
 HTREEITEM CModelView::GetItemByGUID( CString guid )
 {
 	return m_wndModelView.GetItemByGUID(guid);
+}
+
+void CModelView::DeleteItemByGUID( CString guid )
+{
+	m_wndModelView.DeleteGUIDItem(guid);
 }

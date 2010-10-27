@@ -12,6 +12,7 @@
 #include "../DlgZSlice.h"
 #include "../DlgXYSlice.h"
 #include "../IntersectSearchManager.h"
+#include <afxtempl.h> 
 // C3DObjTreeCtrl
 
 IMPLEMENT_DYNAMIC(C3DObjTreeCtrl, CTreeCtrl)
@@ -1331,6 +1332,8 @@ void C3DObjTreeCtrl::OnDeleteItem()
 	if( hItem != NULL )
 	{
 		CGLObject *pObj = (CGLObject*)GetItemData(hItem);
+		CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+		//pMF->GetTreeModelView()->DeleteItemByGUID(pObj->m_strGUID);
 		if( pObj == NULL || pObj->GetGLObjType() == GLTRIHEDRON )
 			return;
 		
@@ -1720,27 +1723,45 @@ void C3DObjTreeCtrl::TreeVisit(HTREEITEM hItem)
 	}
 }
 
-void C3DObjTreeCtrl::DeleteAllGlObjects()
-{
-	//TreeVisit(GetRootItem());
-	//CIntersectSearchManager
-}
-
 HTREEITEM C3DObjTreeCtrl::GetItemByGUID( CString guid )
 {
-	HTREEITEM root = GetRootItem();
-	if(!root)
-		return NULL;
-	return SearchItemByGUID(guid, root);
+	////HTREEITEM root = GetRootItem();
+	////if(!root)
+	////	return NULL;
+	////return SearchItemByGUID(guid, root);
+	CList <HTREEITEM,HTREEITEM&>   TreeList; 
+	HTREEITEM   hItemhi   =   GetRootItem();
+	if   (hItemhi   !=   NULL)
+	{
+		TreeList.AddHead(hItemhi);
+		while(!TreeList.IsEmpty())
+		{
+			hItemhi   =   TreeList.RemoveHead();
+			CGLObject *pObj = (CGLObject*)GetItemData(hItemhi);
+			if( pObj )
+				if(pObj->GetGLObjType() != GLTRIHEDRON )
+					if(guid   ==   pObj->m_strGUID)   //ItemName是你想找的字符
+						return hItemhi;
+			hItemhi   =    GetChildItem(hItemhi);
+			while(hItemhi)
+			{
+				TreeList.AddHead(hItemhi);
+				hItemhi   =   GetNextSiblingItem(hItemhi);
+			}
+		}
+	}
+	return NULL;
 }
 
 HTREEITEM C3DObjTreeCtrl::SearchItemByGUID( CString guid, HTREEITEM parent )
 {
+	if(!parent)
+		return NULL;
 	HTREEITEM point = parent;
-	CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(point);
-	if(lpNodeDat)
+	CGLObject *pObj = (CGLObject*)GetItemData(point);
+	if(pObj)
 	{
-		if(lpNodeDat->m_strGUIDName==guid)
+		if(pObj->m_strGUID==guid)
 		{
 			return point;
 		}
@@ -1756,6 +1777,39 @@ HTREEITEM C3DObjTreeCtrl::SearchItemByGUID( CString guid, HTREEITEM parent )
 	return NULL;
 }
 
+void C3DObjTreeCtrl::DeleteItemByGUID( CString guid )
+{
+	HTREEITEM hItem = GetItemByGUID(guid);
+
+	if( hItem != NULL )
+	{
+		CGLObject *pObj = (CGLObject*)GetItemData(hItem);
+		CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+		pMF->GetTreeModelView()->DeleteItemByGUID(pObj->m_strGUID);
+		if( pObj == NULL || pObj->GetGLObjType() == GLTRIHEDRON )
+			return;
+
+		//if( ::MessageBox(m_hWnd,_T("确定要删除吗？"),_T("提示信息"),MB_YESNO|MB_ICONQUESTION) == IDNO )
+		//	return;
+
+		DeleteItem(hItem);
+
+		if( pObj->GetGLObjType() == GLDICE )
+			m_pDoc->GetContext()->EraseDice(pObj);
+		else if (pObj->GetGLObjType() == GLSLICE)
+			m_pDoc->GetContext()->EraseSlice(pObj);
+		else
+			m_pDoc->GetContext()->Erase(pObj);
+
+		POSITION pos = m_pDoc->GetFirstViewPosition();
+		CView *pView = m_pDoc->GetNextView(pos);
+		pView->Invalidate(FALSE);
+
+		m_pDoc->SetModifiedFlag();
+
+		SetFocus();
+	}
+}
 void CIntersectSearchTree::FillTreeCtrl()
 {
 	DeleteAllItems();

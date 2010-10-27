@@ -168,6 +168,7 @@ public:
 	//------------------------------------------------------------------------
 	HTREEITEM GetItemByGUID(CString guid);
 	HTREEITEM SearchItemByGUID(CString guid, HTREEITEM parent);
+	void			   DeleteGUIDItem(CString guid);
 	// bCase 区分大小写
 	HTREEITEM GetChildNode(HTREEITEM hti, LPCSTR lpszNodeName, BOOL bCase = TRUE);
 	BOOL IsExistChildNode(HTREEITEM hti, LPCSTR lpszNodeName, BOOL bCase = TRUE);

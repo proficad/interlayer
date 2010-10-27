@@ -22,6 +22,7 @@ public:
 	HTREEITEM AddTreeItem(LPCTSTR lpszItem, int nImage = 0, int nSelectedImage = 0, 
 		HTREEITEM hParent = TVI_ROOT, 
 		HTREEITEM hInsertAfter = TVI_LAST);
+	void			 DeleteItemByGUID(CString guid);
 protected:
 	void ReadEclipseGrid(LPCTSTR filename);
 protected:

@@ -1266,6 +1266,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\DlgExportGridData.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GeoMap\DlgExportPicture.h"
 					>
 				</File>
@@ -1801,6 +1805,10 @@
 				</File>
 				<File
 					RelativePath=".\DlgColorTableSet.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DlgExportGridData.cpp"
 					>
 				</File>
 				<File

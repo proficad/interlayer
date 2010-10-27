@@ -1131,6 +1131,10 @@ void C3DObjBar::OnUpdateAdjPhyPara( CCmdUI *pCmdUI )
 		pCmdUI->Enable(FALSE);
 }
 
+void C3DObjBar::DeleteItemByGUID( CString guid )
+{
+	m_wndTree.DeleteItemByGUID(guid);
+}
 IMPLEMENT_DYNAMIC(CLayerIntersectSearch, CDockablePane)
 
 CLayerIntersectSearch::CLayerIntersectSearch()

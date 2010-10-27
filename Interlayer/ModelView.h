@@ -57,6 +57,7 @@ public:
 
 	bool OnImportInterlayer( LPCSTR filename, LPCSTR name, CString modelGUID );
 	HTREEITEM GetItemByGUID(CString guid);
+	void			   DeleteItemByGUID(CString guid);
 // ÖØÐ´
 public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

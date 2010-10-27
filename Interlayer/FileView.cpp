@@ -2214,8 +2214,10 @@ void CFileView::OnExportTriangle()
 void CFileView::OnUpdateExportTriangle( CCmdUI *pCmdUI )
 {
 	HTREEITEM hti;
+	CTreeNodeDat *lpNodeDat ;
 	hti = m_wndFileView.GetSelectedItem();
-	CTreeNodeDat *lpNodeDat = (CTreeNodeDat*)m_wndFileView.GetItemData(hti);
+	if(hti)
+		lpNodeDat = (CTreeNodeDat*)m_wndFileView.GetItemData(hti);
 	if( hti != NULL )
 	{
 		if( lpNodeDat->m_nType == FILE_PLANE ) 

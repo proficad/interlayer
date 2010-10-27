@@ -3002,10 +3002,13 @@ void CViewTree::OnDeleteItem()
 {	
 	HTREEITEM hti;
 
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
 	hti = GetSelectedItem();
 	if (hti != NULL)
 	{	
 		CTreeNodeDat *lpNodeDat = (CTreeNodeDat*)GetItemData(hti);
+		//pMF->Get3DBar()->DeleteItemByGUID(lpNodeDat->m_strGUIDName);
 		switch(m_eTreeType)
 		{
 		case fileTree:
@@ -3050,11 +3053,12 @@ void CViewTree::OnDeleteItem()
 
 		if( ::MessageBox(m_hWnd,_T("确定要删除吗？"),_T("提示信息"),MB_YESNO|MB_ICONQUESTION) == IDYES )
 		{
+			
 			FreeAllChildNodeData(hti);
 
 			if( lpNodeDat->m_nType == WELL_DAT ) // 如果删除单井数据，由删除
 			{
-				CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+				
 				CString strFileName = pMF->GetProjectDatPath();
 				strFileName += _T("\\files\\");
 
@@ -3072,7 +3076,7 @@ void CViewTree::OnDeleteItem()
 			}
 
 			CMultiDocTemplate *pTemplate = NULL;
-			CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
 			CString strTargePathName = pMF->GetProjectDatPath();
 
 			switch(m_eTreeType)
@@ -3236,7 +3240,8 @@ void CViewTree::OnDeleteItem()
 			default:
 				break;
 			}
-
+			//CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+			
 			if( lpNodeDat != NULL )
 			{
 				delete lpNodeDat;
@@ -3820,10 +3825,42 @@ HTREEITEM CViewTree::LoadTreeData(HGLOBAL hMem, HTREEITEM hItem)
 
 HTREEITEM CViewTree::GetItemByGUID( CString guid )
 {
-	HTREEITEM root = GetRootItem();
-	if(!root)
-		return NULL;
-	return SearchItemByGUID(guid, root);
+	//HTREEITEM root = GetRootItem();
+	//if(!root)
+	//	return NULL;
+	//return SearchItemByGUID(guid, root);
+
+	CList <HTREEITEM,HTREEITEM&>   TreeList; 
+	HTREEITEM   hItemhi   =   GetRootItem();
+	if   (hItemhi   !=   NULL)
+	{
+		TreeList.AddHead(hItemhi);
+		while(!TreeList.IsEmpty())
+		{
+			hItemhi   =   TreeList.RemoveHead();
+			CGLObject*   pObj   =   (CGLObject*)GetItemData(hItemhi);
+			if(pObj)
+			{
+				CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(hItemhi);
+				if(lpNodeDat)
+				{
+					if(lpNodeDat->m_strGUIDName==guid)
+					{
+						return hItemhi;
+					}
+				}
+			}
+				//if   (guid   ==   pObj->m_strGUID)   //ItemName是你想找的字符
+				//	return hItemhi;
+			hItemhi   =    GetChildItem(hItemhi);
+			while(hItemhi)
+			{
+				TreeList.AddHead(hItemhi);
+				hItemhi   =   GetNextSiblingItem(hItemhi);
+			}
+		}
+	}
+	return NULL;
 }
 
 HTREEITEM CViewTree::SearchItemByGUID( CString guid, HTREEITEM parent )
@@ -3846,4 +3883,259 @@ HTREEITEM CViewTree::SearchItemByGUID( CString guid, HTREEITEM parent )
 		son = GetNextSiblingItem(son);
 	} while (son!=NULL);
 	return NULL;
+}
+
+void CViewTree::DeleteGUIDItem( CString guid )
+{
+	HTREEITEM hti = GetItemByGUID(guid);
+
+	if (hti != NULL)
+	{	
+		CTreeNodeDat *lpNodeDat = (CTreeNodeDat*)GetItemData(hti);
+		switch(m_eTreeType)
+		{
+		case fileTree:
+			{
+				switch(lpNodeDat->m_nType)
+				{
+				case WELL_INFO:
+				case WELL_HOLE:
+				case WELL_LOGING_INFO:
+				case WELL_LOGINGS:
+				case WELL_LOGING:
+				case WELL_PRO:
+				case WELL_INJ:
+				case FILE_VERT_MODELS:
+				case FILE_VERT_MODEL:
+					return;
+				}
+			}
+			break;
+		case graphTree:
+			{
+				switch(lpNodeDat->m_nType)
+				{
+				case GRAPHICS_2DS:
+				case GRAPHICS_3DS:
+				case GRAPHICS_LOGS:
+					return;
+				}
+			}
+			break;
+		case modelTree:
+			{
+				switch(lpNodeDat->m_nType)
+				{
+				case FARM_LAYER:
+					return;
+				}
+			}
+			break;
+		}
+
+
+		//if( ::MessageBox(m_hWnd,_T("确定要删除吗？"),_T("提示信息"),MB_YESNO|MB_ICONQUESTION) == IDYES )
+		{
+			FreeAllChildNodeData(hti);
+
+			if( lpNodeDat->m_nType == WELL_DAT ) // 如果删除单井数据，由删除
+			{
+				CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+				CString strFileName = pMF->GetProjectDatPath();
+				strFileName += _T("\\files\\");
+
+				CString str = strFileName;
+				str += _T("WellInfo.dat");
+				DeleteFile(str);
+
+				str = strFileName;
+				str += _T("WellPathInfo.dat");
+				DeleteFile(str);
+
+				str = strFileName;
+				str += _T("WellLoggingInfo.dat");
+				DeleteFile(str);
+			}
+
+			CMultiDocTemplate *pTemplate = NULL;
+			CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+			CString strTargePathName = pMF->GetProjectDatPath();
+
+			switch(m_eTreeType)
+			{
+			case fileTree:
+				{	
+					switch(lpNodeDat->m_nType)
+					{
+					case FILE_PICTRUE:
+						{
+							pTemplate = theApp.m_pPictrueDocTempl;
+							strTargePathName += _T("\\files\\");
+						}
+						break;
+					case FILE_POINT:
+						{
+							pTemplate = theApp.m_pFileDatDocTemplate;
+							strTargePathName += _T("\\files\\");
+						}
+						break;
+					case FILE_LINE:
+						{
+							pTemplate = theApp.m_pFileDatDocTemplate;
+							strTargePathName += _T("\\files\\");
+						}
+						break;
+					case FILE_POLYGON:
+						{
+							pTemplate = theApp.m_pFileDatDocTemplate;
+							strTargePathName += _T("\\files\\");
+						}
+						break;
+					case FILE_PLANE: 
+						{
+							pTemplate = theApp.m_pFileDatDocTemplate;
+							strTargePathName += _T("\\files\\");
+						}
+						break;
+					case FILE_LAYER_MODEL: 
+						{
+							pTemplate = theApp.m_pLayerDocTemplate;
+							strTargePathName += _T("\\files\\");
+						}
+						break;
+					default:
+						break;
+					}			
+
+					if( pTemplate != NULL )
+					{
+						strTargePathName += ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
+
+						CDocTemplate::Confidence match;
+
+						CDocument* pDoc = NULL;
+						match = pTemplate->MatchDocType(strTargePathName, pDoc);
+
+						if (match == CDocTemplate::yesAlreadyOpen) // 已经有文档打开
+						{
+							CView* pView;
+							POSITION pos = pDoc->GetFirstViewPosition ();
+							while (pos != NULL)
+							{
+								pView = pDoc->GetNextView (pos);
+								pView->GetParentFrame ()->ActivateFrame ();
+							}
+
+							pDoc->OnCloseDocument();
+						}
+					}
+				}
+				break;
+			case modelTree:
+				{	
+					switch(lpNodeDat->m_nType)
+					{
+					case FARM_DAT:
+						{
+							pTemplate = theApp.m_p2DModelDocTemplate;
+							strTargePathName += _T("\\models\\");
+						}
+						break;
+					default:
+						break;
+					}			
+
+					if( pTemplate != NULL )
+					{
+						strTargePathName += ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
+
+						CDocTemplate::Confidence match;
+
+						CDocument* pDoc = NULL;
+						match = pTemplate->MatchDocType(strTargePathName, pDoc);
+
+						if (match == CDocTemplate::yesAlreadyOpen) // 已经有文档打开
+						{
+							CView* pView;
+							POSITION pos = pDoc->GetFirstViewPosition ();
+							while (pos != NULL)
+							{
+								pView = pDoc->GetNextView (pos);
+								pView->GetParentFrame ()->ActivateFrame ();
+							}
+
+							pDoc->OnCloseDocument();
+						}
+					}
+				}
+				break;
+			case graphTree:
+				{
+					switch(lpNodeDat->m_nType)
+					{
+					case FILE_2D:
+						{
+							pTemplate = theApp.m_pGeoMapDocTemplate;
+							strTargePathName += _T("\\graphics\\");
+						}
+						break;
+					case FILE_3D:
+						{
+							pTemplate = theApp.m_p3DModelDocTemplate;
+							strTargePathName += _T("\\graphics\\");
+						}
+						break;
+					case FILE_LOG:
+						{
+							pTemplate = theApp.m_pLoggingDocTemplate;
+							strTargePathName += _T("\\graphics\\");
+						}
+						break;
+					default:
+						break;
+					}
+
+					if( pTemplate != NULL )
+					{
+						strTargePathName += ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
+
+						CDocTemplate::Confidence match;
+
+						CDocument* pDoc = NULL;
+						match = pTemplate->MatchDocType(strTargePathName, pDoc);
+
+						if (match == CDocTemplate::yesAlreadyOpen) // 已经有文档打开
+						{
+							CView* pView;
+							POSITION pos = pDoc->GetFirstViewPosition ();
+							while (pos != NULL)
+							{
+								pView = pDoc->GetNextView (pos);
+								pView->GetParentFrame ()->ActivateFrame ();
+							}
+
+							pDoc->OnCloseDocument();
+						}
+					}
+				}
+				break;
+			default:
+				break;
+			}
+
+			if( lpNodeDat != NULL )
+			{
+				delete lpNodeDat;
+				lpNodeDat = NULL;
+			}
+
+			BOOL bFlag = DeleteItem(hti);
+			if (bFlag)
+				SetModifiedFlag();
+		}
+
+		SetFocus();
+
+		m_hSelectItem = GetSelectedItem();
+	}
 }
