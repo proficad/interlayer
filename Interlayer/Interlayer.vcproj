@@ -1582,11 +1582,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\GeoMap\RgnClipping.h"
+					RelativePath=".\RgnClipping.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RgnClipping.h"
+					RelativePath=".\GeoMap\RgnClipping.h"
 					>
 				</File>
 				<File

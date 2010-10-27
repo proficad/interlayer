@@ -3825,42 +3825,42 @@ HTREEITEM CViewTree::LoadTreeData(HGLOBAL hMem, HTREEITEM hItem)
 
 HTREEITEM CViewTree::GetItemByGUID( CString guid )
 {
-	//HTREEITEM root = GetRootItem();
-	//if(!root)
-	//	return NULL;
-	//return SearchItemByGUID(guid, root);
+	HTREEITEM root = GetRootItem();
+	if(!root)
+		return NULL;
+	return SearchItemByGUID(guid, root);
 
-	CList <HTREEITEM,HTREEITEM&>   TreeList; 
-	HTREEITEM   hItemhi   =   GetRootItem();
-	if   (hItemhi   !=   NULL)
-	{
-		TreeList.AddHead(hItemhi);
-		while(!TreeList.IsEmpty())
-		{
-			hItemhi   =   TreeList.RemoveHead();
-			CGLObject*   pObj   =   (CGLObject*)GetItemData(hItemhi);
-			if(pObj)
-			{
-				CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(hItemhi);
-				if(lpNodeDat)
-				{
-					if(lpNodeDat->m_strGUIDName==guid)
-					{
-						return hItemhi;
-					}
-				}
-			}
-				//if   (guid   ==   pObj->m_strGUID)   //ItemName是你想找的字符
-				//	return hItemhi;
-			hItemhi   =    GetChildItem(hItemhi);
-			while(hItemhi)
-			{
-				TreeList.AddHead(hItemhi);
-				hItemhi   =   GetNextSiblingItem(hItemhi);
-			}
-		}
-	}
-	return NULL;
+	//CList <HTREEITEM,HTREEITEM&>   TreeList; 
+	//HTREEITEM   hItemhi   =   GetRootItem();
+	//if   (hItemhi   !=   NULL)
+	//{
+	//	TreeList.AddHead(hItemhi);
+	//	while(!TreeList.IsEmpty())
+	//	{
+	//		hItemhi   =   TreeList.RemoveHead();
+	//		CGLObject*   pObj   =   (CGLObject*)GetItemData(hItemhi);
+	//		if(pObj)
+	//		{
+	//			CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(hItemhi);
+	//			if(lpNodeDat)
+	//			{
+	//				if(lpNodeDat->m_strGUIDName==guid)
+	//				{
+	//					return hItemhi;
+	//				}
+	//			}
+	//		}
+	//			//if   (guid   ==   pObj->m_strGUID)   //ItemName是你想找的字符
+	//			//	return hItemhi;
+	//		hItemhi   =    GetChildItem(hItemhi);
+	//		while(hItemhi)
+	//		{
+	//			TreeList.AddHead(hItemhi);
+	//			hItemhi   =   GetNextSiblingItem(hItemhi);
+	//		}
+	//	}
+	//}
+	//return NULL;
 }
 
 HTREEITEM CViewTree::SearchItemByGUID( CString guid, HTREEITEM parent )
