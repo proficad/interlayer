@@ -481,19 +481,19 @@ void C3DObjBar::OnAddPhyPara()
 								HTREEITEM hItem = pMF->GetTreeModelView()->GetItemByGUID(pGrid->m_strGUID);
 								if(hItem)
 									pMF->GetTreeModelView()->AddGridEclipse(m_PhyParaNamefilename[i].GetBuffer(), m_PhyParaName[i], hItem);
-								CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
-								if( pWnd )
-								{
-									C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
-									if(pView)
-									{
-										if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
-										{
-											C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
-											pDoc->GetContext()->SetModifiedFlag();
-										}
-									}
-								}	
+								//CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+								//if( pWnd )
+								//{
+								//	C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+								//	if(pView)
+								//	{
+								//		if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+								//		{
+								//			C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+								//			pDoc->GetContext()->SetModifiedFlag();
+								//		}
+								//	}
+								//}	
 
 							}
 						}
@@ -1078,19 +1078,19 @@ void C3DObjBar::OnAdjPhyPara()
 
 		CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
 
-		CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
-		if( pWnd )
-		{
-			C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
-			if(pView)
-			{
-				if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
-				{
-					C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
-					pDoc->GetContext()->SetModifiedFlag();
-				}
-			}
-		}	
+		//CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
+		//if( pWnd )
+		//{
+		//	C3DModelView *pView = (C3DModelView *)pWnd->GetActiveView();
+		//	if(pView)
+		//	{
+		//		if(pView->IsKindOf(RUNTIME_CLASS(C3DModelView)))
+		//		{
+		//			C3DModelDoc *pDoc = (C3DModelDoc *)pView ->GetDocument();
+		//			pDoc->GetContext()->SetModifiedFlag();
+		//		}
+		//	}
+		//}	
 
 		C3DObjBar*pBar = pMF->Get3DBar();
 		pBar->m_wndTree.FillTreeCtrl();

@@ -50,7 +50,7 @@ void CPhyPara::SavePara( const std::string& filename )
 
 	//ar << m_strName;
 	char *tmp = m_strName.GetBuffer();
-	for(int i=0; i<16; i++)
+	for(int i=0; i<8; i++)
 	{
 		if(i<=(m_strName.GetLength()-1))
 		{
@@ -84,8 +84,8 @@ void CPhyPara::LoadPara( const std::string& filename )
 	CArchive ar(&file, CArchive::load);
 
 	//ar << m_strName;
-	char tmp[16];
-	for(int i=0; i<16; i++)
+	char tmp[8];
+	for(int i=0; i<8; i++)
 	{
 		ar >> tmp[i];
 	}

@@ -3875,6 +3875,8 @@ HTREEITEM CViewTree::SearchItemByGUID( CString guid, HTREEITEM parent )
 		}
 	}
 	HTREEITEM son = GetChildItem( point);
+	if(son==NULL)
+		return NULL;
 	do 
 	{
 		HTREEITEM result = SearchItemByGUID(guid, son);

@@ -14,7 +14,8 @@ CDlgExportGridData::CDlgExportGridData(CWnd* pParent /*=NULL*/)
 	: CDialog(CDlgExportGridData::IDD, pParent)
 	, m_strFilePath(_T(""))
 {
-
+	m_bCoordinate = true;
+	m__bRedefine = m_bRedefineProperty = m_bTransRate = m_bCenterPoint = m_bProperty = false;
 }
 
 CDlgExportGridData::~CDlgExportGridData()
@@ -38,6 +39,7 @@ BEGIN_MESSAGE_MAP(CDlgExportGridData, CDialog)
 	ON_BN_CLICKED(IDC_CHECK6, &CDlgExportGridData::OnBnClickedCheck6)
 	ON_NOTIFY(NM_CLICK, IDC_TREE1, &CDlgExportGridData::OnNMClickTree1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDlgExportGridData::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_CHECK5, &CDlgExportGridData::OnBnClickedCheck5)
 END_MESSAGE_MAP()
 
 
@@ -99,16 +101,33 @@ void CDlgExportGridData::OnBnClickedCheck4()
 	}
 }
 
+void CDlgExportGridData::OnBnClickedCheck5()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	// TODO: 在此添加控件通知处理程序代码
+	if ( BST_CHECKED == IsDlgButtonChecked( IDC_CHECK5 ) )
+	{
+		// 勾选
+		m_bRedefineProperty = true;
+	}
+	else
+	{
+		m_bRedefineProperty = false;
+	}
+}
+
 void CDlgExportGridData::OnBnClickedCheck6()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	if ( BST_CHECKED == IsDlgButtonChecked( IDC_CHECK6 ) )
 	{
 		// 勾选
+		m_bProperty = true;
 		m_ctrTree.EnableWindow(TRUE);
 	}
 	else
 	{
+		m_bProperty = false;
 		m_ctrTree.EnableWindow(FALSE);
 	}
 }
@@ -121,6 +140,7 @@ BOOL CDlgExportGridData::OnInitDialog()
 	m_ctrTree.EnableWindow(FALSE);
 	m_bCoordinate = TRUE;
 	((CButton *)GetDlgItem(IDC_CHECK1))->SetCheck(TRUE);
+	((CButton *)GetDlgItem(IDC_CHECK1))->EnableWindow(FALSE);
 
 	FillProperty();
 	
@@ -141,31 +161,30 @@ bool CDlgExportGridData::FillProperty()
 	CExportManager::Instance()->SetExportGridFileName(strSourcePathName.GetBuffer());
 
 	HTREEITEM son = pTree->GetChildItem(m_ModelItem);
+	if(son==NULL)
+		return false;
 	do 
 	{
 		CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)(pTree->GetItemData)(son);
 		if(lpNodeDat->m_nType==FARM_DAT)
 		{
-			CString strSourcePathName = pMF->GetProjectDatPath();
-			CString strFileName = ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
-			strSourcePathName += _T("\\models\\");
-			strSourcePathName += strFileName;
+			CString strFileName2 = ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
 			HTREEITEM hTreeItem = m_ctrTree.InsertItem(pTree->GetItemText(son));
 			m_ctrTree.SetItemData(hTreeItem, (DWORD)(this->m_strProperty.size()));
 			m_ctrTree.SetCheck(hTreeItem, 1);
 			m_ctrTree.Expand(hTreeItem, TVE_EXPAND);
 
-			m_strProperty.push_back(strSourcePathName);
+			m_strProperty.push_back(strFileName2);
 			m_bPropertyExport.push_back(FALSE);
 		}
 		else if(lpNodeDat->m_nType==GRID_LAYER)
 		{
-			CString strFileName = ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
-			m_strGridLayer.push_back(strFileName);
+			CString strFileName3 = ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
+			m_strGridLayer.push_back(strFileName3);
 		}
 		son = pTree->GetNextSiblingItem(son);
 	} while (son!=NULL);
-	return NULL;
+	return true;
 }
 
 void CDlgExportGridData::SetModelItem( HTREEITEM model )
@@ -270,3 +289,4 @@ void CDlgExportGridData::SaveExport()
 	CExportManager::Instance()->ClearProNames();
 	CExportManager::Instance()->ClearTrackNames();
 }
+

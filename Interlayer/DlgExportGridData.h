@@ -19,6 +19,7 @@ public:
 protected:
 	bool				m_bCoordinate;
 	bool				m__bRedefine;
+	bool				m_bRedefineProperty;
 	bool				m_bTransRate;
 	bool				m_bCenterPoint;
 	bool				m_bProperty;
@@ -32,6 +33,7 @@ protected:
 public:
 	CString m_strFilePath;
 	CTreeCtrl m_ctrTree;
+	CEdit m_filenameEditCtr;
 	afx_msg void OnBnClickedCheck1();
 	afx_msg void OnBnClickedCheck2();
 	afx_msg void OnBnClickedCheck3();
@@ -45,5 +47,6 @@ protected:
 public:
 	afx_msg void OnNMClickTree1(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnBnClickedButton1();
-	CEdit m_filenameEditCtr;
+
+	afx_msg void OnBnClickedCheck5();
 };
