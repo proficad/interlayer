@@ -898,6 +898,16 @@ void C3DObjBar::OnCalcPhyPara()
 				{
 					pGrid->m_vecPhyPara[i].LoadPara(strNewFileName3.GetBuffer());
 					pGrid->m_vecPhyPara[i].m_bShow = FALSE;
+					CString strName = newGUID();
+					strName += _T(".grd");
+					CString strNewFileNameOut = pMF->GetProjectDatPath();
+					strNewFileNameOut += _T("\\models\\");
+					strNewFileNameOut += strName;
+					CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+					pGrid->m_vecPhyPara[i].SavePara(strNewFileNameOut.GetBuffer());
+					HTREEITEM hItem = pMF->GetTreeModelView()->GetItemByGUID(pGrid->m_strGUID);
+					if(hItem)
+						pMF->GetTreeModelView()->AddGridEclipse(strNewFileNameOut.GetBuffer(), pGrid->m_vecPhyPara[i].m_strName, hItem);
 				}
 				else
 				{
@@ -906,6 +916,17 @@ void C3DObjBar::OnCalcPhyPara()
 					tmpara.m_bShow = FALSE;
 					tmpara.m_strName = dlg.m_new_phyname;
 					pGrid->m_vecPhyPara.Add(tmpara);
+
+					CString strName = newGUID();
+					strName += _T(".grd");
+					CString strNewFileNameOut = pMF->GetProjectDatPath();
+					strNewFileNameOut += _T("\\models\\");
+					strNewFileNameOut += strName;
+					CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+					pGrid->m_vecPhyPara[i].SavePara(strNewFileNameOut.GetBuffer());
+					HTREEITEM hItem = pMF->GetTreeModelView()->GetItemByGUID(pGrid->m_strGUID);
+					if(hItem)
+						pMF->GetTreeModelView()->AddGridEclipse(strNewFileNameOut.GetBuffer(), tmpara.m_strName, hItem);
 				}
 			}
 			break;
@@ -1059,6 +1080,17 @@ void C3DObjBar::OnAdjPhyPara()
 						{
 							pGrid->m_vecPhyPara[i].LoadPara(strNewFileName3.GetBuffer());
 							pGrid->m_vecPhyPara[i].m_bShow = FALSE;
+
+							CString strName = newGUID();
+							strName += _T(".grd");
+							CString strNewFileNameOut = pMF->GetProjectDatPath();
+							strNewFileNameOut += _T("\\models\\");
+							strNewFileNameOut += strName;
+							CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+							pGrid->m_vecPhyPara[i].SavePara(strNewFileNameOut.GetBuffer());
+							HTREEITEM hItem = pMF->GetTreeModelView()->GetItemByGUID(pGrid->m_strGUID);
+							if(hItem)
+								pMF->GetTreeModelView()->AddGridEclipse(strNewFileNameOut.GetBuffer(), pGrid->m_vecPhyPara[i].m_strName, hItem);
 						}
 						else
 						{
@@ -1067,7 +1099,19 @@ void C3DObjBar::OnAdjPhyPara()
 							tmpara.m_bShow = FALSE;
 							tmpara.m_strName = dlg.m_newphyname;
 							pGrid->m_vecPhyPara.Add(tmpara);
+							
+							CString strName = newGUID();
+							strName += _T(".grd");
+							CString strNewFileNameOut = pMF->GetProjectDatPath();
+							strNewFileNameOut += _T("\\models\\");
+							strNewFileNameOut += strName;
+							CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
+							pGrid->m_vecPhyPara[i].SavePara(strNewFileNameOut.GetBuffer());
+							HTREEITEM hItem = pMF->GetTreeModelView()->GetItemByGUID(pGrid->m_strGUID);
+							if(hItem)
+								pMF->GetTreeModelView()->AddGridEclipse(strNewFileNameOut.GetBuffer(), tmpara.m_strName, hItem);
 						}
+
 					}
 					break;
 				default:

@@ -158,6 +158,7 @@ int CModelView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 bool CModelView::OpenTree(CTreeNodeDat *lpNodeDat, void *lpVoid)
 {
 	CString strTitle = (LPCSTR)lpVoid;
+	CString strGuid = lpNodeDat->m_strGUIDName;
 
 	switch ( lpNodeDat->m_nType )
 	{	
@@ -223,8 +224,8 @@ bool CModelView::OpenTree(CTreeNodeDat *lpNodeDat, void *lpVoid)
 
 					if( pDoc != NULL )
 					{
-						CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)m_wndModelView.GetItemData(hSrc);
-						pDoc->AddGridModel(strFileName, strTitle, m_arParamName, m_arFileName, lpNodeDat->m_strGUIDName);
+						//CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)m_wndModelView.GetItemData(hSrc);
+						pDoc->AddGridModel(strFileName, strTitle, m_arParamName, m_arFileName, strGuid);
 					}
 
 					pMF->GetTreeGraphView()->GetTreeCtrl()->m_bNew3D = false;
