@@ -44,10 +44,13 @@ public:
 	CCoordConverterNew(double *screen2ground, double *ground2screen);
 	~CCoordConverterNew(void);
 public:
-	void AddCoincidence(const CPoint2D &oldPt, const CPoint2D &newPt);	// 添加重合点坐标
+	void AddCoincidence(const CPoint2D &ground, const CPoint2D &screen);	// 添加重合点坐标
 	bool Prepare();																							// 准备转换
 	CPoint2D Ground2Screen(const CPoint2D& ground);
 	CPoint2D Screen2Ground(const CPoint2D& screen);
+
+	double GetG2SParameter(int index) { return m_ground2screen[index]; }
+	double GetS2GParameter(int index) { return m_screen2ground[index]; }
 protected:
 	void hdai(double a[][6],double *b, double *m_bhcsh);//回代求解 
 	void lzyxq(double a[][6],double *b);//高斯变换

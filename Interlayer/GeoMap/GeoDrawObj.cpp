@@ -1055,7 +1055,7 @@ CPoint2D CGeoDrawObj::CoordinateTransfer(const CPoint &pt)
 
 	CDrawPage *pPage = m_pParentLayer->GetParentPage();
 	
-	CPoint2D point = pPage->CoordinateTransfer(pt);
+	CPoint2D point = pPage->CoordinateTransferNew(pt);
 
 	return point;
 }
@@ -1067,7 +1067,7 @@ CPoint CGeoDrawObj::CoordinateTransfer(const CPoint2D &pt)
 
 	CDrawPage *pPage = m_pParentLayer->GetParentPage();
 
-	CPoint point = pPage->CoordinateTransfer(pt);
+	CPoint point = pPage->CoordinateTransferNew(pt);
 
 	return point;
 }
@@ -1077,7 +1077,7 @@ CRectEx CGeoDrawObj::CoordinateTransfer(const CRect &rect)
 {
 	CDrawPage *pPage = m_pParentLayer->GetParentPage();
 
-	CRectEx retRect = pPage->CoordinateTransfer(rect);
+	CRectEx retRect = pPage->CoordinateTransferNew(rect);
 
 	return retRect;
 }
@@ -1086,7 +1086,7 @@ CRect CGeoDrawObj::CoordinateTransfer(const CRectEx &rect)
 {
 	CDrawPage *pPage = m_pParentLayer->GetParentPage();
 	
-	CRect retRect = pPage->CoordinateTransfer(rect);
+	CRect retRect = pPage->CoordinateTransferNew(rect);
 
 	return retRect;
 }

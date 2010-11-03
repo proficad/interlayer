@@ -32,3 +32,7 @@ extern "C" _declspec(dllexport) bool	WriteNet(const std::string& filename);
 extern "C" _declspec(dllexport) bool	WriteCenterPointNet(const std::string& filename, const std::string& saveFileName, bool isWriteTick, int number );
 
 extern "C" _declspec(dllexport) bool RunExeDotNet(const std::string& filename);
+
+extern "C" _declspec(dllexport) bool RunTrack();
+extern "C" _declspec(dllexport) bool SetGridFileName(const std::string& filename);
+extern "C" _declspec(dllexport) bool AddItem(const std::string& facefile, const std::string& savefile);

@@ -697,13 +697,13 @@ CRectEx CDrawPage::CoordinateTransferNew(const CRect &rect)
 	CDrawPage *pPage = this;
 
 	// a = Lx, b = Ly, c = Kcos£á, d = Ksin£á;
-	double a, b, c, d;
+	//double a, b, c, d;
 
-	a = m_ptCoordOrig.x;
-	b = m_ptCoordOrig.y;
+	//a = m_ptCoordOrig.x;
+	//b = m_ptCoordOrig.y;
 
-	c = 1.0 / m_lScale * cos(this->GetAngle()/180.0*PI);
-	d = 1.0 / m_lScale * sin(this->GetAngle()/180.0*PI);
+	//c = 1.0 / m_lScale * cos(this->GetAngle()/180.0*PI);
+	//d = 1.0 / m_lScale * sin(this->GetAngle()/180.0*PI);
 
 	// ÒòÎª
 	// 
@@ -732,7 +732,7 @@ CRectEx CDrawPage::CoordinateTransferNew(const CRect &rect)
 	double xMin = DBL_MAX, xMax = -DBL_MAX, yMin = DBL_MAX, yMax = -DBL_MAX; 
 	for (int i=0; i<4; i++)
 	{
-		CPoint2D point = CoordinateTransfer(pt[i]);
+		CPoint2D point = CoordinateTransferNew(pt[i]);
 		if(point.x < xMin)
 			xMin = point.x;
 		if(point.x > xMax)
@@ -784,7 +784,7 @@ CRect CDrawPage::CoordinateTransferNew(const CRectEx &rect)
 	long xMin = LONG_MAX, xMax = LONG_MIN, yMin = LONG_MAX, yMax = LONG_MIN; 
 	for (int i=0; i<4; i++)
 	{
-		CPoint point = CoordinateTransfer(pt[i]);
+		CPoint point = CoordinateTransferNew(pt[i]);
 		if(point.x < xMin)
 			xMin = point.x;
 		if(point.x > xMax)

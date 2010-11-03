@@ -101,7 +101,8 @@ UINT CIntersectSearchManager::SearchInterSect(LPVOID pParam)
 		SearchALayer(face, index++, modelTree);
 		delete face;
 	}
-
+	SetGridFileName(m_gridFilename);
+	RunTrack();
 	////写点坝文件
 	//CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
 	//CString strFileName = pMF->GetProjectDatPath();
@@ -141,7 +142,8 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index, CModelVi
 
 	TRY 
 	{	
-		bool rs = Tracking(strNewtempFileName.GetBuffer(),m_gridFilename,strNewFileName.GetBuffer());
+		//bool rs = Tracking(strNewtempFileName.GetBuffer(),m_gridFilename,strNewFileName.GetBuffer());
+		bool rs = AddItem(strNewtempFileName.GetBuffer(), strNewFileName.GetBuffer());
 		if(!rs)
 			return ;
 		//相交网格的显示
