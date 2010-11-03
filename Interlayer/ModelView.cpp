@@ -14,6 +14,8 @@
 #include "3DLib/3DModelDoc.h"
 #include "IntersectSearchManager.h"
 #include "DlgExportGridData.h"
+#include "DlgInterlayerSelect.h"
+
 using namespace GridModel;
 
 class CModelViewMenuButton : public CMFCToolBarMenuButton
@@ -74,6 +76,9 @@ BEGIN_MESSAGE_MAP(CModelView, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_IMPORT_MODEL, &CModelView::OnUpdateImportModel)
 	ON_COMMAND(ID_SEARCH_MODEL, &CModelView::OnSearchModel)
 	ON_UPDATE_COMMAND_UI(ID_SEARCH_MODEL, &CModelView::OnUpdateSearchModel)
+	ON_COMMAND(ID_EDIT_GRID_REDEFINE, &CModelView::OnEditRedefine)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_GRID_REDEFINE, &CModelView::OnUpdateEditRedefine)
+	
 	//ID_SEARCH_MODEL
 	ON_COMMAND(ID_IMPORT_FIELD, &CModelView::OnImportField)
 	ON_UPDATE_COMMAND_UI(ID_IMPORT_FIELD, &CModelView::OnUpdateImportField)
@@ -2443,11 +2448,19 @@ void CModelView::OnSearchModel()
 	}
 
 	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
-	pMF->GetSearchBar()->SetGrid(filename.GetBuffer());
+
 	CString strTargePathName = pMF->GetProjectDatPath();
 	strTargePathName += _T("\\models\\");
 	strTargePathName += filename;
-	CIntersectSearchManager::Instance()->SetGridModelName(strTargePathName.GetBuffer(),guid.GetBuffer());
+	//CIntersectSearchManager::Instance()->SetGridModelName(strTargePathName.GetBuffer(),guid.GetBuffer());
+
+	CDlgInterlayerSelect *dlg = new CDlgInterlayerSelect;
+	dlg->Create(IDD_DLG_SELECT_INTERSECT, NULL);
+	dlg->InitTree();
+	dlg->m_ctrGridModel.SetWindowText(m_wndModelView.GetItemText(hItem));
+	dlg->m_strGridModelName = strTargePathName;
+	dlg->m_strGuid = guid;
+	dlg->ShowWindow(SW_SHOW);
 }
 
 void CModelView::OnUpdateSearchModel( CCmdUI *pCmdUI )
@@ -2559,4 +2572,52 @@ HTREEITEM CModelView::GetItemByGUID( CString guid )
 void CModelView::DeleteItemByGUID( CString guid )
 {
 	m_wndModelView.DeleteGUIDItem(guid);
+}
+
+void CModelView::OnEditRedefine()
+{
+	HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+
+	CString filename;
+	CString titlename;
+	CString guid;
+	if( hItem != NULL)
+	{
+		CTreeNodeDat *pNote = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
+		filename = pNote->m_strFileName;
+		guid = pNote->m_strGUIDName;
+	}
+
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
+	CString strTargePathName = pMF->GetProjectDatPath();
+	strTargePathName += _T("\\models\\");
+	strTargePathName += filename;
+	CIntersectSearchManager::Instance()->RunCommond(strTargePathName.GetBuffer());
+}
+
+void CModelView::OnUpdateEditRedefine( CCmdUI *pCmdUI )
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
+	if( pMF->m_strPrjFileName.IsEmpty() )
+		pCmdUI->Enable(FALSE);
+	else
+	{
+		HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+
+		if( hItem != NULL)
+		{
+			CTreeNodeDat *pNote = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
+			if(pNote->m_nType == GRID_DAT)
+			{
+				pCmdUI->Enable(TRUE);
+			}
+			else
+				pCmdUI->Enable(FALSE);
+		}
+		else
+			pCmdUI->Enable(FALSE);
+	}
 }

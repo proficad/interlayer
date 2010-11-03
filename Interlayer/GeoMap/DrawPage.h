@@ -26,6 +26,8 @@ public:
 	// 坐标原点坐标 x南北 y东西 m_dValue与正北方向夹角--顺时针为正(度)
 	CPoint2D			m_ptCoordOrig;
 	double				m_lScale;				// 大地坐标比例尺
+	double				m_ground2screen[6];
+	double				m_screen2ground[6];
 	BOOL				m_bParameter;			// 是否已经赋予平差四参数
 	//------------------------------------------------------------------------
 	// 平差四参数
@@ -112,6 +114,11 @@ public:
 	CPoint CoordinateTransfer(const CPoint2D &pt);
 	CRectEx CoordinateTransfer(const CRect &rect);
 	CRect CoordinateTransfer(const CRectEx &rect);
+
+	CPoint2D CoordinateTransferNew(const CPoint &pt);
+	CPoint CoordinateTransferNew(const CPoint2D &pt);
+	CRectEx CoordinateTransferNew(const CRect &rect);
+	CRect CoordinateTransferNew(const CRectEx &rect);
 
 	// 认领孩子
 	void ClaimChildren();

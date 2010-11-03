@@ -27,11 +27,13 @@ void CDlgPhyAdj::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO1, m_ctr_phyname);
 	DDX_Text(pDX, IDC_EDIT1, m_newphyname);
+	DDX_Control(pDX, IDC_COMBO_TYPE, m_ctrType);
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgPhyAdj, CDialog)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CDlgPhyAdj::OnCbnSelchangeCombo1)
+	ON_CBN_SELCHANGE(IDC_COMBO_TYPE, &CDlgPhyAdj::OnCbnSelchangeComboType)
 END_MESSAGE_MAP()
 
 
@@ -68,7 +70,11 @@ BOOL CDlgPhyAdj::OnInitDialog()
 	default:
 		break;
 	}
+	m_ctrType.InsertString(ADJ_TYPE_VOLUME, "体柔化");
+	m_ctrType.InsertString(ADJ_TYPE_Z, "单层柔化");
 	m_ctr_phyname.SetCurSel(0);
+	m_ctrType.SetCurSel(1);
+	m_adjType = 1;
 	m_newphyname = "柔化属性";
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
@@ -83,4 +89,10 @@ void CDlgPhyAdj::OnCbnSelchangeCombo1()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	m_index = m_ctr_phyname.GetCurSel();
+}
+
+void CDlgPhyAdj::OnCbnSelchangeComboType()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_adjType = m_ctr_phyname.GetCurSel();
 }

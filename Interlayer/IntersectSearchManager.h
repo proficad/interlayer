@@ -6,7 +6,7 @@
 class CGridObject;
 class CGLObject;
 class CVector3DF;
-
+class CModelView;
 //WinExec(_T("f:\\testcreate.exe 实验"), SW_SHOW);
 
 class CIntersectSearchManager
@@ -19,10 +19,10 @@ public:
 	}
 
 	bool LoadGridModel(const std::string& filename,const std::string& outfilename);
-	bool SearchInterSect();
+	UINT SearchInterSect(LPVOID pParam);
 
 	//void SetGridModel(CGridObject* model){ m_model = model; }
-	void SetGridModelName(const std::string& filename,const std::string& guid){m_gridFilename=filename;m_gridModelTreeItemGuid=guid;}
+	void SetGridModelName(const std::string& filename,const std::string& guid, CString pathname){m_gridFilename=filename;m_gridModelTreeItemGuid=guid; m_pathname=pathname;}
 	std::string GetGridModelName(){return m_gridFilename;}
 
 	void AddLayerModel(CGLObject* layer);
@@ -44,7 +44,7 @@ public:
 											float para1, float para2);
 	bool			ComputePara1(const std::string& file, float para, const std::string& savefile, const std::string& op);
 	//参数柔化
-	bool			AveragePara(const std::string& filename, const std::string& savename);
+	bool			AveragePara(const std::string& filename, const std::string& savename, int type);
 	//导出加密三角形
 	bool			ExportTriangle(const std::string& input, const std::string& output, int size, int index);
 	//命令行
@@ -54,8 +54,9 @@ public:
 protected:
 	CIntersectSearchManager();
 	~CIntersectSearchManager();
-	void SearchALayer(CGLObject* gird, int index);
+	void SearchALayer(CGLObject* gird, int index, CModelView* modeltree);
 	CGridObject* m_model;
+	CString			m_pathname;
 	std::string		 m_gridFilename;
 	std::string		 m_gridModelTreeItemGuid;
 	std::vector<std::string>  	 m_interlayerNames;

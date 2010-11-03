@@ -495,18 +495,19 @@ HTREEITEM CViewTree::ReadTreeViewContent(CArchive& ar, HTREEITEM hItem)
 						pNote->m_nImage = nImage;
 						pNote->m_nSelectedImage = nImage;
 					}
-					if( m_eTreeType == modelTree )
-					{
-						switch(pNote->m_nType)
-						{
-						case GRID_LAYER:
-							{
-								pNote->m_nImage = 10;
-								pNote->m_nSelectedImage = 10;
-							}
-							break;
-						}
-					}
+					//if( m_eTreeType == modelTree )
+					//{
+					//	switch(pNote->m_nType)
+					//	{
+					//	case GRID_LAYER:
+					//		{
+					//			pNote->m_nImage =  10;
+					//			pNote->m_nSelectedImage = 10;
+
+					//		}
+					//		break;
+					//	}
+					//}
 					hAfter = InsertItem(strTxt, pNote->m_nImage, pNote->m_nSelectedImage, m_hItems[m_nIndex], hAfter);
 				}
 				SetItemData(hAfter, (DWORD_PTR)pNote);
@@ -3828,39 +3829,18 @@ HTREEITEM CViewTree::GetItemByGUID( CString guid )
 	HTREEITEM root = GetRootItem();
 	if(!root)
 		return NULL;
-	return SearchItemByGUID(guid, root);
 
-	//CList <HTREEITEM,HTREEITEM&>   TreeList; 
-	//HTREEITEM   hItemhi   =   GetRootItem();
-	//if   (hItemhi   !=   NULL)
-	//{
-	//	TreeList.AddHead(hItemhi);
-	//	while(!TreeList.IsEmpty())
-	//	{
-	//		hItemhi   =   TreeList.RemoveHead();
-	//		CGLObject*   pObj   =   (CGLObject*)GetItemData(hItemhi);
-	//		if(pObj)
-	//		{
-	//			CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(hItemhi);
-	//			if(lpNodeDat)
-	//			{
-	//				if(lpNodeDat->m_strGUIDName==guid)
-	//				{
-	//					return hItemhi;
-	//				}
-	//			}
-	//		}
-	//			//if   (guid   ==   pObj->m_strGUID)   //ItemNameÊÇÄãÏëÕÒµÄ×Ö·û
-	//			//	return hItemhi;
-	//		hItemhi   =    GetChildItem(hItemhi);
-	//		while(hItemhi)
-	//		{
-	//			TreeList.AddHead(hItemhi);
-	//			hItemhi   =   GetNextSiblingItem(hItemhi);
-	//		}
-	//	}
-	//}
-	//return NULL;
+	if   (root   !=   NULL)
+	{
+		while(root!=NULL)
+		{
+			HTREEITEM ret = SearchItemByGUID(guid, root);
+			if(ret)
+				return ret;
+			root = GetNextSiblingItem(root);
+		}
+	}
+	return NULL;
 }
 
 HTREEITEM CViewTree::SearchItemByGUID( CString guid, HTREEITEM parent )

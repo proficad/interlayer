@@ -3,12 +3,21 @@
 #include <vcclr.h>
 using std::string;
 
-#using "../../debug/EclipseGridIO.dll"
-#using "../../debug/Track.dll"
+#if _DEBUG
+	#using "../../debug/EclipseGridIO.dll"
+	#using "../../debug/Track.dll"
+	#using "../../debug/RunGridCellThick.dll"
+#else
+	#using "../../release/EclipseGridIO.dll"
+	#using "../../release/Track.dll"
+	#using "../../release/RunGridCellThick.dll"
+#endif
 //#using "../../debug/octc.dll"
 //#using "../../debug/Microsoft.DirectX.dll"
+
 using namespace EclipseGridIO;
 using namespace Track;
+
 //using namespace 
 using namespace System;
 
@@ -102,5 +111,26 @@ extern "C" _declspec(dllexport) bool Average(const string& filename, const strin
 	bool IsTrue = false;
 	PropertyAverage ^pa = gcnew PropertyAverage();
 	IsTrue = pa->Average(file, savefile);
+	return IsTrue;
+}
+
+extern "C" _declspec(dllexport) bool AverageZ(const string& filename, const string& savename)
+{
+	String ^file = gcnew String(filename.c_str());
+	String ^savefile = gcnew String(savename.c_str());
+
+	bool IsTrue = false;
+	PropertyAverage ^pa = gcnew PropertyAverage();
+	IsTrue = pa->AverageLayerOnly(file, savefile);
+	return IsTrue;
+}
+
+extern "C" _declspec(dllexport) bool RunExeDotNet(const std::string& filename)
+{
+	String ^file = gcnew String(filename.c_str());
+
+	bool IsTrue = false;
+	RunGridCellThick::RunGridCellThick ^re = gcnew RunGridCellThick::RunGridCellThick();
+	IsTrue = re->RunEXE(file);
 	return IsTrue;
 }

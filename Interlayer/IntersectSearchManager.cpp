@@ -8,11 +8,22 @@
 #include "3dlib/3DModelView.h"
 #include "../ShapeDll/GridCellShape/GridCellShape.h"
 
+//#using <mscorlib.dll>
+//#using <system.dll>
+//#using <System.Windows.Forms.dll>
+//#ifdef _DEBUG
+	//#using "../debug/RunGridCellThick.dll"
+//#else
+//	#using "../release/RunGridCellThick.dll"
+//#endif
+
 #ifdef _DEBUG
 	#pragma comment(lib,"../debug/GridCellShape.lib");
 #else
 	#pragma comment(lib,"../release/GridCellShape.lib");
 #endif
+
+//using namespace System;
 
 CIntersectSearchManager::CIntersectSearchManager()
 {
@@ -77,8 +88,9 @@ bool CIntersectSearchManager::LoadGridModel( const std::string& filename,const s
 	return LoadEclipseFile(filename, outfilename);
 }
 
-bool CIntersectSearchManager::SearchInterSect()
+UINT CIntersectSearchManager::SearchInterSect(LPVOID pParam)
 {
+	CModelView* modelTree = (CModelView*)(pParam);
 	CWaitCursor wait;
 	if((m_gridFilename.empty())||(m_interlayers.empty()))
 		return false;
@@ -86,7 +98,8 @@ bool CIntersectSearchManager::SearchInterSect()
 	for(std::vector<CGLObject*>::iterator it=m_interlayers.begin(); it!=m_interlayers.end(); ++it)
 	{
 		CGLObject* face = (*it);
-		SearchALayer(face, index++);
+		SearchALayer(face, index++, modelTree);
+		delete face;
 	}
 
 	////写点坝文件
@@ -108,14 +121,13 @@ bool CIntersectSearchManager::SearchInterSect()
 	//art.Close();
 	m_interlayerNames.clear();
 	m_interlayers.clear();
-	return true;
+	return 0;
 }
 
-void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index )
+void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index, CModelView* modeltree )
 {
 	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
-	CString strFileName = pMF->GetProjectDatPath();
-	strFileName += _T("\\models\\");
+	CString strFileName = m_pathname;
 	CString strNewtempFileName;
 	strNewtempFileName = strFileName + newGUID();
 	CString strNewFileName;
@@ -135,8 +147,8 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index )
 		//相交网格的显示
 		CString title;
 		title.Format("%s%d","夹层网格", index);
-		CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
-		pMF->GetTreeModelView()->OnImportInterlayer(strNewFileName, title, m_gridModelTreeItemGuid.c_str());
+		//CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+		modeltree->OnImportInterlayer(strNewFileName, title, m_gridModelTreeItemGuid.c_str());
 
 		//CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
 		//if( pWnd )
@@ -194,16 +206,26 @@ bool CIntersectSearchManager::ComputePara1( const std::string& file, float para,
 	return rl;
 }
 
-void CIntersectSearchManager::RunCommond( const std::string& command )
+void CIntersectSearchManager::RunCommond( const std::string& filename )
 {
-
-	WinExec(_T("f:\\release\\WindowsFormsApplication5.exe test"), SW_SHOW);
+	RunExeDotNet(filename);
 }
 
-bool CIntersectSearchManager::AveragePara( const std::string& filename, const std::string& savename )
+bool CIntersectSearchManager::AveragePara( const std::string& filename, const std::string& savename, int type )
 {
 	bool IsTrue = false;
-	IsTrue = Average(filename, savename);
+	switch(type)
+	{
+	case 0://ADJ_TYPE_VOLUME:
+		IsTrue = Average(filename, savename);
+		break;
+	case 1://ADJ_TYPE_Z:
+		IsTrue = AverageZ(filename, savename);
+		break;
+	default:
+		break;
+	}
+
 	return IsTrue;
 }
 

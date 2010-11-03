@@ -81,6 +81,8 @@ public:
 	afx_msg void OnUpdateEditRename(CCmdUI *pCmdUI);
 	afx_msg void OnImportModel();
 	afx_msg void OnUpdateImportModel(CCmdUI *pCmdUI);
+	afx_msg void OnEditRedefine();
+	afx_msg void OnUpdateEditRedefine(CCmdUI *pCmdUI);
 
 	afx_msg void OnSearchModel();
 	afx_msg void OnUpdateSearchModel(CCmdUI *pCmdUI);

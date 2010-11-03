@@ -3,6 +3,7 @@
 #include "GeoMapDoc.h"
 #include "GeoMapView.h"
 #include "DlgPageSet.h"
+#include "../CoordTrans.h"
 
 extern const char* newGUID();
 
@@ -39,6 +40,11 @@ CDrawPage::CDrawPage()
 	m_ptCoordOrig.x		= 0;
 	m_ptCoordOrig.x		= 0;
 	m_ptCoordOrig.m_dValue	= 0;
+	for(int i=0; i<6; i++)
+	{
+		m_ground2screen[i] = 0;
+		m_screen2ground[i] = 0;
+	}
 	m_bParameter		= FALSE;
 }
 
@@ -66,6 +72,11 @@ CDrawPage::CDrawPage(CGeoMapDoc* pDocument)
 	m_ptCoordOrig.x		= 0;
 	m_ptCoordOrig.x		= 0;
 	m_ptCoordOrig.m_dValue	= 0;
+	for(int i=0; i<6; i++)
+	{
+		m_ground2screen[i] = 0;
+		m_screen2ground[i] = 0;
+	}
 	m_bParameter		= FALSE;
 }
 
@@ -106,6 +117,11 @@ void CDrawPage::Serialize(CArchive &ar)
 		ar << m_ptPosition;			// 屏幕位置		
 		ar << m_bPagePanel;
 		ar << m_iMarginWidth;
+		for(int i=0; i<6; i++)
+		{
+			ar << m_ground2screen[i];
+			ar << m_screen2ground[i];
+		}
 	}
 	else
 	{
@@ -134,6 +150,12 @@ void CDrawPage::Serialize(CArchive &ar)
 
 				ar >> m_bPagePanel;
 				ar >> m_iMarginWidth;
+
+				for(int i=0; i<6; i++)
+				{
+					ar >> m_ground2screen[i];
+					ar >> m_screen2ground[i];
+				}
 
 				POSITION pos = m_DrawLayers.GetHeadPosition();
 				while (pos != NULL)
@@ -638,4 +660,146 @@ void CDrawPage::ClaimChildren()
 		pObj->m_pParentPage = this;
 		pObj->ClaimChildren();
 	}
+}
+
+// 坐标转换器
+// 转换成大地坐标
+CPoint2D CDrawPage::CoordinateTransferNew(const CPoint &pt)
+{
+	// 100 代表1cm
+	// pt.x/10000.0 化为米
+
+	CPoint2D point;
+	point.x = pt.x;
+	point.y = pt.y;
+	CCoordConverterNew *ct = new CCoordConverterNew(m_screen2ground, m_ground2screen);
+	point = ct->Screen2Ground(point);
+	return point;
+}
+
+CPoint CDrawPage::CoordinateTransferNew(const CPoint2D &pt)
+{
+	// 100 代表1cm
+	// pt.x/10000.0 化为米
+
+	CPoint point;
+	CPoint2D tp;
+	CCoordConverterNew *ct = new CCoordConverterNew(m_screen2ground, m_ground2screen);
+	tp = ct->Ground2Screen(pt);
+	point.x = tp.x;
+	point.y = tp.y;
+	return point;
+
+}
+
+CRectEx CDrawPage::CoordinateTransferNew(const CRect &rect)
+{
+	CDrawPage *pPage = this;
+
+	// a = Lx, b = Ly, c = Kcosａ, d = Ksinａ;
+	double a, b, c, d;
+
+	a = m_ptCoordOrig.x;
+	b = m_ptCoordOrig.y;
+
+	c = 1.0 / m_lScale * cos(this->GetAngle()/180.0*PI);
+	d = 1.0 / m_lScale * sin(this->GetAngle()/180.0*PI);
+
+	// 因为
+	// 
+	// X=a+X1*c-Y1*d
+	// Y=b+Y1*c+X1*d
+	//
+	// 所以
+	//
+	// X1 = (x*c+y*d-(a*c+b*d))/(c*c+d*d)
+	// Y1 = ((y*c-x*d)-(b*c-a*d))/(c*c+d*d)
+	// 
+
+	CPoint pt[4];
+	pt[0].x =  rect.left;
+	pt[0].y =  rect.top;
+
+	pt[1].x =  rect.right;
+	pt[1].y =  rect.top;
+
+	pt[2].x =  rect.right;
+	pt[2].y =  rect.bottom;
+
+	pt[3].x =  rect.left;
+	pt[3].y =  rect.bottom;
+
+	double xMin = DBL_MAX, xMax = -DBL_MAX, yMin = DBL_MAX, yMax = -DBL_MAX; 
+	for (int i=0; i<4; i++)
+	{
+		CPoint2D point = CoordinateTransfer(pt[i]);
+		if(point.x < xMin)
+			xMin = point.x;
+		if(point.x > xMax)
+			xMax = point.x;
+		if(point.y < yMin)
+			yMin = point.y;
+		if(point.y > yMax)
+			yMax = point.x;
+	}
+
+	CRectEx retRect;
+
+	retRect.left = xMin;
+	retRect.top = yMin;
+	retRect.right = xMax;
+	retRect.bottom = yMax;
+
+	return retRect;
+}
+
+CRect CDrawPage::CoordinateTransferNew(const CRectEx &rect)
+{
+	CDrawPage *pPage = this;
+
+	// a = Lx, b = Ly, c = Kcosａ, d = Ksinａ;
+	double a, b, c, d;
+
+	a = m_ptCoordOrig.x;
+	b = m_ptCoordOrig.y;
+
+	c = 1.0 / m_lScale * cos(this->GetAngle()/180.0*PI);
+	d = 1.0 / m_lScale * sin(this->GetAngle()/180.0*PI);
+
+	// X=a+X1*c-Y1*d
+	// Y=b+Y1*c+X1*d
+	CPoint2D pt[4];
+	pt[0].x =  rect.left;
+	pt[0].y =  rect.top;
+
+	pt[1].x =  rect.right;
+	pt[1].y =  rect.top;
+
+	pt[2].x =  rect.right;
+	pt[2].y =  rect.bottom;
+
+	pt[3].x =  rect.left;
+	pt[3].y =  rect.bottom;
+
+	long xMin = LONG_MAX, xMax = LONG_MIN, yMin = LONG_MAX, yMax = LONG_MIN; 
+	for (int i=0; i<4; i++)
+	{
+		CPoint point = CoordinateTransfer(pt[i]);
+		if(point.x < xMin)
+			xMin = point.x;
+		if(point.x > xMax)
+			xMax = point.x;
+		if(point.y < yMin)
+			yMin = point.y;
+		if(point.y > yMax)
+			yMax = point.x;
+	}
+
+	CRect retRect;
+	retRect.left = xMin;
+	retRect.top = yMin;
+	retRect.right = xMax;
+	retRect.bottom = yMax;
+
+	return retRect;
 }

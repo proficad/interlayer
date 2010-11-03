@@ -10,6 +10,9 @@
 using namespace GridModel;
 
 extern CString GetFileErrMsg(int nErr);
+extern void StatusBarMessage(char* fmt, ...);
+extern void StatusProgress(int nIndex, int nRange=-1);
+extern void StatusSetProgress(int nIndex, int nPos);
 
 IMPLEMENT_SERIAL(CGridModel, CObject, VERSIONABLE_SCHEMA | 0)
 
@@ -195,18 +198,20 @@ void CGridModel::Serialize(CArchive& ar)
 					CVertex3D point;
 					double v;
 					ULONG size = (m_nGridY + 1) * (m_nGridX + 1) * 2;
+					StatusProgress(1, 100);
 					for (ULONG i = 0; i < size; i++)
 					{
 						ar >> point;
 						m_coordGrid.push_back(point);
+						StatusSetProgress(1, i*20/size );
 					}
 
 					size = m_nGridY * m_nGridX * m_nGridZ * 8;
-
 					for (ULONG i = 0; i < size; i++)
 					{
 						ar >> v;
 						m_zcornGrid.push_back(v);
+						StatusSetProgress(1, 21+i*20/size );
 					}
 
 					ar >> size;
@@ -215,7 +220,10 @@ void CGridModel::Serialize(CArchive& ar)
 					for (long i = 0; i < size; i++)
 					{
 						m_gridRedine[i].Serialize(ar);
+						StatusSetProgress(1, 41+i*20/size );
 					}
+					if(size==0)
+						StatusSetProgress(1, 60 );
 				}
 				else
 				{
@@ -1208,12 +1216,16 @@ void GridModel::CGridModel::FillGridCells()
 				gridline.push_back(cell);
 			}
 			gridPlane.push_back(gridline);
+			StatusSetProgress(1, 61+i*30/m_nGridX );
 		}
 		m_gridCells->m_gridCells.push_back(gridPlane);
 	}
-
+	int size = 0;
+	if(m_gridRedine.size()==0)
+		StatusSetProgress(1, 100);
 	for(vector<GridRefinement>::iterator it=m_gridRedine.begin(); it!=m_gridRedine.end(); ++it)
 	{
+		StatusSetProgress(1, 90+(size++)*10/m_gridRedine.size());
 		GridRefinement gr = (*it);
 	
 		for(int index_x=gr.m_X1;  index_x<=gr.m_X2;  index_x++)

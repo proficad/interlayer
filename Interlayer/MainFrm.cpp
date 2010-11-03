@@ -506,14 +506,6 @@ BOOL CMainFrame::CreateDockingWindows()
 		return FALSE;      // fail to create
 	}
 
-	if (!m_wndSearchBar.Create (_T("Ì×½Ó¹ÜÀí"), this, CRect (0, 0, 200, 200),
-		TRUE, 
-		ID_VIEW_INTERSECT_SEARCH,
-		WS_CHILD | WS_VISIBLE| WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_RIGHT | CBRS_FLOAT_MULTI))
-	{
-		return FALSE;      // fail to create
-	}
-
 	SetDockingWindowIcons(theApp.m_bHiColorIcons);
 
 
@@ -522,11 +514,11 @@ BOOL CMainFrame::CreateDockingWindows()
 	m_wndGraphView.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndToolBarLayer.EnableDocking(CBRS_ALIGN_ANY);
 	m_wnd3DObjBar.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndSearchBar.EnableDocking(CBRS_ALIGN_ANY);
+
 	DockPane(&m_wndFileView);
 	DockPane(&m_wndToolBarLayer,AFX_IDW_DOCKBAR_RIGHT);
 	DockPane(&m_wnd3DObjBar,AFX_IDW_DOCKBAR_RIGHT);
-	DockPane(&m_wndSearchBar,AFX_IDW_DOCKBAR_RIGHT);
+
 	CDockablePane* pTabbedBar = NULL;
 	//m_wndGraphView.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
 	m_wndGraphView.DockToWindow (&m_wndFileView, CBRS_ALIGN_BOTTOM);
@@ -535,8 +527,6 @@ BOOL CMainFrame::CreateDockingWindows()
 	m_wndToolBarLayer.ToggleAutoHide();
 	m_wnd3DObjBar.EnableAutohideAll(TRUE);
 	m_wnd3DObjBar.ToggleAutoHide();
-	m_wndSearchBar.EnableAutohideAll(TRUE);
-	m_wndSearchBar.ToggleAutoHide();
 	//m_wndSearchBar.AttachToTabWnd(&m_wndFileView, DM_SHOW, TRUE, &pTabbedBar);
 
 	return TRUE;
@@ -1512,7 +1502,6 @@ void CMainFrame::ActiveView(CView *pView)
 		{
 			m_wnd3DModelToolBar.ShowPane(TRUE, FALSE, TRUE);
 			m_wnd3DObjBar.ShowPane(TRUE, FALSE, TRUE);
-			m_wndSearchBar.ShowPane(TRUE, FALSE, TRUE);
 		}
 		RecalcLayout ();
 	}
@@ -1534,7 +1523,6 @@ void CMainFrame::DeactiveView(CView *pView)
 		{
 			m_wnd3DModelToolBar.ShowPane(FALSE, FALSE, TRUE);
 			m_wnd3DObjBar.ShowPane(FALSE, FALSE, TRUE);
-			m_wndSearchBar.ShowPane(FALSE, FALSE, TRUE);
 		}
 
 		RecalcLayout ();

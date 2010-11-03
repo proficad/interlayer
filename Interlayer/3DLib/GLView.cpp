@@ -112,24 +112,26 @@ void CGLView::ReSize(int cx, int cy)
 	::glMatrixMode(GL_PROJECTION);
 	::glLoadIdentity();
 
+	gluPerspective(45.0, w/h, 1, 50);
 	// Ortho Viewing
-	if (w <= h)
-		::glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
-		m_pContext->m_dRange - m_pContext->m_xTrans, 
-		-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-		(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans, 
-		-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans, 
-		(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
-	else
-		::glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans, 
-		(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-		-m_pContext->m_dRange - m_pContext->m_yTrans,
-		m_pContext->m_dRange - m_pContext->m_yTrans,
-		-m_pContext->m_dRange * 5000.0f,
-		m_pContext->m_dRange * 5000.0f);
+	//if (w <= h)
+	//	::glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
+	//	m_pContext->m_dRange - m_pContext->m_xTrans, 
+	//	-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
+	//	(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans, 
+	//	-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans, 
+	//	(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
+	//else
+	//	::glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans, 
+	//	(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
+	//	-m_pContext->m_dRange - m_pContext->m_yTrans,
+	//	m_pContext->m_dRange - m_pContext->m_yTrans,
+	//	-m_pContext->m_dRange * 5000.0f,
+	//	m_pContext->m_dRange * 5000.0f);
 
 	::glMatrixMode(GL_MODELVIEW);
 	::glLoadIdentity();
+	gluLookAt( 0, 0, m_pContext->m_dRange*5, 0, 0, 0, 0, 1, 0 );
 
 	::wglMakeCurrent(NULL, NULL);	
 }

@@ -5,6 +5,10 @@
 #include "../MainFrm.h"
 #include "../IntersectSearchManager.h"
 
+extern void StatusBarMessage(char* fmt, ...);
+extern void StatusProgress(int nIndex, int nRange=-1);
+extern void StatusSetProgress(int nIndex, int nPos);
+
 GLint faceindexes[24] =
 {
 	3,2,1,0,								//面0
@@ -352,11 +356,10 @@ CGLObject* CGridObject::Copy()
 
 void CGridObject::DefineDisplay()
 {	
-	CWaitCursor wait;
+	//CWaitCursor wait;
 
-	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
-	pMF->GetStatusBar().SetPaneText(0, _T("正在渲染图形，请稍等..."));	
 
+	StatusSetProgress(1, m_layerIndex );
 	GLdouble bgcol[4];
 	glGetDoublev(GL_COLOR_CLEAR_VALUE, bgcol);
 	GLfloat specref[] =
@@ -444,7 +447,7 @@ void CGridObject::DefineDisplay()
 
 	glDisable(GL_BLEND);
 
-	pMF->GetStatusBar().SetPaneText(0, _T("就绪"));	
+	//pMF->GetStatusBar().SetPaneText(0, _T("就绪"));	
 }
 
 void CGridObject::Display(const GLDisplayMode& dMode, bool bForce)
@@ -492,7 +495,9 @@ bool CGridObject::BuildList()
 		TRACE("CGLObject::BuildList : unable to build DrawList\n");
 		return false;
 	}
-
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	pMF->GetStatusBar().SetPaneText(0, _T("正在渲染图形，请稍等..."));	
+	StatusProgress(1, K-1);
 	for(m_layerIndex=0; m_layerIndex<K; m_layerIndex++)
 	{
 		::glNewList(m_ListOpenGL+m_layerIndex, GL_COMPILE_AND_EXECUTE);
@@ -502,11 +507,11 @@ bool CGridObject::BuildList()
 		//m_bChangeK[m_layerIndex] = FALSE;
 		::glEndList();
 	}
-
+	StatusProgress(1);
 	// List is done now
 	m_ListDone = 1;
 	m_Modified = 0;
-
+	pMF->GetStatusBar().SetPaneText(0, _T("就绪"));	
 	return true;
 }
 

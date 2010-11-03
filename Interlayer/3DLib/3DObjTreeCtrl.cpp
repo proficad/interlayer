@@ -1785,7 +1785,7 @@ void C3DObjTreeCtrl::DeleteItemByGUID( CString guid )
 	{
 		CGLObject *pObj = (CGLObject*)GetItemData(hItem);
 		CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
-		pMF->GetTreeModelView()->DeleteItemByGUID(pObj->m_strGUID);
+		//pMF->GetTreeModelView()->DeleteItemByGUID(pObj->m_strGUID);
 		if( pObj == NULL || pObj->GetGLObjType() == GLTRIHEDRON )
 			return;
 

@@ -310,7 +310,7 @@ void CGLDisplayContext::AddGLObj(CGLObject* aObj)
 	CMainFrame *pMF = (CMainFrame *)AfxGetMainWnd();
 
 	C3DObjBar*pBar = pMF->Get3DBar();
-	CLayerIntersectSearch *pSearchbar = pMF->GetSearchBar();
+
 	//CGLObject* pObj = aObj->Copy();
 
 	switch(pObj->GetGLObjType())
@@ -376,7 +376,7 @@ void CGLDisplayContext::AddGLObj(CGLObject* aObj)
 			pObj->SetMaterial(mat);
 
 			m_listDisplay->push_back(pObj);				// 添加到显示链表
-			pSearchbar->m_wndTree.AddLayer(pObj);
+			//pSearchbar->m_wndTree.AddLayer(pObj);
 		}
 		break;
 	default:

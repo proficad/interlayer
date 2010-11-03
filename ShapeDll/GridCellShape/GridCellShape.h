@@ -9,6 +9,7 @@ extern "C" _declspec(dllexport) bool Operation2(const std::string& filename1, co
 											   const std::string& operator1, const std::string& operator2, const std::string& operator0, float para1, float para2); 
 extern "C" _declspec(dllexport) bool Operation1(const std::string& filename1, float para, const std::string& savefilename, const std::string& operator0); 
 extern "C" _declspec(dllexport) bool Average(const std::string& filename, const std::string& savename);
+extern "C" _declspec(dllexport) bool AverageZ(const std::string& filename, const std::string& savename);
 
 //导出文件
 extern "C" _declspec(dllexport) bool SetGridFileNameNet( const std::string& filename );
@@ -29,3 +30,5 @@ extern "C" _declspec(dllexport) int		GetTrackFileNameCountNet();
 extern "C" _declspec(dllexport) bool	WriteNet(const std::string& filename);
 
 extern "C" _declspec(dllexport) bool	WriteCenterPointNet(const std::string& filename, const std::string& saveFileName, bool isWriteTick, int number );
+
+extern "C" _declspec(dllexport) bool RunExeDotNet(const std::string& filename);
