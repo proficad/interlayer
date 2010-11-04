@@ -61,6 +61,7 @@ protected:
 	std::string		 m_gridModelTreeItemGuid;
 	std::vector<std::string>  	 m_interlayerNames;
 	std::vector<CGLObject*>   m_interlayers;
+	std::vector<std::string>		m_tempTriangleFiles;
 
 	double			m_phyparaMin;
 	double			m_phyparaMax;

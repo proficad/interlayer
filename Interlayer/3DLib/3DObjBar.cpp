@@ -13,6 +13,8 @@
 #include "../DlgPhyParaCalc.h"
 #include "../DlgPhyAdj.h"
 
+extern void StatusProgress(int nIndex, int nRange=-1);
+extern void StatusSetProgress(int nIndex, int nPos);
 // C3DObjBar
 
 IMPLEMENT_DYNAMIC(C3DObjBar, CDockablePane)
@@ -658,7 +660,7 @@ void C3DObjBar::ReadEclipseGrid( LPCTSTR filename )
 						archive << strModelFileName;
 
 						int nSize = values.size();
-
+						
 						archive << nSize;
 
 						for ( int i=0; i<nSize; i++)
@@ -728,6 +730,7 @@ void C3DObjBar::ReadEclipseGrid( LPCTSTR filename )
 	if( values.size() > 0 )
 	{
 		strMsg = _T("正在保存静态场数据文件，请稍等...");
+		//StatusProgress(1, 100);
 		pMF->GetStatusBar().SetPaneText(0, strMsg);
 
 		CString strName = newGUID();
@@ -752,9 +755,11 @@ void C3DObjBar::ReadEclipseGrid( LPCTSTR filename )
 			int nSize = values.size();
 
 			archive << nSize;
-
+			
 			for ( int i=0; i<nSize; i++)
 			{
+				//if()
+				//StatusSetProgress(1, i );
 				archive << values[i];
 			}
 			archive << RGB(255,0,0);
@@ -764,7 +769,7 @@ void C3DObjBar::ReadEclipseGrid( LPCTSTR filename )
 			archive.Close();
 			fileNew.Close();
 		}
-
+		//StatusProgress(1);
 	}
 }
 

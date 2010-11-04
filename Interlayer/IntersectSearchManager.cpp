@@ -8,15 +8,6 @@
 #include "3dlib/3DModelView.h"
 #include "../ShapeDll/GridCellShape/GridCellShape.h"
 
-//#using <mscorlib.dll>
-//#using <system.dll>
-//#using <System.Windows.Forms.dll>
-//#ifdef _DEBUG
-	//#using "../debug/RunGridCellThick.dll"
-//#else
-//	#using "../release/RunGridCellThick.dll"
-//#endif
-
 #ifdef _DEBUG
 	#pragma comment(lib,"../debug/GridCellShape.lib");
 #else
@@ -95,13 +86,14 @@ UINT CIntersectSearchManager::SearchInterSect(LPVOID pParam)
 	if((m_gridFilename.empty())||(m_interlayers.empty()))
 		return false;
 	int index = 1;
+	SetGridFileName(m_gridFilename);
 	for(std::vector<CGLObject*>::iterator it=m_interlayers.begin(); it!=m_interlayers.end(); ++it)
 	{
 		CGLObject* face = (*it);
 		SearchALayer(face, index++, modelTree);
 		delete face;
 	}
-	SetGridFileName(m_gridFilename);
+
 	RunTrack();
 	////写点坝文件
 	//CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
@@ -120,6 +112,19 @@ UINT CIntersectSearchManager::SearchInterSect(LPVOID pParam)
 	//		art <<m_interlayerNames[i].c_str()[j];
 	//}
 	//art.Close();
+	for(int i=0; i<m_tempTriangleFiles.size(); i++)
+	{
+		TRY
+		{
+			CFile::Remove( m_tempTriangleFiles[i].c_str() );
+		}
+		CATCH( CFileException, e )
+		{
+			assert(false&&"删除文件失败");
+		}
+		END_CATCH 
+	}
+	m_tempTriangleFiles.clear();
 	m_interlayerNames.clear();
 	m_interlayers.clear();
 	return 0;
@@ -174,16 +179,16 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index, CModelVi
 	}
 	END_CATCH
 
-
-	TRY
-	{
-		CFile::Remove( strNewtempFileName.GetBuffer() );
-	}
-	CATCH( CFileException, e )
-	{
-		assert(false&&"删除文件失败");
-	}
-	END_CATCH 
+	m_tempTriangleFiles.push_back(strNewtempFileName.GetBuffer());
+	//TRY
+	//{
+	//	CFile::Remove( strNewtempFileName.GetBuffer() );
+	//}
+	//CATCH( CFileException, e )
+	//{
+	//	assert(false&&"删除文件失败");
+	//}
+	//END_CATCH 
 		
 }
 

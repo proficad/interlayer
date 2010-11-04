@@ -1242,20 +1242,20 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 	int h = rect.Height();
 
 	// Ortho Viewing
-	if (w <= h)
-		glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
-		m_pContext->m_dRange - m_pContext->m_xTrans,
-		-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-		(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-		-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans,
-		(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
-	else
-		glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-		(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-		-m_pContext->m_dRange - m_pContext->m_yTrans,
-		m_pContext->m_dRange - m_pContext->m_yTrans,
-		-m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans,
-		m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans);
+	//if (w <= h)
+	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
+	//	m_pContext->m_dRange - m_pContext->m_xTrans,
+	//	-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
+	//	(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
+	//	-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans,
+	//	(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
+	//else
+	//	glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
+	//	(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
+	//	-m_pContext->m_dRange - m_pContext->m_yTrans,
+	//	m_pContext->m_dRange - m_pContext->m_yTrans,
+	//	-m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans,
+	//	m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans);
 
 	// Draw the scene
 	RenderScene(GL_SELECT);
