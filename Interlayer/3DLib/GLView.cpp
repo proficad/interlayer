@@ -131,7 +131,7 @@ void CGLView::ReSize(int cx, int cy)
 
 	::glMatrixMode(GL_MODELVIEW);
 	::glLoadIdentity();
-	gluLookAt( 0, 0, m_pContext->m_dRange*5, 0, 0, 0, 0, 1, 0 );
+	gluLookAt( -m_pContext->m_xTrans, -m_pContext->m_yTrans, m_pContext->m_dRange*5, -m_pContext->m_xTrans, -m_pContext->m_yTrans, 0, 0, 1, 0 );
 
 	::wglMakeCurrent(NULL, NULL);	
 }
@@ -995,21 +995,22 @@ int CGLView::HitSliceXY(const int& xPos, const int& yPos, const int& sensitivity
 	int w = rect.Width();
 	int h = rect.Height();
 
+	gluPerspective(45.0, w/h, 1, 50);
 	// Ortho Viewing
-	if (w <= h)
-		glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
-		m_pContext->m_dRange - m_pContext->m_xTrans,
-		-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-		(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-		-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans,
-		(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
-	else
-		glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-		(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-		-m_pContext->m_dRange - m_pContext->m_yTrans,
-		m_pContext->m_dRange - m_pContext->m_yTrans,
-		-m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans,
-		m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans);
+	//if (w <= h)
+	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
+	//	m_pContext->m_dRange - m_pContext->m_xTrans,
+	//	-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
+	//	(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
+	//	-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans,
+	//	(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
+	//else
+	//	glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
+	//	(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
+	//	-m_pContext->m_dRange - m_pContext->m_yTrans,
+	//	m_pContext->m_dRange - m_pContext->m_yTrans,
+	//	-m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans,
+	//	m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans);
 
 	// Draw the scene
 	RenderScene(GL_SELECT, true);
@@ -1023,6 +1024,7 @@ int CGLView::HitSliceXY(const int& xPos, const int& yPos, const int& sensitivity
 
 	// Go back to modelview for normal rendering
 	glMatrixMode(GL_MODELVIEW);
+	gluLookAt( 0, 0, m_pContext->m_dRange*5, 0, 0, 0, 0, 1, 0 );
 
 	// If a single hit occured, display the info.
 	if (hits)
@@ -1100,28 +1102,29 @@ int CGLView::HitPoint(const int& xPos, const int& yPos, const int& sensitivity)
 	int n = sensitivity;
 	glLoadIdentity();
 	gluPickMatrix(xPos, viewport[3] - yPos, n, n, viewport);
-
+	//gluPerspective(45.0, w/h, 1, 50);
 	CRect rect;
 	m_ptrWnd->GetClientRect(&rect);
 
 	int w = rect.Width();
 	int h = rect.Height();
 
+	gluPerspective(45.0, w/h, 1, 50);
 	// Ortho Viewing
-	if (w <= h)
-		glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
-		m_pContext->m_dRange - m_pContext->m_xTrans,
-		-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-		(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-		-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans,
-		(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
-	else
-		glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-		(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-		-m_pContext->m_dRange - m_pContext->m_yTrans,
-		m_pContext->m_dRange - m_pContext->m_yTrans,
-		-m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans,
-		m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans);
+	//if (w <= h)
+	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
+	//	m_pContext->m_dRange - m_pContext->m_xTrans,
+	//	-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
+	//	(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
+	//	-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans,
+	//	(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
+	//else
+	//	glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
+	//	(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
+	//	-m_pContext->m_dRange - m_pContext->m_yTrans,
+	//	m_pContext->m_dRange - m_pContext->m_yTrans,
+	//	-m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans,
+	//	m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans);
 
 	// Draw the scene
 	RenderScene(GL_SELECT, true);
@@ -1135,7 +1138,7 @@ int CGLView::HitPoint(const int& xPos, const int& yPos, const int& sensitivity)
 
 	// Go back to modelview for normal rendering
 	glMatrixMode(GL_MODELVIEW);
-
+	//gluLookAt( 0, 0, m_pContext->m_dRange*5, 0, 0, 0, 0, 1, 0 );
 	// If a single hit occured, display the info.
 	if (hits>=3)
 	{
@@ -1241,6 +1244,7 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 	int w = rect.Width();
 	int h = rect.Height();
 
+	gluPerspective(45.0, w/h, 1, 50);
 	// Ortho Viewing
 	//if (w <= h)
 	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
@@ -1269,7 +1273,7 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 
 	// Go back to modelview for normal rendering
 	glMatrixMode(GL_MODELVIEW);
-
+	//gluLookAt( 0, 0, m_pContext->m_dRange*5, 0, 0, 0, 0, 1, 0 );
 	// If a single hit occured, display the info.
 	if (hits)
 	{
@@ -1357,19 +1361,20 @@ int CGLView::ProcessSweepSelection(const CRect& swRect, unsigned long int* id)
 	int w = rect.Width();
 	int h = rect.Height();
 
+	gluPerspective(45.0, w/h, 1, 50);
 	// Ortho Viewing
-	if (w <= h)
-		glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, m_pContext->m_dRange - m_pContext->m_xTrans, 
-		-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans, 
-		(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans, 
-		-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans, 
-		(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
-	else
-		glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans, (m_pContext->m_dRange * w / h) - m_pContext->m_xTrans, 
-		-m_pContext->m_dRange - m_pContext->m_yTrans, 
-		m_pContext->m_dRange - m_pContext->m_yTrans, 
-		-m_pContext->m_dRange * 5000.0f - m_pContext->m_yTrans, 
-		m_pContext->m_dRange * 5000.0f - m_pContext->m_yTrans);
+	//if (w <= h)
+	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, m_pContext->m_dRange - m_pContext->m_xTrans, 
+	//	-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans, 
+	//	(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans, 
+	//	-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans, 
+	//	(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
+	//else
+	//	glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans, (m_pContext->m_dRange * w / h) - m_pContext->m_xTrans, 
+	//	-m_pContext->m_dRange - m_pContext->m_yTrans, 
+	//	m_pContext->m_dRange - m_pContext->m_yTrans, 
+	//	-m_pContext->m_dRange * 5000.0f - m_pContext->m_yTrans, 
+	//	m_pContext->m_dRange * 5000.0f - m_pContext->m_yTrans);
 
 	// Draw the scene
 	RenderScene(GL_SELECT);
@@ -1383,7 +1388,7 @@ int CGLView::ProcessSweepSelection(const CRect& swRect, unsigned long int* id)
 
 	// Go back to modelview for normal rendering
 	glMatrixMode(GL_MODELVIEW);
-
+	//gluLookAt( 0, 0, m_pContext->m_dRange*5, 0, 0, 0, 0, 1, 0 );
 	// If hits occured, display the info.
 	if (hits)
 	{

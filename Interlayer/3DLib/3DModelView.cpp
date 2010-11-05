@@ -1451,7 +1451,7 @@ BOOL C3DModelView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 
-	if( m_eOperate == NONE || m_eOperate == SELECT )
+	//if( m_eOperate == NONE || m_eOperate == SELECT )
 	{
 		CPoint point = pt;
 		pt.y += zDelta/10.0;

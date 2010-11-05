@@ -392,22 +392,24 @@ void C3DObject::DrawWired(const GLSelectedMode& dMode)
 		{
 			if( m_iSelectedPoint == i)
 			{
-				glPointSize(4);
+				glPointSize(20);
 				glColor3ub(255, 0, 0);
 			}
 			else
 			{
-				glPointSize(2);
+				glPointSize(10);
 				glColor3ub(0, 255, 255);
 			}
 
 			glLoadName(i);
-			glBegin(GL_POINTS);			
+			glEnable(GL_POINT_SMOOTH); 
+			glBegin(GL_POINTS);
 			glVertex3d(
 				(m_ArrayVertex.GetAt(i)->x-xMin)/range*2.0-1.0, 
 				(m_ArrayVertex.GetAt(i)->y-yMin)/range*2.0-1.0,
 				(m_ArrayVertex.GetAt(i)->z-box.ZMin())/zRange*2.0-1.0);
 			glEnd();
+			glDisable(GL_POINT_SMOOTH); 
 		}
 	}
 }
