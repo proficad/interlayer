@@ -54,7 +54,7 @@ public:
 protected:
 	CIntersectSearchManager();
 	~CIntersectSearchManager();
-	void SearchALayer(CGLObject* gird, int index, CModelView* modeltree);
+	void SearchALayer(CGLObject* gird);
 	CGridObject* m_model;
 	CString			m_pathname;
 	std::string		 m_gridFilename;

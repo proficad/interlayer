@@ -39,7 +39,7 @@ public:
 	HPALETTE m_hPalette, m_hPalette2;
 
 	CGLTrihedron* m_myTrihedron;	// ×ø±êÖá
-
+	CGLEditAxis*	m_editAxis;				//±à¼­×ø±êÖá
 private:
 	// Color Indexes
 	struct colorIndexState

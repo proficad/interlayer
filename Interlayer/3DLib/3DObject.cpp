@@ -80,6 +80,7 @@ C3DObject::C3DObject(CReader* r)
 
 	ComputePoints(r);
 	ComputeBoundLimits();
+	//SetPosition(100,100,0);
 }
 
 
@@ -376,9 +377,9 @@ void C3DObject::DrawWired(const GLSelectedMode& dMode)
 			for(int j=0;j<3;j++)
 			{				
 				::glVertex3f(
-					(pFace->v(j)->x-xMin)/range*2.0-1.0,
-					(pFace->v(j)->y-yMin)/range*2.0-1.0,
-					(pFace->v(j)->z-box.ZMin())/zRange*2.0-1.0);
+					(pFace->v(j)->x+m_Position.x-xMin)/range*2.0-1.0,
+					(pFace->v(j)->y+m_Position.y-yMin)/range*2.0-1.0,
+					(pFace->v(j)->z+m_Position.z-box.ZMin())/zRange*2.0-1.0);
 			}
 		}
 		glEnd();
@@ -397,7 +398,7 @@ void C3DObject::DrawWired(const GLSelectedMode& dMode)
 			}
 			else
 			{
-				glPointSize(10);
+				glPointSize(15);
 				glColor3ub(0, 255, 255);
 			}
 
@@ -405,9 +406,9 @@ void C3DObject::DrawWired(const GLSelectedMode& dMode)
 			glEnable(GL_POINT_SMOOTH); 
 			glBegin(GL_POINTS);
 			glVertex3d(
-				(m_ArrayVertex.GetAt(i)->x-xMin)/range*2.0-1.0, 
-				(m_ArrayVertex.GetAt(i)->y-yMin)/range*2.0-1.0,
-				(m_ArrayVertex.GetAt(i)->z-box.ZMin())/zRange*2.0-1.0);
+				(m_ArrayVertex.GetAt(i)->x+m_Position.x-xMin)/range*2.0-1.0, 
+				(m_ArrayVertex.GetAt(i)->y+m_Position.y-yMin)/range*2.0-1.0,
+				(m_ArrayVertex.GetAt(i)->z+m_Position.z-box.ZMin())/zRange*2.0-1.0);
 			glEnd();
 			glDisable(GL_POINT_SMOOTH); 
 		}
@@ -464,9 +465,9 @@ void C3DObject::DrawShaded()
 
 			// Vertex
 			::glVertex3f(
-				(pFace->v(j)->x-xMin)/range*2.0-1.0,
-				(pFace->v(j)->y-yMin)/range*2.0-1.0,
-				(pFace->v(j)->z-box.ZMin())/zRange*2.0-1.0);
+				(pFace->v(j)->x+m_Position.x-xMin)/range*2.0-1.0,
+				(pFace->v(j)->y+m_Position.y-yMin)/range*2.0-1.0,
+				(pFace->v(j)->z+m_Position.z-box.ZMin())/zRange*2.0-1.0);
 		}
 	}
 

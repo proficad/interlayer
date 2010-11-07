@@ -33,6 +33,11 @@ public:
 	void ReversePoints();
 	void SaveSurface(const std::string& filename);
 	void SaveDivideSurface( const std::string& filename, const std::string& newfilename, const CVector3D& size, int index );
+	
+	void	SetPosition(double x, double y, double z){m_Position.SetX(x); m_Position.SetY(y), m_Position.SetZ(z);}
+	double GetPosX(){return m_Position.GetX();}
+	double GetPosY(){return m_Position.GetY();}
+	double GetPosZ(){return m_Position.GetZ();}
 
 	int m_iSelectedPoint;
 	std::vector<CVertex3D>* GetPointList() { return &m_pointList; }
@@ -43,6 +48,8 @@ public:
 	//-----------------------------------------------------------------------
 	CArray3d<CVertex3D> m_ArrayVertex;
 	CArray3d<CFaceTriangles> m_ArrayFace;
+
+	CVertex3D					m_Position;
 
 private:
 	void DrawWired(const GLSelectedMode& dMode = GLNOSELECTED);

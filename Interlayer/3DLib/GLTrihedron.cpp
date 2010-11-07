@@ -8,6 +8,7 @@
 #include "GridObject.h"
 #include "GLText.h"
 
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
@@ -67,7 +68,7 @@ CGLObject* CGLTrihedron::Copy()
 void CGLTrihedron::DefineDisplay() // 定义显示
 {
 	GLdouble bgcol[4];	
-
+	
 	glGetDoublev(GL_COLOR_CLEAR_VALUE, bgcol);
 	GLfloat specref[] =
 	{
@@ -126,7 +127,6 @@ void CGLTrihedron::DrawAxis()
 
 	//X Axis
 	glColor3f(0.5f, 0.25f, 0.25f);
-
 	glBegin(GL_LINES);
 	glVertex3f(-1.0f, -1.0f, -1.0f);
 	glVertex3f(1.1f, -1.0f, -1.0f);
@@ -221,6 +221,7 @@ void CGLTrihedron::DrawGrid()
 	glLineWidth(0.1);
 	//X Axis
 	glColor3f(0.25f, 0.25f, 0.25f);
+	
 
 	for (int i=1;i<40; i++)
 	{
@@ -245,9 +246,10 @@ void CGLTrihedron::DrawGrid()
 
 void CGLTrihedron::Display(const GLDisplayMode& dMode, bool bForce)
 {
+	glLoadName(reinterpret_cast<GLuint>(this));
 	if (!m_Show)
 		return;
-
+	
 	// Build list at first
 	if (!m_ListDone || m_Modified)
 		if (!BuildList())
@@ -569,4 +571,287 @@ void CGLTrihedron::DrawMark()
 
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+}
+
+CGLEditAxis::CGLEditAxis()
+{
+	m_strObjName = _T("EditAxis");
+	m_glObjType = GLEDITAXIS;
+	//m_bLegend = false;
+	m_pGLView = NULL;
+
+	m_bShowAxis = true;
+	//m_bShowGrid = true;
+	m_size = 1.0;
+	SetMaterial(White);
+	Show(0);
+	m_ListOpenGL = 0;
+}
+
+CGLEditAxis::CGLEditAxis( GLfloat size )
+{
+	m_strObjName = _T("Trihedron");
+	m_glObjType = GLTRIHEDRON;
+	//m_bLegend = false;
+	m_pGLView = NULL;
+	m_size = size;
+	m_bShowAxis = true;
+	//m_bShowGrid = true;
+
+	SetMaterial(White);
+	Show(0);
+	m_ListOpenGL = 0;
+}
+
+CGLEditAxis::~CGLEditAxis()
+{
+
+}
+
+CGLObject* CGLEditAxis::Copy()
+{
+	CGLEditAxis* T = new CGLEditAxis(m_size);
+	T->m_glObjID = m_glObjID;
+	T->SetGLView (m_pGLView);
+	return T;
+}
+
+bool CGLEditAxis::BuildList()
+{
+	//TRACE(" Start building list ...\n");
+
+	if (!m_Modified && m_ListDone)
+		return false;
+
+	// Erase last list
+	::glDeleteLists(m_ListOpenGL, 1);
+
+	// Search for a new list
+	m_ListOpenGL = ::glGenLists(1);
+	if (m_ListOpenGL == 0)
+	{
+		TRACE("CGLObject::BuildList : unable to build DrawList\n");
+		return false;
+	}
+
+	// Start list
+	::glNewList(m_ListOpenGL, GL_COMPILE_AND_EXECUTE);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	DefineDisplay(); // 定义显示
+
+	::glEndList();
+
+	// List is done now
+	m_ListDone = 1;
+	m_Modified = 0;
+
+	return true;
+}
+
+void CGLEditAxis::DefineDisplay()
+{
+	GLdouble bgcol[4];	
+
+	glGetDoublev(GL_COLOR_CLEAR_VALUE, bgcol);
+	GLfloat specref[] =
+	{
+		1.0f, 1.0f, 1.0f, 1.0f
+	};
+
+	// Enable Depth Testing
+	//glEnable(GL_DEPTH_TEST);
+
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+
+	// Enable lighting
+	glEnable(GL_LIGHTING);
+
+	// Enable color tracking
+	glEnable(GL_COLOR_MATERIAL);
+
+	// Set Material properties to follow glColor values
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
+	// 	GLfloat light_position[] = { 2.0, 2.0, 2.0, 0.0 };
+	// 
+	// 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specref);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
+
+	glShadeModel(GL_SMOOTH);
+
+	glEnable(GL_AUTO_NORMAL);
+	glEnable(GL_NORMALIZE);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	ApplyMaterial();
+
+	DrawShaded();
+}
+
+void CGLEditAxis::Display( const GLDisplayMode& /*= GLWIREFRAME*/, bool bForce /*= false*/ )
+{
+	//glLoadName(reinterpret_cast<GLuint>(this));
+	if (!m_Show)
+		return;
+
+	// Build list at first
+	if (!m_ListDone || m_Modified)
+		if (!BuildList())
+			return;
+
+	// Search for a new list
+	if (::glIsList(m_ListOpenGL) == GL_TRUE)
+	{
+		::glCallList(m_ListOpenGL);
+		return;
+	}
+	else
+	{
+		TRACE("unable to draw list %d\n", m_ListOpenGL);
+		return;
+	}
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//DefineDisplay();
+	//DrawShaded();
+}
+
+void CGLEditAxis::DisplaySelected( const GLSelectedMode& /*= GLSELECTED*/ )
+{
+
+}
+
+void CGLEditAxis::Hilight( const GLSelectedMode& )
+{
+
+}
+
+void CGLEditAxis::SetSize( GLfloat size )
+{
+	if( m_size != size )
+		m_Modified = 1;
+	m_size = size;
+}
+
+void CGLEditAxis::SetColor( const GLubyte&, const GLubyte&, const GLubyte& )
+{
+
+}
+
+void CGLEditAxis::SetColor( CColor& color )
+{
+
+}
+
+void CGLEditAxis::GetColor( GLubyte* ) const
+{
+
+}
+
+CColor* CGLEditAxis::GetColor( void )
+{
+	return NULL;
+}
+
+void CGLEditAxis::SetPosition( const CVector3DF& position )
+{
+	m_v3Position = position;
+}
+
+CVector3DF CGLEditAxis::GetPosition()
+{
+	return m_v3Position;
+}
+
+void CGLEditAxis::DrawShaded()
+{
+	CBoundingBox box = m_pDisplayContext->GetBoundingBox();
+	double xRange = box.XMax()-box.XMin();
+	double yRange = box.YMax()-box.YMin();
+	double zRange = box.ZMax()-box.ZMin();
+
+	double range = (xRange>yRange?xRange:yRange);
+
+	double xMin, xMax, yMin, yMax;
+	xMin = (box.XMin()+box.XMax())/2.0-range/2;
+	xMax = (box.XMin()+box.XMax())/2.0+range/2;
+	yMin = (box.YMin()+box.YMax())/2.0-range/2;
+	yMax = (box.YMin()+box.YMax())/2.0+range/2;
+
+	glLineWidth(4);
+	glEnable(GL_BLEND);
+	glPushAttrib(GL_LIGHTING_BIT);
+	CVector3DF position;
+	position.SetX((m_v3Position.GetX()-xMin)/range*2.0-1.0);
+	position.SetY((m_v3Position.GetY()-yMin)/range*2.0-1.0);
+	position.SetZ( m_pDisplayContext->m_dVertical*((m_v3Position.GetZ()-box.ZMin())/zRange*2.0-1.0) );
+
+	//Axes' label
+	glLoadName(reinterpret_cast<GLuint>(this));
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glRasterPos3d(position.GetX()+m_size, position.GetY(), position.GetZ());
+	DrawText("X");
+
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glRasterPos3d(position.GetX(), position.GetY()+m_size, position.GetZ());
+	DrawText("Y");
+
+	glColor3f(0.0f, 1.0f, 1.0f);
+	glRasterPos3d(position.GetX(), position.GetY(), position.GetZ()+m_size);
+	DrawText("Z");
+
+	//X Axis
+	glColor3f(0.5f, 0.25f, 0.25f);
+	glBegin(GL_LINES);
+	glVertex3f(position.GetX(), position.GetY(), position.GetZ());
+	glVertex3f(position.GetX()+m_size, position.GetY(), position.GetZ());
+	glEnd();
+
+	glPushMatrix();	
+	glTranslatef(position.GetX()+m_size, position.GetY(), position.GetZ());
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	glutSolidCone(0.027*m_size*2 , 0.09*m_size*2 , 10, 10);
+	glPopMatrix();
+
+	//Y Axis
+	glColor3f(0.25f, 0.5f, 0.25f);
+
+	glBegin(GL_LINES);
+	glVertex3f(position.GetX(), position.GetY(), position.GetZ());
+	glVertex3f(position.GetX(), position.GetY()+m_size, position.GetZ());
+	glEnd();
+
+
+	glPushMatrix();	
+	glTranslatef(position.GetX(), position.GetY()+m_size, position.GetZ());
+	glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+	glutSolidCone(0.027*m_size*2 , 0.09*m_size*2 , 10, 10);
+	glPopMatrix();
+
+	//Z Axis
+	glColor3f(0.25f, 0.25f, 0.5f);
+
+	glBegin(GL_LINES);
+	glVertex3f(position.GetX(), position.GetY(), position.GetZ());
+	glVertex3f(position.GetX(), position.GetY(), position.GetZ()+m_size);
+	glEnd();
+
+	glPushMatrix();	
+	glTranslatef(position.GetX(), position.GetY(), position.GetZ()+m_size);
+	glutSolidCone(0.027*m_size*2 , 0.09*m_size*2 , 10, 10);
+	glPopMatrix();
+
+	glPopAttrib();
+	glDisable(GL_BLEND);
+	glLineWidth(1);
+}
+
+void CGLEditAxis::SetGLView( CGLView* pGLView )
+{
+	m_pGLView = pGLView;
+	m_Modified = 1;
 }

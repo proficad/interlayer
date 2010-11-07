@@ -756,7 +756,7 @@ void CGLDisplayContext::Display(const GLDisplayMode& mode)
 
 	// Initialize the names stack
 	glInitNames();
-	glPushName(-1);
+	glPushName(-1);	///-1
 
 	bool bSlice = IsShowSlice(); // ÊÇ·ñÏÔÊ¾ÇÐÆ¬
 	bool bDice = IsShowDice();	//  ÊÇ·ñÏÔÊ¾ÇÐ¿é
@@ -1011,8 +1011,8 @@ bool CGLDisplayContext::IsShowSlice()
 
 bool CGLDisplayContext::Select(CGLView* aView, const int& x, const int& y)
 {
-	if( m_listDisplay->empty() )
-		return false;
+	//if( m_listDisplay->empty() )
+	//	return false;
 
 	bool res = false;
 	CGLObject* pObj = NULL;
@@ -1039,8 +1039,8 @@ bool CGLDisplayContext::Select(CGLView* aView, const int& x, const int& y)
 
 bool CGLDisplayContext::MultiSelect(CGLView* aView, const int& x, const int& y)
 {
-	if( m_listDisplay->empty() )
-		return false;
+	//if( m_listDisplay->empty() )
+	//	return false;
 
 	bool res = false;
 	CGLObject* pObj = NULL;

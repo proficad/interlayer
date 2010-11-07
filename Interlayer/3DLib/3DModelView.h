@@ -43,6 +43,8 @@ public:
 		SLICE_X,	// ×ÝÇÐÆ¬
 		SLICE_Y,	// ×ÝÇÐÆ¬
 		DICE,		// ÇÐ¿é
+		EDIT_FACE_POS,	//ÒÆ¶¯Ãæ
+		EDIT_POINT_POS,	//ÒÆ¶¯µã
 	};
 	CGLView* m_myView;
 private:	

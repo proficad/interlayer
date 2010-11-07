@@ -348,6 +348,18 @@ void C3DModelView::OnLButtonDown(UINT nFlags, CPoint point)
 					{
 						pObj->m_iSelectedPoint = n;
 						pObj->SetModified();
+						int size = pObj->m_ArrayVertex.GetSize();
+						if(n>=0&&n<size)
+						{
+							CVertex3D pos(pObj->GetPosX(),pObj->GetPosY(),pObj->GetPosZ());
+							CVertex3D* pVert = pObj->m_ArrayVertex.GetAt(pObj->m_iSelectedPoint);
+							pos.SetX(pos.GetX()+pVert->GetX());
+							pos.SetY(pos.GetY()+pVert->GetY());
+							pos.SetZ(pos.GetZ()+pVert->GetZ());
+							m_myView->m_editAxis->SetPosition(CVector3DF(pos.x, pos.y, pos.z+2));
+							m_myView->m_editAxis->Show(true);
+							m_myView->m_editAxis->SetModified();
+						}
 					}
 				}
 				InvalidateRect(NULL, FALSE);

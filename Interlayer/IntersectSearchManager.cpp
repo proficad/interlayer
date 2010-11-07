@@ -90,11 +90,20 @@ UINT CIntersectSearchManager::SearchInterSect(LPVOID pParam)
 	for(std::vector<CGLObject*>::iterator it=m_interlayers.begin(); it!=m_interlayers.end(); ++it)
 	{
 		CGLObject* face = (*it);
-		SearchALayer(face, index++, modelTree);
+		SearchALayer(face);
 		delete face;
 	}
 
-	RunTrack();
+	if(RunTrack())
+	{
+		for(int i=0; i<m_interlayerNames.size(); i++)
+		{
+			CString title;
+			title.Format("%s%d","夹层网格", index++);
+			//CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+			modelTree->OnImportInterlayer(m_interlayerNames[i].c_str(), title, m_gridModelTreeItemGuid.c_str());
+		}
+	}
 	////写点坝文件
 	//CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
 	//CString strFileName = pMF->GetProjectDatPath();
@@ -130,7 +139,7 @@ UINT CIntersectSearchManager::SearchInterSect(LPVOID pParam)
 	return 0;
 }
 
-void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index, CModelView* modeltree )
+void CIntersectSearchManager::SearchALayer( CGLObject* gird )
 {
 	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
 	CString strFileName = m_pathname;
@@ -152,10 +161,6 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird, int index, CModelVi
 		if(!rs)
 			return ;
 		//相交网格的显示
-		CString title;
-		title.Format("%s%d","夹层网格", index);
-		//CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
-		modeltree->OnImportInterlayer(strNewFileName, title, m_gridModelTreeItemGuid.c_str());
 
 		//CMDIChildWndEx *pWnd =(CMDIChildWndEx *) pMF->MDIGetActive();
 		//if( pWnd )

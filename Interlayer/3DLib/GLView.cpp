@@ -57,6 +57,13 @@ CGLView::CGLView(CWnd* pWnd, CGLDisplayContext* ctx) : m_ptrWnd(pWnd), m_pContex
 	m_myTrihedron = new CGLTrihedron;
 	m_myTrihedron->SetContext(m_pContext);
 	m_myTrihedron->SetGLView(this);
+	//m_pContext->AddGLObj(m_myTrihedron);
+
+	m_editAxis	=	new CGLEditAxis;
+	m_editAxis->SetContext(m_pContext);
+	m_editAxis->SetGLView(this);
+	//m_editAxis->SetPosition(CVector3DF(107,208,-998));
+	m_editAxis->SetSize(0.2);
 	
 	InitGL();
 }
@@ -389,7 +396,8 @@ void CGLView::RenderScene(GLenum mode, bool bSlice)
 	glRotatef(m_pContext->m_xRot, 1.0f, 0.0f, 0.0f);
 	glRotatef(m_pContext->m_yRot, 0.0f, 1.0f, 0.0f);
 	glRotatef(m_pContext->m_zRot, 0.0f, 0.0f, 1.0f);
-
+	
+	m_editAxis->Display();
 	glScalef(1.0f, 1.0f, m_pContext->m_dVertical);	
 
 	m_pContext->Display(m_pContext->m_displayMode);
@@ -400,6 +408,8 @@ void CGLView::RenderScene(GLenum mode, bool bSlice)
 	// »­×ø±ê¿ò
 	m_myTrihedron->SetSize(m_pContext->m_dRange / 2);
 	m_myTrihedron->Display();
+
+	
 
 	//------------------------------------------------------------------------
 	// »­ÇÐÆ¬¿ò
@@ -1231,6 +1241,10 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 	// Change render mode
 	glRenderMode(GL_SELECT);
 
+	// Initialize the names stack
+	glInitNames();
+	glPushName(-1);	///-1
+
 	// Establish new clipping volume to be unit cube around
 	// mouse cursor point (xPos, yPos) and extending n pixels
 	// in the vertical and horzontal direction
@@ -1244,26 +1258,13 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 	int w = rect.Width();
 	int h = rect.Height();
 
+	// Perspective Viewing
 	gluPerspective(45.0, w/h, 1, 50);
-	// Ortho Viewing
-	//if (w <= h)
-	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
-	//	m_pContext->m_dRange - m_pContext->m_xTrans,
-	//	-(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-	//	(m_pContext->m_dRange * h / w) - m_pContext->m_yTrans,
-	//	-(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans,
-	//	(m_pContext->m_dRange * 5000.0f) - m_pContext->m_zTrans);
-	//else
-	//	glOrtho(-(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-	//	(m_pContext->m_dRange * w / h) - m_pContext->m_xTrans,
-	//	-m_pContext->m_dRange - m_pContext->m_yTrans,
-	//	m_pContext->m_dRange - m_pContext->m_yTrans,
-	//	-m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans,
-	//	m_pContext->m_dRange * 5000.0f - m_pContext->m_zTrans);
+
 
 	// Draw the scene
-	RenderScene(GL_SELECT);
-
+	RenderScene(GL_SELECT, true);
+	m_myTrihedron->Display();
 	// Collect the hits
 	hits = glRenderMode(GL_RENDER);
 
