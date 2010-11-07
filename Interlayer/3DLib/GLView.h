@@ -173,6 +173,7 @@ public:
 	int HitPoint(const int& x, const int& y, const int& sensitivity = 5);
 	CGLObject* ProcessSelection(const int& x, const int& y, const int& sensitivity = 5);
 	int ProcessSweepSelection(const CRect& rect, unsigned long int* id);
+	int ProcessEditAxisSelection(const int& x, const int& y, const int& sensitivity = 5);
 
 	virtual void Draw();			// 绘制
 	void ReSize(int cx, int cy);	// 改变图形大小

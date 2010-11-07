@@ -1224,6 +1224,8 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 
 	::wglMakeCurrent(m_hDC, m_hRC);
 
+	glDepthRange(0.0,0.5);
+
 	// Space for selection buffer
 	GLuint selectBuff[512]={0};
 
@@ -1267,6 +1269,7 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 	// Draw the scene
 	RenderScene(GL_SELECT, true);
 	//m_myTrihedron->Display();
+	//m_editAxis->Display();
 	// Collect the hits
 	hits = glRenderMode(GL_RENDER);
 
@@ -1288,9 +1291,15 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 		GLint	  nnames;
 		
 		minz = pick_maxz;
+
+
+		int z = INT_MAX;
+
 		for (i = j = 0; j < hits; j++) 
 		{
 			nnames = selectBuff[i];
+			int z1 = selectBuff[i+1];
+			int z2 = selectBuff[i+2];
 			i++;
 			if (selectBuff[i] < minz) 
 			{
@@ -1300,9 +1309,12 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 					hit = (GLint)selectBuff[i + 1 + nnames];
 					if (hit>200)
 					{
-						pObj = reinterpret_cast<CGLObject*>(hit);
-						if( pObj->isShow())
-							break;
+						if(z>z1)
+						{
+							pObj = reinterpret_cast<CGLObject*>(hit);
+							//if( pObj->isShow())
+							//	break;
+						}
 					}
 				}
 			} 
@@ -1319,6 +1331,7 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 		}
 	}
 
+	glDepthRange(0.0,1.0);
 	::wglMakeCurrent(NULL, NULL);
 
 	return pObj;
@@ -1380,6 +1393,7 @@ int CGLView::ProcessSweepSelection(const CRect& swRect, unsigned long int* id)
 	//	m_pContext->m_dRange * 5000.0f - m_pContext->m_yTrans);
 
 	// Draw the scene
+	glEnable(GL_DEPTH_TEST); 
 	RenderScene(GL_SELECT);
 
 	// Collect the hits
@@ -1408,7 +1422,7 @@ int CGLView::ProcessSweepSelection(const CRect& swRect, unsigned long int* id)
 			}
 		}
 	}
-
+	glDisable(GL_DEPTH_TEST); 
 	::wglMakeCurrent(NULL, NULL);
 
 	return hits;
@@ -1449,4 +1463,97 @@ void CGLView::ExportFile(LPCTSTR lpszFileName)
 	delete [] pFeedbackBuffer;	
 	glPopMatrix();
 	::wglMakeCurrent(NULL, NULL);
+}
+
+int CGLView::ProcessEditAxisSelection( const int& x, const int& y, const int& sensitivity /*= 5*/ )
+{
+	CGLObject* pObj = NULL;
+
+	::wglMakeCurrent(m_hDC, m_hRC);
+
+	// Space for selection buffer
+	GLuint selectBuff[512]={0};
+
+	// Hit counter and viewport storeage
+	GLint hits, viewport[4];
+
+	// Setup selection buffer
+	glSelectBuffer(512, selectBuff);
+
+	// Get the viewport
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	// Switch to projection and save the matrix
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+
+	// Change render mode
+	glRenderMode(GL_SELECT);
+
+	// Initialize the names stack
+	glInitNames();
+	glPushName(-1);	///-1
+
+	// Establish new clipping volume to be unit cube around
+	// mouse cursor point (xPos, yPos) and extending n pixels
+	// in the vertical and horzontal direction
+	int n = sensitivity;
+	glLoadIdentity();
+	gluPickMatrix(x, viewport[3] - y, n, n, viewport);
+
+	CRect rect;
+	m_ptrWnd->GetClientRect(&rect);
+
+	int w = rect.Width();
+	int h = rect.Height();
+
+	// Perspective Viewing
+	gluPerspective(45.0, w/h, 1, 50);
+
+
+	// Draw the scene
+	glDepthRange(0.0, 1.0);
+	RenderScene(GL_SELECT, true);
+	// Collect the hits
+	hits = glRenderMode(GL_RENDER);
+
+	// Restore the projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	// Go back to modelview for normal rendering
+	glMatrixMode(GL_MODELVIEW);
+	//gluLookAt( 0, 0, m_pContext->m_dRange*5, 0, 0, 0, 0, 1, 0 );
+	// If a single hit occured, display the info.
+	if (hits)
+	{
+		int		  name_background = -1;
+		const int pick_maxz = 0xffffffff;
+		GLint     hit = name_background;
+		GLuint    minz;
+		GLint     i,j;
+		GLint	  nnames;
+
+		minz = pick_maxz;
+		for (i = j = 0; j < hits; j++) 
+		{
+			nnames = selectBuff[i];
+			i++;
+			if (selectBuff[i] < minz) 
+			{
+				minz = selectBuff[i + nnames];
+				if(minz>0)
+				{
+					hit = (GLint)selectBuff[i + 1 + nnames];
+					if( (hit==101)||(hit==102)||(hit==103) )
+						return hit;
+				}
+			} 
+			i++;
+			i += nnames + 1;
+		}
+	}
+		return -1;
+	::wglMakeCurrent(NULL, NULL);
+
 }

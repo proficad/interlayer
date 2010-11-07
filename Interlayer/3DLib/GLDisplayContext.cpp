@@ -1017,7 +1017,8 @@ bool CGLDisplayContext::Select(CGLView* aView, const int& x, const int& y)
 	bool res = false;
 	CGLObject* pObj = NULL;
 	pObj = aView->ProcessSelection(x, y, m_mouseSensitivity);
-
+	///±à¼­×ø±êÖáÊ°È¡
+	int i = aView->ProcessEditAxisSelection(x,y,m_mouseSensitivity);
 	if (pObj!=NULL)
 		res = true;
 	else
@@ -1028,7 +1029,8 @@ bool CGLDisplayContext::Select(CGLView* aView, const int& x, const int& y)
 
 	if (!IsSelected(pObj))
 	{
-		m_listSelect->clear();
+		if(!m_listSelect->empty())
+			m_listSelect->clear();
 		AddToSelection(pObj);
 	}
 	else
@@ -1050,7 +1052,8 @@ bool CGLDisplayContext::MultiSelect(CGLView* aView, const int& x, const int& y)
 	
 	if (!IsSelected(pObj))
 	{
-		m_listSelect->clear();
+		if(!m_listSelect->empty())
+			m_listSelect->clear();
 		AddToSelection(pObj);
 	}
 	else

@@ -791,7 +791,7 @@ void CGLEditAxis::DrawShaded()
 	position.SetZ( m_pDisplayContext->m_dVertical*((m_v3Position.GetZ()-box.ZMin())/zRange*2.0-1.0) );
 
 	//Axes' label
-	glLoadName(reinterpret_cast<GLuint>(this));
+	//glLoadName(reinterpret_cast<GLuint>(this));
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glRasterPos3d(position.GetX()+m_size, position.GetY(), position.GetZ());
 	DrawText("X");
@@ -805,7 +805,9 @@ void CGLEditAxis::DrawShaded()
 	DrawText("Z");
 
 	//X Axis
+	glLoadName(101);
 	glColor3f(0.5f, 0.25f, 0.25f);
+
 	glBegin(GL_LINES);
 	glVertex3f(position.GetX(), position.GetY(), position.GetZ());
 	glVertex3f(position.GetX()+m_size, position.GetY(), position.GetZ());
@@ -818,6 +820,7 @@ void CGLEditAxis::DrawShaded()
 	glPopMatrix();
 
 	//Y Axis
+	glLoadName(102);
 	glColor3f(0.25f, 0.5f, 0.25f);
 
 	glBegin(GL_LINES);
@@ -833,6 +836,7 @@ void CGLEditAxis::DrawShaded()
 	glPopMatrix();
 
 	//Z Axis
+	glLoadName(103);
 	glColor3f(0.25f, 0.25f, 0.5f);
 
 	glBegin(GL_LINES);
