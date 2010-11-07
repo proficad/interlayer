@@ -586,6 +586,7 @@ CGLEditAxis::CGLEditAxis()
 	SetMaterial(White);
 	Show(0);
 	m_ListOpenGL = 0;
+	m_editaxis = -1;
 }
 
 CGLEditAxis::CGLEditAxis( GLfloat size )
@@ -601,6 +602,7 @@ CGLEditAxis::CGLEditAxis( GLfloat size )
 	SetMaterial(White);
 	Show(0);
 	m_ListOpenGL = 0;
+	m_editaxis = -1;
 }
 
 CGLEditAxis::~CGLEditAxis()
@@ -806,7 +808,10 @@ void CGLEditAxis::DrawShaded()
 
 	//X Axis
 	glLoadName(101);
-	glColor3f(0.5f, 0.25f, 0.25f);
+	if(m_editaxis==101)
+		glColor3f(1.0, 0.5, 0.5);
+	else
+		glColor3f(0.5f, 0.15, 0.15);
 
 	glBegin(GL_LINES);
 	glVertex3f(position.GetX(), position.GetY(), position.GetZ());
@@ -821,7 +826,10 @@ void CGLEditAxis::DrawShaded()
 
 	//Y Axis
 	glLoadName(102);
-	glColor3f(0.25f, 0.5f, 0.25f);
+	if(m_editaxis==102)
+		glColor3f(0.5, 1.0, 0.5);
+	else
+		glColor3f(0.15, 0.5f, 0.15);
 
 	glBegin(GL_LINES);
 	glVertex3f(position.GetX(), position.GetY(), position.GetZ());
@@ -837,7 +845,10 @@ void CGLEditAxis::DrawShaded()
 
 	//Z Axis
 	glLoadName(103);
-	glColor3f(0.25f, 0.25f, 0.5f);
+	if(m_editaxis==103)
+		glColor3f(0.5, 0.5, 1.0);
+	else
+		glColor3f(0.15, 0.15, 0.5f);
 
 	glBegin(GL_LINES);
 	glVertex3f(position.GetX(), position.GetY(), position.GetZ());

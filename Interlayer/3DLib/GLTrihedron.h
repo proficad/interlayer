@@ -96,6 +96,8 @@ public:
 	CVector3DF GetPosition();
 
 	void SetGLView(CGLView* pGLView);
+		
+	int				m_editaxis;
 protected:
 	bool				m_show;
 	CVector3DF	m_v3Position;

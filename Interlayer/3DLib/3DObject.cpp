@@ -1914,7 +1914,7 @@ void C3DObject::Serialize(CArchive& ar)
 		ar << size;
 
 		for (int i= 0; i < size; i++)
-			ar << m_pointList[i];
+			ar << m_pointList[i]+CVertex3D(m_Position.GetX(), -m_Position.GetY(), -m_Position.GetZ());
 
 		size = m_indexs.size();
 		ar << size;
@@ -2016,7 +2016,7 @@ void C3DObject::SaveSurface( const std::string& filename )
 	art << size;
 
 	for (int i= 0; i < size; i++)
-		art << m_pointList[i];
+		art << m_pointList[i]+CVertex3D(m_Position.GetX(), -m_Position.GetY(), -m_Position.GetZ());
 
 	size = m_indexs.size();
 	art << size;

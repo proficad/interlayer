@@ -1018,7 +1018,7 @@ bool CGLDisplayContext::Select(CGLView* aView, const int& x, const int& y)
 	CGLObject* pObj = NULL;
 	pObj = aView->ProcessSelection(x, y, m_mouseSensitivity);
 	///±à¼­×ø±êÖáÊ°È¡
-	int i = aView->ProcessEditAxisSelection(x,y,m_mouseSensitivity);
+	
 	if (pObj!=NULL)
 		res = true;
 	else

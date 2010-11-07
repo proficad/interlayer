@@ -337,30 +337,90 @@ void C3DModelView::OnLButtonDown(UINT nFlags, CPoint point)
  			if (!(nFlags & MK_SHIFT) && !(nFlags & MK_CONTROL))
 			{
 				if( pDoc->GetContext()->m_selectedMode != GLEDIT )
-					m_myView->Select(point.x, point.y);
-				else
 				{
-					int n = m_myView->HitPoint(point.x, point.y,10);
-					std::vector<CGLObject*>::iterator listIterSel = pDoc->GetContext()->m_listSelect->begin();
+					if(m_myView->GetContext()->m_listSelect->empty())
+						m_myView->Select(point.x, point.y);
+
+					std::vector<CGLObject*>::iterator listIterSel = m_myView->GetContext()->m_listSelect->begin();
 
 					C3DObject *pObj = (C3DObject *)(*listIterSel);
 					if( pObj!=NULL)
 					{
-						pObj->m_iSelectedPoint = n;
-						pObj->SetModified();
-						int size = pObj->m_ArrayVertex.GetSize();
-						if(n>=0&&n<size)
+						CVertex3D pos(pObj->GetPosX(),pObj->GetPosY(),pObj->GetPosZ());
+						CVertex3D* pVert = pObj->m_ArrayVertex.GetAt(0);
+						pos.SetX(pos.GetX()+pVert->GetX());
+						pos.SetY(pos.GetY()+pVert->GetY());
+						pos.SetZ(pos.GetZ()+pVert->GetZ());
+						m_myView->m_editAxis->SetPosition(CVector3DF(pos.x, pos.y, pos.z+2));
+						m_myView->m_editAxis->Show(true);
+						m_myView->m_editAxis->SetModified();
+					}
+					int m_edit = m_myView->ProcessEditAxisSelection(point.x, point.y, 5);
+					m_myView->m_editAxis->m_editaxis = m_edit;
+					m_myView->m_editAxis->SetModified();
+				}
+				else
+				{
+					int m_edit = m_myView->ProcessEditAxisSelection(point.x, point.y, 5);
+					m_myView->m_editAxis->m_editaxis = m_edit;
+					m_myView->m_editAxis->SetModified();
+					if(m_edit==-1)
+					{
+						int n = m_myView->HitPoint(point.x, point.y,10);
+						std::vector<CGLObject*>::iterator listIterSel = pDoc->GetContext()->m_listSelect->begin();
+
+						C3DObject *pObj = (C3DObject *)(*listIterSel);
+						if( pObj!=NULL)
 						{
-							CVertex3D pos(pObj->GetPosX(),pObj->GetPosY(),pObj->GetPosZ());
-							CVertex3D* pVert = pObj->m_ArrayVertex.GetAt(pObj->m_iSelectedPoint);
-							pos.SetX(pos.GetX()+pVert->GetX());
-							pos.SetY(pos.GetY()+pVert->GetY());
-							pos.SetZ(pos.GetZ()+pVert->GetZ());
-							m_myView->m_editAxis->SetPosition(CVector3DF(pos.x, pos.y, pos.z+2));
-							m_myView->m_editAxis->Show(true);
+							pObj->m_iSelectedPoint = n;
+							pObj->SetModified();
+							int size = pObj->m_ArrayVertex.GetSize();
+							if(n>=0&&n<size)
+							{
+								CVertex3D pos(pObj->GetPosX(),pObj->GetPosY(),pObj->GetPosZ());
+								CVertex3D* pVert = pObj->m_ArrayVertex.GetAt(pObj->m_iSelectedPoint);
+								pos.SetX(pos.GetX()+pVert->GetX());
+								pos.SetY(pos.GetY()+pVert->GetY());
+								pos.SetZ(pos.GetZ()+pVert->GetZ());
+								m_myView->m_editAxis->SetPosition(CVector3DF(pos.x, pos.y, pos.z+2));
+								m_myView->m_editAxis->Show(true);
+								m_myView->m_editAxis->SetModified();
+							}
+						else
+						{
+							m_myView->m_editAxis->Show(false);
 							m_myView->m_editAxis->SetModified();
 						}
+						}
+
 					}
+					
+					//else
+					//{
+					//	switch(m_edit)
+					//	{
+					//	case 101:
+					//		{
+
+					//		}
+					//		break;
+					//	case 102:
+					//		{
+
+					//		}
+					//		break;
+					//	case 103:
+					//		{
+
+					//		}
+					//		break;
+					//	default:
+					//		{
+
+					//		}
+					//		break;
+					//	}
+					//}
 				}
 				InvalidateRect(NULL, FALSE);
 			}
@@ -458,7 +518,17 @@ void C3DModelView::OnLButtonUp(UINT nFlags, CPoint point)
  					m_myView->SweepSelect(rect);
  
  				InvalidateRect(NULL, FALSE);
- 			}			
+ 			}
+			if(m_myView->GetContext()->m_selectedMode == GLEDIT)
+			{
+				m_myView->m_editAxis->m_editaxis = -1;
+				m_myView->m_editAxis->SetModified();
+			}
+			else
+			{
+				m_myView->m_editAxis->m_editaxis = -1;
+				m_myView->m_editAxis->SetModified();
+			}
 		}
 		break;
 	case MOVE:
@@ -623,6 +693,96 @@ void C3DModelView::OnMouseMove(UINT nFlags, CPoint point)
 			{
 				m_myView->RotateView(m_lDownPnt, point);
 				Invalidate(FALSE);
+			}
+			CBoundingBox box = m_myView->GetContext()->GetBoundingBox();
+
+			double xRange = box.XMax()-box.XMin();
+			double yRange = box.YMax()-box.YMin();
+
+			double range = (xRange>yRange?xRange:yRange)*0.0001;
+			CSize pan = m_lDownPnt - point;
+			m_lDownPnt = point;
+
+			if(m_myView->m_editAxis->m_editaxis!=-1)
+			{
+				if(m_myView->GetContext()->m_selectedMode != GLEDIT)
+				{
+					std::vector<CGLObject*>::iterator listIterSel = m_myView->GetContext()->m_listSelect->begin();
+
+					C3DObject *pObj = (C3DObject *)(*listIterSel);
+
+					switch(m_myView->m_editAxis->m_editaxis)
+					{
+					case 101:
+						{	// + (pan.cx +pan.cy)*range
+							pObj->SetPosition(pObj->GetPosX()+ (pan.cx +pan.cy)*range, pObj->GetPosY(), pObj->GetPosZ());
+							CVector3DF newpos = m_myView->m_editAxis->GetPosition();
+							newpos.SetX(newpos.GetX()  + (pan.cx +pan.cy)*range);
+							m_myView->m_editAxis->SetPosition(newpos);
+						}
+						break;
+					case 102:
+						{
+							pObj->SetPosition(pObj->GetPosX(), pObj->GetPosY()+ (pan.cx +pan.cy)*range, pObj->GetPosZ());
+							CVector3DF newpos = m_myView->m_editAxis->GetPosition();
+							newpos.SetY(newpos.GetY()  + (pan.cx +pan.cy)*range);
+							m_myView->m_editAxis->SetPosition(newpos);
+						}
+						break;
+					case 103:
+						{
+							pObj->SetPosition(pObj->GetPosX(), pObj->GetPosY(), pObj->GetPosZ()+ (pan.cx +pan.cy)*range);
+							CVector3DF newpos = m_myView->m_editAxis->GetPosition();
+							newpos.SetZ(newpos.GetZ()  + (pan.cx +pan.cy)*range);
+							m_myView->m_editAxis->SetPosition(newpos);
+						}
+						break;
+					}
+					pObj->Rebuild();
+					m_myView->m_editAxis->SetModified();
+					Invalidate(FALSE);
+				}
+				else
+				{
+					std::vector<CGLObject*>::iterator listIterSel = m_myView->GetContext()->m_listSelect->begin();
+
+					C3DObject *pObj = (C3DObject *)(*listIterSel);
+					if(pObj->m_iSelectedPoint>-1)
+					{
+						CVertex3D* pVert = pObj->m_ArrayVertex.GetAt(pObj->m_iSelectedPoint);
+						switch(m_myView->m_editAxis->m_editaxis)
+						{
+						case 101:
+							{
+								pVert->x = pVert->x + (pan.cx +pan.cy)*range;
+								CVector3DF newpos = m_myView->m_editAxis->GetPosition();
+								newpos.SetX(newpos.GetX()  + (pan.cx +pan.cy)*range);
+								m_myView->m_editAxis->SetPosition(newpos);
+							}
+							break;
+						case 102:
+							{
+								pVert->y = pVert->y + (pan.cx +pan.cy)*range;
+								CVector3DF newpos = m_myView->m_editAxis->GetPosition();
+								newpos.SetY(newpos.GetY()  + (pan.cx +pan.cy)*range);
+								m_myView->m_editAxis->SetPosition(newpos);
+							}
+							break;
+						case 103:
+							{
+								pVert->z = pVert->z + (pan.cx +pan.cy)*range;
+								CVector3DF newpos = m_myView->m_editAxis->GetPosition();
+								newpos.SetZ(newpos.GetZ()  + (pan.cx +pan.cy)*range);
+								m_myView->m_editAxis->SetPosition(newpos);
+							}
+							break;
+						}
+						pObj->Rebuild();
+						m_myView->m_editAxis->SetModified();
+						Invalidate(FALSE);
+					}
+					
+				}
 			}
 			
 //  			if (m_lbutdown && !(nFlags & MK_CONTROL) && !(nFlags & MK_SHIFT))
@@ -1516,6 +1676,7 @@ void C3DModelView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 					}
 
 					pObj->SetModified();
+					Invalidate(FALSE);
 				}
 			}
 			else

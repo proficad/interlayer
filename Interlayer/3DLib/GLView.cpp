@@ -1499,7 +1499,7 @@ int CGLView::ProcessEditAxisSelection( const int& x, const int& y, const int& se
 	// in the vertical and horzontal direction
 	int n = sensitivity;
 	glLoadIdentity();
-	gluPickMatrix(x, viewport[3] - y, n, n, viewport);
+	gluPickMatrix(x, viewport[3] - y, n+5, n+5, viewport);
 
 	CRect rect;
 	m_ptrWnd->GetClientRect(&rect);
