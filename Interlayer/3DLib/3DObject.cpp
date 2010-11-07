@@ -398,7 +398,7 @@ void C3DObject::DrawWired(const GLSelectedMode& dMode)
 			}
 			else
 			{
-				glPointSize(15);
+				glPointSize(10);
 				glColor3ub(0, 255, 255);
 			}
 

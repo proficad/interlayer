@@ -399,17 +399,19 @@ void CGLView::RenderScene(GLenum mode, bool bSlice)
 	
 	m_editAxis->Display();
 	glScalef(1.0f, 1.0f, m_pContext->m_dVertical);	
-
+	
 	m_pContext->Display(m_pContext->m_displayMode);
 	if( m_pContext->m_selectedMode != GLNONE)
 		m_pContext->DisplaySelected(m_pContext->m_selectedMode);
 	
 	//------------------------------------------------------------------------
 	// »­×ø±ê¿ò
-	m_myTrihedron->SetSize(m_pContext->m_dRange / 2);
-	m_myTrihedron->Display();
+	if(mode!=GL_SELECT)
+	{
+		m_myTrihedron->SetSize(m_pContext->m_dRange / 2);
+		m_myTrihedron->Display();
+	}
 
-	
 
 	//------------------------------------------------------------------------
 	// »­ÇÐÆ¬¿ò
@@ -1264,7 +1266,7 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 
 	// Draw the scene
 	RenderScene(GL_SELECT, true);
-	m_myTrihedron->Display();
+	//m_myTrihedron->Display();
 	// Collect the hits
 	hits = glRenderMode(GL_RENDER);
 
