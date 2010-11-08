@@ -48,6 +48,7 @@ C3DObject::C3DObject()
 		m_glObjID = (int)m_glObjType + CGLObject::GetCount();
 
 	SetMaterial(Jade);
+	m_first = true;
 }
 
 C3DObject::C3DObject(CReader* r)
@@ -81,6 +82,7 @@ C3DObject::C3DObject(CReader* r)
 	ComputePoints(r);
 	ComputeBoundLimits();
 	//SetPosition(100,100,0);
+	m_first = true;
 }
 
 
@@ -324,11 +326,12 @@ void C3DObject::ComputeBoundLimits()
 				dMaxY = -P.y;
 			if( (-P.z) > dMaxZ )
 				dMaxZ = -P.z;
+			
 		}
 
 		pCnt++;
 	}
-
+	//m_first = false;
 	m_itsBox.SetLimits(dMinX, dMaxX, dMinY, dMaxY, dMinZ, dMaxZ);
 }
 
@@ -1750,11 +1753,11 @@ int C3DObject::GenerateMap(CTexture* pTexture, int width, int height, int FlagCo
 		{
 			int index = m_ArrayFace.Add(new CFaceTriangles(m_ArrayVertex[j* width + i + 1], m_ArrayVertex[j* width + i], m_ArrayVertex[(j + 1) * width + i + 1]));
 			m_ArrayFace.Add(new CFaceTriangles(m_ArrayVertex[(j + 1) * width + i + 1], m_ArrayVertex[j * width + i], m_ArrayVertex[(j + 1) * width + i]));
-			if (FlagColor)
-			{
+			//if (FlagColor)
+			//{
 				//				m_ArrayFace[index]->SetColor(*m_ArrayVertex[j * width + i]->GetColor());
 				//				m_ArrayFace[index + 1]->SetColor(*m_ArrayVertex[j * width + i + 1]->GetColor());
-			}
+			//}
 		}
 	}
 
@@ -1910,11 +1913,14 @@ void C3DObject::Serialize(CArchive& ar)
 
 	if( ar.IsStoring() )
 	{
+		SaveSurface();
 		int size = m_pointList.size();
+		ar << m_strGUID;
+		ar << m_Position;
 		ar << size;
 
 		for (int i= 0; i < size; i++)
-			ar << m_pointList[i]+CVertex3D(m_Position.GetX(), -m_Position.GetY(), -m_Position.GetZ());
+			ar << m_pointList[i];
 
 		size = m_indexs.size();
 		ar << size;
@@ -1926,7 +1932,8 @@ void C3DObject::Serialize(CArchive& ar)
 	{
 		m_pointList.clear();
 		m_indexs.clear();
-
+		ar >> m_strGUID;
+		ar >> m_Position;
 		int size;
 		ar >> size;
 
@@ -1934,7 +1941,10 @@ void C3DObject::Serialize(CArchive& ar)
 		{
 			CVertex3D point;
 			ar >> point;
+			if(m_first)
 			m_pointList.push_back(CVertex3D(point.x, -point.y, -point.z));
+			else
+				m_pointList.push_back(point);
 		}
 
 		ar >> size;
@@ -1953,9 +1963,18 @@ void C3DObject::Serialize(CArchive& ar)
 		for (int i=0;i<size; i++)
 		{
 			CVertex3D *pVert = new CVertex3D;
-			pVert->x = m_pointList[i].x;
-			pVert->y = m_pointList[i].y;
-			pVert->z = m_pointList[i].z;
+			if(m_first)
+			{
+				pVert->x = m_pointList[i].x;
+				pVert->y = m_pointList[i].y;
+				pVert->z = m_pointList[i].z;
+			}
+			else
+			{
+				pVert->x = m_pointList[i].x;
+				pVert->y = -m_pointList[i].y;
+				pVert->z = -m_pointList[i].z;
+			}
 
 			m_ArrayVertex.Add(pVert);
 		}
@@ -2025,6 +2044,49 @@ void C3DObject::SaveSurface( const std::string& filename )
 	art.Close();
 }
 
+void C3DObject::SaveSurface()
+{
+	if(m_strGUID.IsEmpty())
+		return;
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	HTREEITEM hItem = pMF->GetTreeFileView()->GetTreeCtrl()->GetItemByGUID(m_strGUID);
+	if(hItem==NULL)
+		return;
+	CTreeNodeDat *lpNodeDat = (CTreeNodeDat*) pMF->GetTreeFileView()->GetTreeCtrl()->GetItemData(hItem);
+	if(lpNodeDat==NULL)
+		return;
+	if(lpNodeDat->m_strFileName2.IsEmpty())
+		return;
+
+	CFile file(lpNodeDat->m_strFileName2.GetBuffer(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+	CArchive ar(&file, CArchive::store);
+	CGLObject::Serialize(ar);
+
+	if( ar.IsStoring() )
+	{
+		int size = m_ArrayVertex.GetSize();
+		//int size = m_pointList.size();
+		ar << m_strGUID;
+		ar << m_Position;
+		ar << size;
+
+		for (int i= 0; i < size; i++)
+		{
+			CVertex3D tmp = (*m_ArrayVertex.GetAt(i));
+			tmp.SetX(tmp.GetX());
+			tmp.SetY(-tmp.GetY());
+			tmp.SetZ(-tmp.GetZ());
+			ar << tmp;
+		}
+		size = m_indexs.size();
+		ar << size;
+
+		for (int i=0; i<size; i++)
+			ar << m_indexs[i];
+	}
+	
+	ar.Close();
+}
 void C3DObject::SaveDivideSurface( const std::string& filename, const std::string& newfilename, const CVector3D& size, int index )
 {
 	if(size.GetNormL2()<0.00001)

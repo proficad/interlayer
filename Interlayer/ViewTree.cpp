@@ -59,6 +59,7 @@ void CTreeNodeDat::Serialize(CArchive& ar)
 		ar << m_nSelectedImage;
 		ar << (WORD)m_nType;
 		ar << m_strFileName;
+		ar << m_strFileName2;
 		ar << m_strGUIDName;
 
 		BOOL bExist;
@@ -95,6 +96,7 @@ void CTreeNodeDat::Serialize(CArchive& ar)
 				m_nType = (NODE_STYLE)wdTmp;
 
 				ar >> m_strFileName;
+				ar >> m_strFileName2;
 				ar >> m_strGUIDName;
 
 				BOOL bExist;
@@ -124,6 +126,7 @@ CArchive& operator <<(CArchive& ar, const CTreeNodeDat& dat)
 	ar << dat.m_nSelectedImage;
 	ar << (WORD)dat.m_nType;
 	ar << dat.m_strFileName;
+	ar << dat.m_strFileName2;
 	ar << dat.m_strGUIDName;
 
 	BOOL bExist;
@@ -164,6 +167,7 @@ CArchive& operator >>(CArchive& ar, CTreeNodeDat& dat)
 			dat.m_nType = (NODE_STYLE)wdTmp;
 
 			ar >> dat.m_strFileName;
+			ar >> dat.m_strFileName2;
 			ar >> dat.m_strGUIDName;
 
 			BOOL bExist;
@@ -2080,7 +2084,7 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 
 									CString strText = GetItemText(m_hitemDrag);
 									C3DModelDoc *pDoc = ((C3DModelView*)pDropWnd)->GetDocument();
-									pDoc->AddPlane(strSourcePathName, strText);
+									pDoc->AddPlane(strSourcePathName, strText,lpNodeDat->m_strGUIDName);
 								}
 								break;
 							case FOLDER:
@@ -2119,7 +2123,7 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 													CString strText = GetItemText(hItem);
 													StatusBarMessage(_T("正在添加面：%s"), strText);
 													C3DModelDoc *pDoc = ((C3DModelView*)pDropWnd)->GetDocument();
-													pDoc->AddPlane(strSourcePathName, strText);													
+													pDoc->AddPlane(strSourcePathName, strText, lpNode1->m_strGUIDName);													
 												}
 												break;
 											//case GRID_LAYER:			// 网格模型

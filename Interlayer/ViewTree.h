@@ -75,6 +75,8 @@ public:
 
 	CString m_strFileName;	// 文件名
 
+	CString m_strFileName2;	//第二文件名
+
 	CString m_strGUIDName;
 
 	CObject *m_pNodeDat;	// 结点数据

@@ -205,13 +205,47 @@ void C3DModelDoc::ImportFile(LPCTSTR lpszFileName)
 	UpdateAllViews(NULL);
 }
 
-void C3DModelDoc::AddPlane(LPCTSTR lpszFileName, LPCTSTR lpszName)
+void C3DModelDoc::AddPlane(LPCTSTR lpszFileName, LPCTSTR lpszName, CString guid)
 {
-	CPlaneReader* pReader = new CPlaneReader(lpszFileName);
-	C3DObject* pPlaneObj = new C3DObject(pReader);
-	//pPlaneObj->ReversePoints();
+	C3DObject* pPlaneObj;
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
+	HTREEITEM hItem = pMF->GetTreeFileView()->GetTreeCtrl()->GetItemByGUID(guid);
+	CTreeNodeDat *lpNodeDat = (CTreeNodeDat*) pMF->GetTreeFileView()->GetTreeCtrl()->GetItemData(hItem);
+	if(lpNodeDat->m_strFileName2.IsEmpty())
+	{
+		CPlaneReader* pReader = new CPlaneReader(lpszFileName);
+		pPlaneObj = new C3DObject(pReader);
+		pPlaneObj->m_strGUID = guid;
+		
+		delete pReader;
+		CString strSourcePathName = pMF->GetProjectDatPath();
+		CString strFileName1 = pMF->GetProjectDatPath();
+		strFileName1 += _T("\\models\\");
+		CString strNewtempFileName;
+		strNewtempFileName = strFileName1 + newGUID();
+		//pPlaneObj->SaveSurface(strNewtempFileName.GetString());
+		lpNodeDat->m_strFileName2 = strNewtempFileName;
+		pPlaneObj->SaveSurface();
+	}
+	else
+	{
+		pPlaneObj = new C3DObject();
+		pPlaneObj->m_strGUID = guid;
+		pPlaneObj->m_first = false;
+		CFile file(lpNodeDat->m_strFileName2.GetBuffer(), CFile::modeRead|CFile::typeBinary);
+		CArchive art(&file, CArchive::load);
+		//pPlaneObj->SetGLObjType(GLPLANE);
+		pPlaneObj->SetContext(GetContext());
+		pPlaneObj->Serialize(art);
+		//pPlaneObj->ReversePoints();
+		art.Close();
+		file.Close();
+	}
+	
+	
 	pPlaneObj->SetContext(m_pDisplayContext);
-	delete pReader;
+	
 	pPlaneObj->SetGLObjType(GLPLANE);
 	pPlaneObj->SetObjName(lpszName);
 	m_pDisplayContext->AddGLObj(pPlaneObj);

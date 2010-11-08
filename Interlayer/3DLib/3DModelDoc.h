@@ -25,7 +25,7 @@ public:
 		return m_pDisplayContext;
 	}
 	void ImportFile(LPCTSTR lpszFileName);
-	void AddPlane(LPCTSTR lpszFileName, LPCTSTR lpszName);
+	void AddPlane(LPCTSTR lpszFileName, LPCTSTR lpszName,CString guid);
 	void AddGridModel(LPCTSTR lpszFileName, LPCTSTR lpszName, const CStringArray &arParamName, const CStringArray &arFileName, CString guid);
 	void AddPhyParam(LPCTSTR lpszFileName, LPCTSTR lpszName);
 	void AddWellPath(HTREEITEM hItem);

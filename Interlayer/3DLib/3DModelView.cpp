@@ -338,26 +338,37 @@ void C3DModelView::OnLButtonDown(UINT nFlags, CPoint point)
 			{
 				if( pDoc->GetContext()->m_selectedMode != GLEDIT )
 				{
-					if(m_myView->GetContext()->m_listSelect->empty())
-						m_myView->Select(point.x, point.y);
-
-					std::vector<CGLObject*>::iterator listIterSel = m_myView->GetContext()->m_listSelect->begin();
-
-					C3DObject *pObj = (C3DObject *)(*listIterSel);
-					if( pObj!=NULL)
-					{
-						CVertex3D pos(pObj->GetPosX(),pObj->GetPosY(),pObj->GetPosZ());
-						CVertex3D* pVert = pObj->m_ArrayVertex.GetAt(0);
-						pos.SetX(pos.GetX()+pVert->GetX());
-						pos.SetY(pos.GetY()+pVert->GetY());
-						pos.SetZ(pos.GetZ()+pVert->GetZ());
-						m_myView->m_editAxis->SetPosition(CVector3DF(pos.x, pos.y, pos.z+2));
-						m_myView->m_editAxis->Show(true);
-						m_myView->m_editAxis->SetModified();
-					}
 					int m_edit = m_myView->ProcessEditAxisSelection(point.x, point.y, 5);
 					m_myView->m_editAxis->m_editaxis = m_edit;
 					m_myView->m_editAxis->SetModified();
+					
+					if(m_edit==-1)
+					{
+						C3DObject *pObj = NULL;
+						m_myView->GetContext()->m_listSelect->clear();
+						m_myView->Select(point.x, point.y);
+						if(!m_myView->GetContext()->m_listSelect->empty())
+						{
+							std::vector<CGLObject*>::iterator listIterSel = m_myView->GetContext()->m_listSelect->begin();
+							pObj = (C3DObject *)(*listIterSel);
+						}
+						//C3DObject *pObj = m_myView->GetContext()->Select(m_myView, point.x, point.y);
+						if( pObj!=NULL)
+						{
+							CVertex3D pos(pObj->GetPosX(),pObj->GetPosY(),pObj->GetPosZ());
+							CVertex3D* pVert = pObj->m_ArrayVertex.GetAt(0);
+							pos.SetX(pos.GetX()+pVert->GetX());
+							pos.SetY(pos.GetY()+pVert->GetY());
+							pos.SetZ(pos.GetZ()+pVert->GetZ());
+							m_myView->m_editAxis->SetPosition(CVector3DF(pos.x, pos.y, pos.z+2));
+							m_myView->m_editAxis->Show(true);
+							m_myView->m_editAxis->SetModified();
+						}
+						else
+						{
+							m_myView->m_editAxis->Show(false);
+						}
+					}
 				}
 				else
 				{
@@ -386,11 +397,11 @@ void C3DModelView::OnLButtonDown(UINT nFlags, CPoint point)
 								m_myView->m_editAxis->Show(true);
 								m_myView->m_editAxis->SetModified();
 							}
-						else
-						{
-							m_myView->m_editAxis->Show(false);
-							m_myView->m_editAxis->SetModified();
-						}
+							else
+							{
+								m_myView->m_editAxis->Show(false);
+								m_myView->m_editAxis->SetModified();
+							}
 						}
 
 					}
@@ -703,6 +714,14 @@ void C3DModelView::OnMouseMove(UINT nFlags, CPoint point)
 			CSize pan = m_lDownPnt - point;
 			m_lDownPnt = point;
 
+			C3DObject *pObj = NULL;
+			if(m_myView->GetContext()->m_listSelect->empty())
+			{
+				break;
+			}
+			std::vector<CGLObject*>::iterator listIterSel = m_myView->GetContext()->m_listSelect->begin();
+			pObj = (C3DObject *)(*listIterSel);
+
 			if(m_myView->m_editAxis->m_editaxis!=-1)
 			{
 				if(m_myView->GetContext()->m_selectedMode != GLEDIT)
@@ -744,9 +763,7 @@ void C3DModelView::OnMouseMove(UINT nFlags, CPoint point)
 				}
 				else
 				{
-					std::vector<CGLObject*>::iterator listIterSel = m_myView->GetContext()->m_listSelect->begin();
 
-					C3DObject *pObj = (C3DObject *)(*listIterSel);
 					if(pObj->m_iSelectedPoint>-1)
 					{
 						CVertex3D* pVert = pObj->m_ArrayVertex.GetAt(pObj->m_iSelectedPoint);
@@ -1385,6 +1402,8 @@ void C3DModelView::OnSelectObj()
 {
 	m_eOperate = SELECT;
 
+	m_myView->m_editAxis->Show(false);
+
 	C3DModelDoc* pDoc = GetDocument();
 	pDoc->GetContext()->m_selectedMode = GLSELECTED;	
 }
@@ -1398,6 +1417,8 @@ void C3DModelView::OnEditPoint()
 {
 	C3DModelDoc* pDoc = GetDocument();
 	
+	m_myView->m_editAxis->Show(false);
+
 	if( pDoc->GetContext()->m_selectedMode == GLEDIT)
 		pDoc->GetContext()->m_selectedMode = GLSELECTED;
 	else
@@ -1442,6 +1463,8 @@ void C3DModelView::OnMoveEye()
 	else
 		m_eOperate = NONE;
 
+	m_myView->m_editAxis->Show(false);
+
 	C3DModelDoc* pDoc = GetDocument();
 	pDoc->GetContext()->m_selectedMode = GLNOSELECTED;
 }
@@ -1456,6 +1479,8 @@ void C3DModelView::OnRotateEye()
 		m_eOperate = ROTATE;
 	else
 		m_eOperate = NONE;
+
+	m_myView->m_editAxis->Show(false);
 
 	C3DModelDoc* pDoc = GetDocument();
 	pDoc->GetContext()->m_selectedMode = GLNOSELECTED;
@@ -1472,6 +1497,8 @@ void C3DModelView::OnZoomEye()
 	else
 		m_eOperate = NONE;
 
+	m_myView->m_editAxis->Show(false);
+
 	C3DModelDoc* pDoc = GetDocument();
 	pDoc->GetContext()->m_selectedMode = GLNOSELECTED;
 }
@@ -1486,6 +1513,8 @@ void C3DModelView::OnSliceZ()
 		m_eOperate = SLICE_Z;
 	else
 		m_eOperate = NONE;
+
+	m_myView->m_editAxis->Show(false);
 
 	C3DModelDoc* pDoc = GetDocument();
 	pDoc->GetContext()->m_selectedMode = GLNOSELECTED;
@@ -1509,6 +1538,8 @@ void C3DModelView::OnSliceX()
 	else
 		m_eOperate = NONE;
 
+	m_myView->m_editAxis->Show(false);
+
 	C3DModelDoc* pDoc = GetDocument();
 	pDoc->GetContext()->m_selectedMode = GLNOSELECTED;
 
@@ -1530,6 +1561,8 @@ void C3DModelView::OnSliceY()
 	else
 		m_eOperate = NONE;
 
+	m_myView->m_editAxis->Show(false);
+
 	C3DModelDoc* pDoc = GetDocument();
 	pDoc->GetContext()->m_selectedMode = GLNOSELECTED;
 
@@ -1547,6 +1580,8 @@ void C3DModelView::OnSliceXY()
 		m_eOperate = SLICE_XY;
 	else
 		m_eOperate = NONE;
+
+	m_myView->m_editAxis->Show(false);
 
 	C3DModelDoc* pDoc = GetDocument();
 	pDoc->GetContext()->m_selectedMode = GLNOSELECTED;

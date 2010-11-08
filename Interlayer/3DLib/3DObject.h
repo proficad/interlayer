@@ -32,6 +32,7 @@ public:
 	virtual void Hilight(const GLSelectedMode&);
 	void ReversePoints();
 	void SaveSurface(const std::string& filename);
+	void SaveSurface();
 	void SaveDivideSurface( const std::string& filename, const std::string& newfilename, const CVector3D& size, int index );
 	
 	void	SetPosition(double x, double y, double z){m_Position.SetX(x); m_Position.SetY(y), m_Position.SetZ(z);}
@@ -50,6 +51,7 @@ public:
 	CArray3d<CFaceTriangles> m_ArrayFace;
 
 	CVertex3D					m_Position;
+	bool								m_first;
 
 private:
 	void DrawWired(const GLSelectedMode& dMode = GLNOSELECTED);
