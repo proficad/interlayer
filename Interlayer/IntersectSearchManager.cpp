@@ -145,14 +145,15 @@ void CIntersectSearchManager::SearchALayer( CGLObject* gird )
 	CString strFileName = m_pathname;
 	CString strNewtempFileName;
 	strNewtempFileName = strFileName + newGUID();
-	CString strNewFileName;
-	strNewFileName = strFileName + newGUID();
+	CString strNewFileName = newGUID();
 
 	C3DObject* obj3d = dynamic_cast<C3DObject*>(gird);
 	if(!obj3d)
 		return;
 	obj3d->SaveSurface(strNewtempFileName.GetString());
 	m_interlayerNames.push_back(strNewFileName.GetBuffer());
+
+	strNewFileName = strFileName + strNewFileName;
 
 	TRY 
 	{	

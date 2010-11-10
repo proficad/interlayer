@@ -2211,17 +2211,17 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 
 									{
 										CWaitCursor wait;
-										//CString strSourcePathName = pMF->GetProjectDatPath();
+										CString strSourcePathName = pMF->GetProjectDatPath();
 										CString strFileName = ((CFileViewObj*)lpNodeDat->m_pNodeDat)->m_strFileName;
-										//strSourcePathName += _T("\\models\\");
-										//strSourcePathName += strFileName;
+										strSourcePathName += _T("\\models\\");
+										strSourcePathName += strFileName;
 
 										CString strText = GetItemText(m_hitemDrag);
 
 										CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(m_hitemDrag);
 										CTreeNodeDat *lpNodeDatModel = (CTreeNodeDat *)GetItemData(GetParentItem(m_hitemDrag));
 										//CStringArray ar1, ar2;
-										pDoc->AddInterlayer(strFileName, strText,lpNodeDat->m_strGUIDName,lpNodeDatModel->m_strGUIDName);
+										pDoc->AddInterlayer(strSourcePathName, strText,lpNodeDat->m_strGUIDName,lpNodeDatModel->m_strGUIDName);
 									}
 								}
 								break;
@@ -2279,17 +2279,17 @@ void CViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 
 													{
 														CWaitCursor wait;
-														//CString strSourcePathName = pMF->GetProjectDatPath();
+														CString strSourcePathName = pMF->GetProjectDatPath();
 														CString strFileName = ((CFileViewObj*)lpNode->m_pNodeDat)->m_strFileName;
-														//strSourcePathName += _T("\\models\\");
-														//strSourcePathName += strFileName;
+														strSourcePathName += _T("\\models\\");
+														strSourcePathName += strFileName;
 
 														CString strText = GetItemText(m_hitemDrag);
 
 														CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)GetItemData(m_hitemDrag);
 														CTreeNodeDat *lpNodeDatModel = (CTreeNodeDat *)GetItemData(GetParentItem(m_hitemDrag));
 														//CStringArray ar1, ar2;
-														pDoc->AddInterlayer(strFileName, strText,lpNodeDat->m_strGUIDName,lpNodeDatModel->m_strGUIDName);
+														pDoc->AddInterlayer(strSourcePathName, strText,lpNodeDat->m_strGUIDName,lpNodeDatModel->m_strGUIDName);
 													}
 												}
 												break;

@@ -2058,7 +2058,14 @@ void C3DObject::SaveSurface()
 	if(lpNodeDat->m_strFileName2.IsEmpty())
 		return;
 
-	CFile file(lpNodeDat->m_strFileName2.GetBuffer(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
+	CString strSourcePathName = pMF->GetProjectDatPath();
+	CString strFileName1 = pMF->GetProjectDatPath();
+	strFileName1 += _T("\\models\\");
+	CString strNewtempFileName;
+	strNewtempFileName = strFileName1 + lpNodeDat->m_strFileName2;
+	//pPlaneObj->SaveSurface(strNewtempFileName.GetString());
+	//lpNodeDat->m_strFileName2 = strNewtempFileName;
+	CFile file(strNewtempFileName.GetBuffer(), CFile::modeWrite|CFile::typeBinary|CFile::modeCreate);
 	CArchive ar(&file, CArchive::store);
 	CGLObject::Serialize(ar);
 

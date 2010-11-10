@@ -219,13 +219,13 @@ void C3DModelDoc::AddPlane(LPCTSTR lpszFileName, LPCTSTR lpszName, CString guid)
 		pPlaneObj->m_strGUID = guid;
 		
 		delete pReader;
-		CString strSourcePathName = pMF->GetProjectDatPath();
-		CString strFileName1 = pMF->GetProjectDatPath();
-		strFileName1 += _T("\\models\\");
-		CString strNewtempFileName;
-		strNewtempFileName = strFileName1 + newGUID();
+		//CString strSourcePathName = pMF->GetProjectDatPath();
+		//CString strFileName1 = pMF->GetProjectDatPath();
+		//strFileName1 += _T("\\models\\");
+		//CString strNewtempFileName;
+		//strNewtempFileName = strFileName1 + newGUID();
 		//pPlaneObj->SaveSurface(strNewtempFileName.GetString());
-		lpNodeDat->m_strFileName2 = strNewtempFileName;
+		lpNodeDat->m_strFileName2 = newGUID();
 		pPlaneObj->SaveSurface();
 	}
 	else
@@ -233,7 +233,11 @@ void C3DModelDoc::AddPlane(LPCTSTR lpszFileName, LPCTSTR lpszName, CString guid)
 		pPlaneObj = new C3DObject();
 		pPlaneObj->m_strGUID = guid;
 		pPlaneObj->m_first = false;
-		CFile file(lpNodeDat->m_strFileName2.GetBuffer(), CFile::modeRead|CFile::typeBinary);
+		
+		CString strFileName1 = pMF->GetProjectDatPath();
+		strFileName1 += _T("\\models\\");
+		strFileName1 += lpNodeDat->m_strFileName2;
+		CFile file(strFileName1.GetBuffer(), CFile::modeRead|CFile::typeBinary);
 		CArchive art(&file, CArchive::load);
 		//pPlaneObj->SetGLObjType(GLPLANE);
 		pPlaneObj->SetContext(GetContext());

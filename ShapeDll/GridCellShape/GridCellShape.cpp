@@ -3,15 +3,15 @@
 #include <vcclr.h>
 using std::string;
 
-#if _DEBUG
-	#using "../../debug/EclipseGridIO.dll"
-	#using "../../debug/Track.dll"
-	#using "../../debug/RunGridCellThick.dll"
-#else
+//#if _DEBUG
+//	#using "../../debug/EclipseGridIO.dll"
+//	#using "../../debug/Track.dll"
+//	#using "../../debug/RunGridCellThick.dll"
+//#else
 	#using "../../release/EclipseGridIO.dll"
 	#using "../../release/Track.dll"
 	#using "../../release/RunGridCellThick.dll"
-#endif
+//#endif
 //#using "../../debug/octc.dll"
 //#using "../../debug/Microsoft.DirectX.dll"
 
