@@ -65,9 +65,9 @@ void CWellInfoDoc::Serialize(CArchive& ar)
 		m_arWellInfo.Add(_T("X"));
 		m_arWellInfo.Add(_T("Y"));
 		m_arWellInfo.Add(_T("补芯海拔"));
-		m_arWellInfo.Add(_T("目前井别"));
 		m_arWellInfo.Add(_T("油层顶深"));
 		m_arWellInfo.Add(_T("油层底深"));
+		m_arWellInfo.Add(_T("目前井别"));
 
 		POSITION pos = GetFirstViewPosition();
 		CWellInfoView *pView = (CWellInfoView*)GetNextView(pos);
@@ -96,10 +96,10 @@ void CWellInfoDoc::Serialize(CArchive& ar)
 		m_arWellInfo.Add(_T("X"));
 		m_arWellInfo.Add(_T("Y"));
 		m_arWellInfo.Add(_T("补芯海拔"));
-		m_arWellInfo.Add(_T("目前井别"));
 		m_arWellInfo.Add(_T("油层顶深"));
 		m_arWellInfo.Add(_T("油层底深"));
-		
+		m_arWellInfo.Add(_T("目前井别"));	
+
 		ar >> m_nRows;
 		ar >> m_nCols;		
 		long n = (m_nCols*m_nRows); 
@@ -181,8 +181,8 @@ BOOL CWellInfoDoc::OnSaveDocument(LPCTSTR lpszPathName)
 				pWellInfo->m_y = atof(m_arWellInfo[i*m_nCols + 2]);
 
 				pWellInfo->m_dElevation = atof(m_arWellInfo[i*m_nCols + 3]);
-				pWellInfo->m_dTop = atof(m_arWellInfo[i*m_nCols + 5]);
-				pWellInfo->m_dBottom = atof(m_arWellInfo[i*m_nCols + 6]);				
+				pWellInfo->m_dTop = atof(m_arWellInfo[i*m_nCols + 4]);
+				pWellInfo->m_dBottom = atof(m_arWellInfo[i*m_nCols + 5]);				
 
 				strWellType.Trim();
 				strWellType.MakeUpper();

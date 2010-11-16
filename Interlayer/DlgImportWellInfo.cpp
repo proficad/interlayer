@@ -94,9 +94,9 @@ BOOL CDlgImportWellInfo::OnInitDialog()
 		_T("X"),
 		_T("Y"),
 		_T("补芯海拔"),
-		_T("目前井别"),
 		_T("油层顶深"),
-		_T("油层底深")
+		_T("油层底深"),
+		_T("目前井别")
 	};
 	
 	// TODO: Add extra initialization here

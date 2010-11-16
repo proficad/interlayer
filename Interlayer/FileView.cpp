@@ -375,11 +375,11 @@ bool CFileView::OpenTree(CTreeNodeDat *lpNodeDat, void *lpVoid)
 				ar << str;
 				str = _T("补芯海拔");
 				ar << str;
-				str = _T("目前井别");
-				ar << str;
 				str = _T("油层顶深");
 				ar << str;
 				str = _T("油层底深");
+				ar << str;
+				str = _T("目前井别");
 				ar << str;
 
 				ar.Close();
@@ -1162,11 +1162,11 @@ void CFileView::OnNewWellDat()
 	ar << str;
 	str = _T("补芯海拔");
 	ar << str;
-	str = _T("目前井别");
-	ar << str;
 	str = _T("油层顶深");
 	ar << str;
 	str = _T("油层底深");
+	ar << str;
+	str = _T("目前井别");
 	ar << str;
 
 	ar.Close();
