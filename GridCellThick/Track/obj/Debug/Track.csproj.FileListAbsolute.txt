@@ -1,0 +1,32 @@
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Mosaic\bin\Debug\Key.xml
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Mosaic\bin\Debug\Track.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Mosaic\bin\Debug\Track.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Mosaic\bin\Debug\EclipseGridIO.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Mosaic\bin\Debug\EclipseGridIO.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Mosaic\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Mosaic\obj\Debug\Track.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Mosaic\obj\Debug\Track.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\Key.xml
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\Track.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\Track.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\EclipseGridIO.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\octc.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\EclipseGridIO.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\octc.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\obj\Debug\Track.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\obj\Debug\Track.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\Microsoft.DirectX.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Debug\Microsoft.DirectX.xml
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\Key.xml
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\Track.dll
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\Track.pdb
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\EclipseGridIO.dll
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\Microsoft.DirectX.dll
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\octc.dll
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\EclipseGridIO.pdb
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\octc.pdb
+G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\Microsoft.DirectX.xml
+G:\karas\工程\interlayer\GridCellThick\Track\obj\Debug\ResolveAssemblyReference.cache
+G:\karas\工程\interlayer\GridCellThick\Track\obj\Debug\Track.dll
+G:\karas\工程\interlayer\GridCellThick\Track\obj\Debug\Track.pdb

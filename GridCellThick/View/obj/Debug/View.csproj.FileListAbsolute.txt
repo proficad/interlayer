@@ -1,0 +1,36 @@
+D:\七厂\多学科辅助拟合与措施优选系统\View\bin\Debug\View.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\bin\Debug\View.pdb
+D:\七厂\多学科辅助拟合与措施优选系统\View\bin\Debug\Interop.CONTOUROCXLib.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\bin\Debug\AxInterop.CONTOUROCXLib.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\ResolveAssemblyReference.cache
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\Interop.CONTOUROCXLib.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\AxInterop.CONTOUROCXLib.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\View.csproj.ResolveComReference.cache
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\View.Draw.resources
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\View.csproj.GenerateResource.Cache
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\View.dll.licenses
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\View.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\View.pdb
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Debug\View.D3D.Display.resources
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Debug\View.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Debug\View.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Debug\View.D3D.Display.resources
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Debug\View.Draw.resources
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Debug\View.csproj.GenerateResource.Cache
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Debug\View.dll.licenses
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Debug\View.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Debug\View.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Debug\Infragistics2.Shared.v8.2.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Debug\Infragistics2.Win.v8.2.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Debug\Infragistics2.Shared.v8.2.xml
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Debug\Infragistics2.Win.v8.2.xml
+G:\karas\工程\interlayer\GridCellThick\View\bin\Debug\View.dll
+G:\karas\工程\interlayer\GridCellThick\View\bin\Debug\View.pdb
+G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\ResolveAssemblyReference.cache
+G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.D3D.Display.resources
+G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.Draw.resources
+G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.csproj.GenerateResource.Cache
+G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.dll.licenses
+G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.dll
+G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.pdb

@@ -1,0 +1,49 @@
+D:\七厂\多学科辅助拟合与措施优选系统\View\bin\Release\View.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\bin\Release\View.pdb
+D:\七厂\多学科辅助拟合与措施优选系统\View\bin\Release\Interop.CONTOUROCXLib.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\bin\Release\AxInterop.CONTOUROCXLib.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\ResolveAssemblyReference.cache
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\Interop.CONTOUROCXLib.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\AxInterop.CONTOUROCXLib.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\View.csproj.ResolveComReference.cache
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\View.D3D.Display.resources
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\View.Draw.resources
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\View.csproj.GenerateResource.Cache
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\View.dll.licenses
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\View.dll
+D:\七厂\多学科辅助拟合与措施优选系统\View\obj\Release\View.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Release\View.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Release\View.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Release\Infragistics2.Shared.v8.2.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Release\Infragistics2.Win.v8.2.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Release\Infragistics2.Shared.v8.2.xml
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\bin\Release\Infragistics2.Win.v8.2.xml
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.D3D.Display.resources
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.Draw.resources
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.dll.licenses
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.pdb
+D:\研究院项目\GridCellThick\View\bin\Release\View.dll
+D:\研究院项目\GridCellThick\View\bin\Release\View.pdb
+D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Shared.v8.2.dll
+D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Win.v8.2.dll
+D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Shared.v8.2.xml
+D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Win.v8.2.xml
+D:\研究院项目\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
+D:\研究院项目\GridCellThick\View\obj\Release\View.D3D.Display.resources
+D:\研究院项目\GridCellThick\View\obj\Release\View.Draw.resources
+D:\研究院项目\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
+D:\研究院项目\GridCellThick\View\obj\Release\View.dll.licenses
+D:\研究院项目\GridCellThick\View\obj\Release\View.dll
+D:\研究院项目\GridCellThick\View\obj\Release\View.pdb
+G:\karas\工程\interlayer\GridCellThick\View\bin\Release\View.dll
+G:\karas\工程\interlayer\GridCellThick\View\bin\Release\View.pdb
+G:\karas\工程\interlayer\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
+G:\karas\工程\interlayer\GridCellThick\View\obj\Release\View.D3D.Display.resources
+G:\karas\工程\interlayer\GridCellThick\View\obj\Release\View.Draw.resources
+G:\karas\工程\interlayer\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
+G:\karas\工程\interlayer\GridCellThick\View\obj\Release\View.dll.licenses
+G:\karas\工程\interlayer\GridCellThick\View\obj\Release\View.dll
+G:\karas\工程\interlayer\GridCellThick\View\obj\Release\View.pdb

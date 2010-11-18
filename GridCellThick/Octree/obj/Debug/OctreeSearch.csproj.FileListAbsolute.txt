@@ -1,0 +1,15 @@
+C:\Documents and Settings\Administrator\桌面\Build\octc.dll
+C:\Documents and Settings\Administrator\桌面\Build\octc.pdb
+C:\Documents and Settings\Administrator\桌面\Octree\Octree\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\桌面\Octree\Octree\obj\Debug\octc.dll
+C:\Documents and Settings\Administrator\桌面\Octree\Octree\obj\Debug\octc.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Octree\bin\Debug\octc.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Octree\bin\Debug\octc.pdb
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Octree\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Octree\obj\Debug\octc.dll
+C:\Documents and Settings\Administrator\桌面\GridCellThick\Octree\obj\Debug\octc.pdb
+G:\karas\工程\interlayer\GridCellThick\Octree\bin\Debug\octc.dll
+G:\karas\工程\interlayer\GridCellThick\Octree\bin\Debug\octc.pdb
+G:\karas\工程\interlayer\GridCellThick\Octree\obj\Debug\ResolveAssemblyReference.cache
+G:\karas\工程\interlayer\GridCellThick\Octree\obj\Debug\octc.dll
+G:\karas\工程\interlayer\GridCellThick\Octree\obj\Debug\octc.pdb
