@@ -15,3 +15,8 @@ G:\karas\工程\interlayer\GridCellThick\Octree\bin\Release\octc.pdb
 G:\karas\工程\interlayer\GridCellThick\Octree\obj\Release\ResolveAssemblyReference.cache
 G:\karas\工程\interlayer\GridCellThick\Octree\obj\Release\octc.dll
 G:\karas\工程\interlayer\GridCellThick\Octree\obj\Release\octc.pdb
+G:\karas\project\interlayer\GridCellThick\Octree\bin\Release\octc.dll
+G:\karas\project\interlayer\GridCellThick\Octree\bin\Release\octc.pdb
+G:\karas\project\interlayer\GridCellThick\Octree\obj\Release\ResolveAssemblyReference.cache
+G:\karas\project\interlayer\GridCellThick\Octree\obj\Release\octc.dll
+G:\karas\project\interlayer\GridCellThick\Octree\obj\Release\octc.pdb
