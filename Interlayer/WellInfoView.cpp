@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CWellInfoView, CResizableFormView)
 	ON_NOTIFY(NM_CLICK, IDC_GRID, OnGridClick)
 	ON_NOTIFY(GVN_ENDLABELEDIT, IDC_GRID, OnGridEndEdit)
 	ON_COMMAND(IDC_BTN_EXPORT, OnBtnExport)
+	ON_BN_CLICKED(IDC_BUTTON_REFRASH, &CWellInfoView::OnBnClickedButtonRefrash)
 END_MESSAGE_MAP()
 
 
@@ -350,4 +351,12 @@ void CWellInfoView::OnBtnExport()
 		file.WriteString(_T("\n"));
 	}
 	file.Close();
+}
+
+void CWellInfoView::OnBnClickedButtonRefrash()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CWellInfoDoc *pDoc = GetDocument();
+	pDoc->SetModifiedFlag(TRUE);
+	pDoc->DoFileSave();
 }

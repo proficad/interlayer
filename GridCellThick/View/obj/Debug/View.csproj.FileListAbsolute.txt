@@ -34,3 +34,5 @@ G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.csproj.GenerateReso
 G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.dll.licenses
 G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.dll
 G:\karas\工程\interlayer\GridCellThick\View\obj\Debug\View.pdb
+G:\karas\project\interlayer\GridCellThick\View\obj\Debug\ResolveAssemblyReference.cache
+G:\karas\project\interlayer\GridCellThick\View\obj\Debug\View.csproj.GenerateResource.Cache

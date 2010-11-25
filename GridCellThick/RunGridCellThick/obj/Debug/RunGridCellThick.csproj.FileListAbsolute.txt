@@ -15,3 +15,4 @@ G:\karas\工程\interlayer\GridCellThick\RunGridCellThick\bin\Debug\EclipseGridI
 G:\karas\工程\interlayer\GridCellThick\RunGridCellThick\obj\Debug\ResolveAssemblyReference.cache
 G:\karas\工程\interlayer\GridCellThick\RunGridCellThick\obj\Debug\RunGridCellThick.dll
 G:\karas\工程\interlayer\GridCellThick\RunGridCellThick\obj\Debug\RunGridCellThick.pdb
+G:\karas\project\interlayer\GridCellThick\RunGridCellThick\obj\Debug\ResolveAssemblyReference.cache

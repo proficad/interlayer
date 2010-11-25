@@ -200,6 +200,14 @@ void CWellLoggingInfoView::OnBtnAddRow()
 void CWellLoggingInfoView::OnBtnDelRow() 
 {
 	// TODO: Add your control notification handler code here
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
+	CFileView *pTreeView = pMF->GetTreeFileView();
+	CViewTree *pTree = pTreeView->GetTreeCtrl();
+	HTREEITEM hRoot = pTree->GetChildNode(TVI_ROOT, _T("单井数据"));
+	HTREEITEM hSrc = pTree->GetChildNode(hRoot, _T("测井数据"));
+	int nImage = pTree->m_nCountImages - 19;
+
 	int nRow = m_wndGrid.GetRowCount();
 	CArray<int,int> arIndex;
 	for (int i=nRow-1;i>0;i--)
@@ -209,6 +217,30 @@ void CWellLoggingInfoView::OnBtnDelRow()
 	}
 
 	nRow = arIndex.GetSize();
+
+	//pTree->DeleteAllChildItem(hSrc);
+	//pTree->DeleteAllChildItem(hSrc);
+	HTREEITEM hSon = pTree->GetChildItem(hSrc);
+
+	while(hSon)
+	{
+		CString treeText = pTree->GetItemText(hSon);
+		bool bDelete = false;
+		for(int i=0; i<arIndex.GetSize(); i++)
+		{
+			CString gridText = m_wndGrid.GetItemText(arIndex[i], 1);
+			if(gridText==treeText)
+			{
+				pTree->DeleteItem(hSon);
+				hSon =  pTree->GetChildItem(hSrc);
+				bDelete = true;
+				break;
+			}
+		}
+		if(!bDelete)
+			hSon = pTree->GetNextSiblingItem(hSon);
+	}
+
 	for ( int i= 0; i<nRow; i++)
 	{
 		m_wndGrid.DeleteRow(arIndex[i]);
@@ -222,6 +254,7 @@ void CWellLoggingInfoView::OnBtnDelRow()
 
 	CWellLoggingInfoDoc *pDoc = GetDocument();
 	pDoc->SetModifiedFlag(TRUE);
+	//pDoc->DoFileSave();
 }
 
 void CWellLoggingInfoView::OnBtnImport() 

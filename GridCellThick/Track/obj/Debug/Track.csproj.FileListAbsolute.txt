@@ -30,3 +30,15 @@ G:\karas\工程\interlayer\GridCellThick\Track\bin\Debug\Microsoft.DirectX.xml
 G:\karas\工程\interlayer\GridCellThick\Track\obj\Debug\ResolveAssemblyReference.cache
 G:\karas\工程\interlayer\GridCellThick\Track\obj\Debug\Track.dll
 G:\karas\工程\interlayer\GridCellThick\Track\obj\Debug\Track.pdb
+G:\karas\project\interlayer\GridCellThick\Track\obj\Debug\ResolveAssemblyReference.cache
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\Key.xml
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\Track.dll
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\Track.pdb
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\EclipseGridIO.dll
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\Microsoft.DirectX.dll
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\octc.dll
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\EclipseGridIO.pdb
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\octc.pdb
+G:\karas\project\interlayer\GridCellThick\Track\bin\Debug\Microsoft.DirectX.xml
+G:\karas\project\interlayer\GridCellThick\Track\obj\Debug\Track.dll
+G:\karas\project\interlayer\GridCellThick\Track\obj\Debug\Track.pdb

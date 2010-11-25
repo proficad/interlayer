@@ -52,6 +52,7 @@ public:
 	afx_msg void OnUpdateEditCopy(CCmdUI* pCmdUI);
 	afx_msg void OnEditPaste();
 	afx_msg void OnUpdateEditPaste(CCmdUI* pCmdUI);		
+	afx_msg void OnBnClickedButtonRefrash();
 };
 
 

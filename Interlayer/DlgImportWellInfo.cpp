@@ -8,6 +8,7 @@
 #include "WellInfoView.h"
 #include <map>
 #include <string>
+#include "../ShapeDll/GridCellShape/GridCellShape.h"
 // CDlgImportWellInfo 对话框
 
 IMPLEMENT_DYNAMIC(CDlgImportWellInfo, CDialog)
@@ -64,21 +65,457 @@ END_MESSAGE_MAP()
 
 
 // CDlgImportWellInfo 消息处理程序
-
-void ProsscessUTF(CString& stringLine)
+char* Utf8toAnsi( const char * utf8, int len )
 {
-	const char * tmpLine = stringLine.GetString();
+
+	char *ansistr = NULL;
+	int length = MultiByteToWideChar(CP_UTF8, 0, utf8, len, NULL, NULL );
+	WCHAR *lpszW = NULL;
+
+	lpszW = new WCHAR[length+1];
+	ansistr = ( char * ) calloc ( sizeof(char), length+5 );
+
+	//this step intended only to use WideCharToMultiByte
+	MultiByteToWideChar(CP_UTF8, 0, utf8, -1, lpszW, length );
+
+	//Conversion to ANSI (CP_ACP)
+	WideCharToMultiByte(CP_ACP, 0, lpszW, -1, ansistr, length, NULL, NULL);
+
+	ansistr[length] = 0;
+
+	delete[] lpszW;
+
+	return ansistr;
+}
+
+int fileUTF8toANSI(const CString &str1, const CString &str2)
+{
+	try
+	{
+		// open the UNICODE file
+		CFile file (str1, CFile::modeRead);
+		int iFileLen = file.GetLength ();
+		PSTR buffer = new char[iFileLen];
+		PSTR pMultiByteStr = new char[iFileLen];
+
+		//memset(pMultiByteStr, '\0', iFileLen);
+		BOOL bUsedDefaultChar;
+		file.Read (buffer, iFileLen);
+		// convert to ANSI string
+
+		CString tmp = Utf8toAnsi((buffer+3), iFileLen*2-6);
+		file.Close();
+		// create the ANSI file
+		file.Open( str2, CFile::modeCreate | CFile::modeWrite);
+
+		file.Write(tmp.GetBuffer(), tmp.GetLength());
+		file.Close();
+		delete[] buffer;
+		delete[] pMultiByteStr;
+	}
+	catch (CFileException* e)
+	{
+		TCHAR szCause[255];
+		e->GetErrorMessage(szCause, 255);
+		AfxMessageBox(szCause);
+		e->ReportError ();
+		e->Delete ();
+	}
+	return 0;
+}
+int fileUNICODEtoANSI(const CString &str1, const CString &str2)
+{
+	try
+	{
+		// open the UNICODE file
+		CFile file (str1, CFile::modeRead);
+		int iFileLen = file.GetLength ();
+		PSTR buffer = new char[iFileLen];
+		PSTR pMultiByteStr = new char[iFileLen];
+
+		memset(pMultiByteStr, '\0', iFileLen);
+		BOOL bUsedDefaultChar;
+		file.Read (buffer, iFileLen);
+		// convert to ANSI string
+		
+		WideCharToMultiByte(CP_ACP, 0, (LPCWSTR) (buffer+2), -1, pMultiByteStr, iFileLen, NULL, &bUsedDefaultChar);
+		file.Close();
+		// create the ANSI file
+		file.Open( str2, CFile::modeCreate | CFile::modeWrite);
+		int index =0;
+		while(pMultiByteStr[index]!='?'&&pMultiByteStr[index]!='\0')
+		{
+			index++;
+		}
+		file.Write(pMultiByteStr, index);
+		file.Close();
+		delete[] buffer;
+		delete[] pMultiByteStr;
+	}
+	catch (CFileException* e)
+	{
+		TCHAR szCause[255];
+		e->GetErrorMessage(szCause, 255);
+		AfxMessageBox(szCause);
+		e->ReportError ();
+		e->Delete ();
+	}
+	return 0;
+}  
+
+class CStdioFileEx: public CStdioFile
+{
+public:
+	CStdioFileEx();
+	CStdioFileEx( LPCTSTR lpszFileName, UINT nOpenFlags );
+
+	virtual BOOL Open( LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pError = NULL );
+	virtual BOOL ReadString(CString& rString);
+	BOOL ReadWideString(CStringW& rString);
+	BOOL ReadAnsiString(CStringA& rString);
+	virtual void WriteString(LPCTSTR lpsz);
+	void WriteWideString(LPCWSTR lpsz);
+	void WriteAnsiString(LPCSTR lpsz);
+	bool IsUnicodeFormat() {return m_bIsUnicodeText;}
+	unsigned long GetCharCount();
+
+	// Additional flag to allow Unicode text format writing
+	enum {modeWriteUnicode = 0x100000};
+
+	static bool IsFileUnicode(const CString& sFilePath);
+	static bool IsFileUTF8code(const CString& sFilePath);
+
+protected:
+	UINT PreprocessFlags(const CString& sFilePath, UINT& nOpenFlags);
+
+	bool    m_bIsUnicodeText;
+};
+#define UNICODE_BOM        0xFEFF//Unicode "byte order mark" which goes at start of file
+
+CStdioFileEx::CStdioFileEx(): CStdioFile()
+{
+	m_bIsUnicodeText = false;
+}
+
+CStdioFileEx::CStdioFileEx(LPCTSTR lpszFileName,UINT nOpenFlags)
+:CStdioFile(lpszFileName, PreprocessFlags(lpszFileName, nOpenFlags))
+{
+}
+
+BOOL CStdioFileEx::Open(LPCTSTR lpszFileName,UINT nOpenFlags,CFileException* pError /*=NULL*/)
+{
+	PreprocessFlags(lpszFileName, nOpenFlags);
+
+	return CStdioFile::Open(lpszFileName, nOpenFlags, pError);
+}
+
+BOOL CStdioFileEx::ReadString(CString& rString)
+{
+#ifdef _UNICODE
+	return ReadWideString(rString);
+#else
+	return ReadAnsiString(rString);
+#endif
+}
+
+BOOL CStdioFileEx::ReadWideString(CStringW& rString)
+{
+	_ASSERTE(m_pStream);
+	rString = L"";      // empty string without deallocating
+
+	if(m_bIsUnicodeText)
+	{
+		// If at position 0, discard byte-order mark before reading
+		if(GetPosition() == 0)
+		{
+			wchar_t bom;
+			Read(&bom, sizeof(wchar_t));
+		}
+		const int nMaxSize = 128;
+		LPWSTR lpsz = rString.GetBuffer(nMaxSize);
+		LPWSTR lpszResult;
+		int nLen = 0;
+		for (;;)
+		{
+			lpszResult = fgetws(lpsz, nMaxSize+1, m_pStream);
+			rString.ReleaseBuffer();
+
+			// handle error/eof case
+			if (lpszResult == NULL && !feof(m_pStream))
+			{
+				Afx_clearerr_s(m_pStream);
+				AfxThrowFileException(CFileException::genericException, _doserrno,
+					m_strFileName);
+			}
+
+			// if string is read completely or EOF
+			if (lpszResult == NULL ||
+				(nLen = (int)lstrlenW(lpsz)) < nMaxSize ||
+				lpsz[nLen-1] == '\n')
+				break;
+
+			nLen = rString.GetLength();
+			lpsz = rString.GetBuffer(nMaxSize + nLen) + nLen;
+		}
+		//remove crlf if exist.
+		nLen = rString.GetLength();
+		if (nLen > 1 && rString.Mid(nLen-2) == L"\r\n")
+		{
+			rString.GetBufferSetLength(nLen-2);
+		}
+		return rString.GetLength() > 0;
+	}
+	else
+	{
+		CStringA ansiString;
+		BOOL bRetval = ReadAnsiString(ansiString);
+		//setlocale(LC_ALL, "chs_chn.936");//no need
+		rString = ansiString;
+		return bRetval;
+	}
+}
+
+BOOL CStdioFileEx::ReadAnsiString(CStringA& rString)
+{
+	_ASSERTE(m_pStream);
+	rString = "";      // empty string without deallocating
+
+	if(!m_bIsUnicodeText)
+	{
+		const int nMaxSize = 128;
+		LPSTR lpsz = rString.GetBuffer(nMaxSize);
+		LPSTR lpszResult;
+		int nLen = 0;
+		for (;;)
+		{
+			lpszResult = fgets(lpsz, nMaxSize+1, m_pStream);
+			rString.ReleaseBuffer();
+
+			// handle error/eof case
+			if (lpszResult == NULL && !feof(m_pStream))
+			{
+				Afx_clearerr_s(m_pStream);
+				AfxThrowFileException(CFileException::genericException, _doserrno,
+					m_strFileName);
+			}
+
+			// if string is read completely or EOF
+			if (lpszResult == NULL ||
+				(nLen = (int)lstrlenA(lpsz)) < nMaxSize ||
+				lpsz[nLen-1] == '\n')
+				break;
+
+			nLen = rString.GetLength();
+			lpsz = rString.GetBuffer(nMaxSize + nLen) + nLen;
+		}
+		//remove crlf if exist.
+		nLen = rString.GetLength();
+		if (nLen > 1 && rString.Mid(nLen-2) == "\r\n")
+		{
+			rString.GetBufferSetLength(nLen-2);
+		}
+		return rString.GetLength() > 0;
+	}
+	else
+	{
+		CStringW wideString;
+		BOOL bRetval = ReadWideString(wideString);
+		//setlocale(LC_ALL, "chs_chn.936");//no need
+		rString = wideString;
+		return bRetval;
+	}
+}
+
+// Purpose:    Writes string to file either in Unicode or multibyte, depending on whether the caller specified the
+//       CStdioFileEx::modeWriteUnicode flag. Override of base class function.
+void CStdioFileEx::WriteString(LPCTSTR lpsz)
+{
+#ifdef _UNICODE
+	WriteWideString(lpsz);
+#else
+	WriteAnsiString(lpsz);
+#endif
+}
+
+void CStdioFileEx::WriteWideString(LPCWSTR lpsz)
+{
+	ASSERT(lpsz != NULL);
+
+	if (lpsz == NULL)
+	{
+		AfxThrowInvalidArgException();
+	}
+	if(m_bIsUnicodeText)
+	{
+		ASSERT(m_pStream != NULL);
+		// If writing Unicode and at the start of the file, need to write byte mark
+		if(GetPosition() == 0)
+		{
+			wchar_t cBOM = (wchar_t)UNICODE_BOM;
+			CFile::Write(&cBOM, sizeof(wchar_t));
+		}
+		if (fputws(lpsz, m_pStream) == _TEOF)
+			AfxThrowFileException(CFileException::diskFull, _doserrno, m_strFileName);
+	}
+	else
+	{
+		USES_CONVERSION;
+		WriteAnsiString(CW2A(lpsz));
+	}
+}
+
+void CStdioFileEx::WriteAnsiString(LPCSTR lpsz)
+{
+	ASSERT(lpsz != NULL);
+
+	if (lpsz == NULL)
+	{
+		AfxThrowInvalidArgException();
+	}
+	if(!m_bIsUnicodeText)
+	{
+		ASSERT(m_pStream != NULL);
+		if (fputs(lpsz, m_pStream) == _TEOF)
+			AfxThrowFileException(CFileException::diskFull, _doserrno, m_strFileName);
+	}
+	else
+	{
+		USES_CONVERSION;
+		WriteWideString(CA2W(lpsz));
+	}
+}
+
+
+UINT CStdioFileEx::PreprocessFlags(const CString& sFilePath, UINT& nOpenFlags)
+{
+	m_bIsUnicodeText = false;
+
+	// If we have writeUnicode we must have write or writeRead as well
+	if (nOpenFlags & CStdioFileEx::modeWriteUnicode)
+	{
+		ASSERT(nOpenFlags & CFile::modeWrite || nOpenFlags & CFile::modeReadWrite);
+		m_bIsUnicodeText = true;
+	}
+	// If reading in text mode and not creating...
+	else if (nOpenFlags & CFile::typeText && !(nOpenFlags & CFile::modeCreate) && !(nOpenFlags & CFile::modeWrite ))
+	{
+		m_bIsUnicodeText = IsFileUnicode(sFilePath);
+	}
+
+	//如果要读写Unicode格式的文本文件, 必须切换到typeBinary方式, 因为这会影响fputws/fgetws的工作方式(具体情况参考MSDN)。
+	if (m_bIsUnicodeText)
+	{
+		nOpenFlags &= ~(CFile::typeText);
+		nOpenFlags |= CFile::typeBinary;
+	}
+
+	return nOpenFlags;
+}
+
+// Purpose:    Determines whether a file is Unicode by reading the first character and detecting
+//       whether it's the Unicode byte marker.
+bool CStdioFileEx::IsFileUnicode(const CString& sFilePath)
+{
+	CStdioFile      file;
+	wchar_t     cFirstChar;
+	CFileException exFile;
+
+	bool      bIsUnicode = false;
+	// Open file in binary mode and read first character
+	if (file.Open(sFilePath, CFile::typeBinary | CFile::modeRead, &exFile))
+	{
+		// If byte is Unicode byte-order marker, let's say it's Unicode
+		//if (file.Read(&cFirstChar, sizeof(wchar_t)) > 0 && cFirstChar == (wchar_t)UNICODE_BOM)
+		if (file.Read(&cFirstChar, sizeof(wchar_t)) > 0 && cFirstChar == (wchar_t)UNICODE_BOM)
+		{
+			bIsUnicode = true;
+		}
+
+		file.Close();
+	}
+	else
+	{
+		// Handle error here if you like
+	}
+
+	return bIsUnicode;
+}
+
+
+unsigned long CStdioFileEx::GetCharCount()
+{
+	int      nCharSize;
+	unsigned long nByteCount, nCharCount = 0;
+
+	if (m_pStream)
+	{
+		// Get size of chars in file
+		nCharSize = m_bIsUnicodeText ? sizeof(wchar_t): sizeof(char);
+
+		// If Unicode, remove byte order mark from count
+		nByteCount = (unsigned long)GetLength();
+
+		if (m_bIsUnicodeText)
+		{
+			nByteCount = nByteCount - sizeof(wchar_t);
+		}
+
+		// Calc chars
+		nCharCount = (nByteCount / nCharSize);
+	}
+
+	return nCharCount;
+}
+
+bool CStdioFileEx::IsFileUTF8code( const CString& sFilePath )
+{
+	CStdioFile      file;
+	CString			 strTmp;
+	CFileException exFile;
+
+	bool      bIsUnicode = false;
+	// Open file in binary mode and read first character
+	if (file.Open(sFilePath, CFile::typeBinary | CFile::modeRead, &exFile))
+	{
+		// If byte is Unicode byte-order marker, let's say it's Unicode
+		file.ReadString(strTmp);
+		char * tmpLine = strTmp.GetBuffer();
+		if(((char)0xEF==tmpLine[0])&&((char)0xBB==tmpLine[1])&&((char)0xBF==tmpLine[2]))
+			bIsUnicode = true;
+		file.Close();
+	}
+	else
+	{
+		// Handle error here if you like
+	}
+
+	return bIsUnicode;
+}
+
+
+bool ProsscessUTF(CString& stringLine)
+{
+	char * tmpLine = stringLine.GetBuffer();
 	//UTF-16 的BOM 头 0xFF, 0xFE
 	//UTF-8   的BOM 头 0xEF, 0xBB, 0xBF
 	ASSERT(stringLine.GetLength()>=3);
 	if( ((char)0xFF==tmpLine[0])&&((char)0xFE==tmpLine[1]) )
 	{
 		stringLine.Delete(0,2);
+		//stringLine = UTF8toASCII(stringLine.GetBuffer()).c_str();
+		return false;
 	}
 	if(((char)0xEF==tmpLine[0])&&((char)0xBB==tmpLine[1])&&((char)0xBF==tmpLine[2]))
 	{
 		stringLine.Delete(0,3);
+		//stringLine = UTF16toASCII(stringLine.GetBuffer()).c_str();
+		//char *rel  = new char[stringLine.GetLength()+1];
+		//WideString ws(stringLine.GetBuffer(), stringLine.GetLength()+1);
+		//ws.toUTF8String(rel);
+		//stringLine = rel;
+		return true;
 	}
+	return false;
 }
 
 BOOL CDlgImportWellInfo::OnInitDialog()
@@ -206,16 +643,29 @@ void CDlgImportWellInfo::OnBnClickedBtnFile()
 	UpdateData(FALSE);
 	if( m_iFileType == 0)
 	{
+		CStdioFileEx cfex;
+		if(cfex.IsFileUnicode(m_strLoadFileName))
+		{
+			fileUNICODEtoANSI(m_strLoadFileName, m_strLoadFileName);
+		}
+		if(cfex.IsFileUTF8code(m_strLoadFileName))
+		{
+			fileUTF8toANSI(m_strLoadFileName, m_strLoadFileName);
+		}
 		CStdioFile file;
 		if( file.Open(m_strLoadFileName, CFile::modeRead | CFile::typeText))
 		{
 			CString strTmp;
 			int i = 0;
+			bool bUTF8;
 			while( file.ReadString(strTmp) )
 			{
 				if(0==i)
 				{
-					ProsscessUTF(strTmp);
+					bUTF8 = ProsscessUTF(strTmp);
+					//char * tmp = new char[strTmp.GetLength()+1];
+					//UnicodeToAnsi((LPCWSTR)(strTmp.GetBuffer()),(LPSTR*)&tmp);
+					//strTmp = tmp;
 				}
 				strTmp.Replace(char(9),char(32));
 				int spaceIndex = strTmp.Find("  ");
@@ -225,6 +675,16 @@ void CDlgImportWellInfo::OnBnClickedBtnFile()
 					spaceIndex = strTmp.Find("  ");
 				}
 				strTmp.Replace(char(32),char(9));
+				if(bUTF8)
+				{
+					strTmp = Utf8toAnsi(strTmp.GetBuffer(), strTmp.GetLength());
+				}
+				//if(bUnicode)
+				//{
+				//	LPSTR tmp;
+				//	UnicodeToAnsi((LPCOLESTR)strTmp.GetBuffer(), &tmp);
+				//	strTmp = tmp;
+				//}
 				m_strText += strTmp;
 				m_strText += "\r\n";				
 				i++;
@@ -233,7 +693,6 @@ void CDlgImportWellInfo::OnBnClickedBtnFile()
 			}
 			
 			file.Close();
-
 			UpdateData(FALSE);
 		}
 	}
@@ -614,16 +1073,31 @@ void CDlgImportWellInfo::Init()
 			else
 				GetDlgItem(IDC_EDIT_CH)->EnableWindow(FALSE);
 
-			CStdioFile file;
-			if( file.Open(strFileName, CFile::modeRead | CFile::typeText))
+			
+			CStdioFileEx cfex;
+			if(cfex.IsFileUnicode(strFileName))
 			{
+				fileUNICODEtoANSI(strFileName, strFileName);
+			}
+			if(cfex.IsFileUTF8code(m_strLoadFileName))
+			{
+				fileUTF8toANSI(m_strLoadFileName, m_strLoadFileName);
+			}
+			CStdioFile file;
+			if( file.Open(strFileName, CFile::modeRead | CFile::typeText ))
+			{
+				
 				CString strTmp;
 				int i = 0;
+				bool bUTF8;
 				while( file.ReadString(strTmp) )
 				{
 					if(0==i)
 					{
-						ProsscessUTF(strTmp);
+						bUTF8 = ProsscessUTF(strTmp);
+						//char * tmp = new char[strTmp.GetLength()+1];
+						//UnicodeToAnsi((LPCWSTR)(strTmp.GetBuffer()),(LPSTR*)&tmp);
+						//strTmp = tmp;
 					}
 					//把空格和tab替换为tab
 					strTmp.Replace(char(9),char(32));
@@ -634,6 +1108,16 @@ void CDlgImportWellInfo::Init()
 						spaceIndex = strTmp.Find("  ");
 					}
 					strTmp.Replace((char)32,(char)9);
+					if(bUTF8)
+					{
+						strTmp = Utf8toAnsi(strTmp.GetBuffer(), strTmp.GetLength());
+					}
+					//if(bUnicode)
+					//{
+					//	LPSTR tmp;
+					//	UnicodeToAnsi((LPCOLESTR)strTmp.GetBuffer(), &tmp);
+					//	strTmp = tmp;
+					//}
 					m_strText += strTmp;
 					m_strText += "\r\n";
 					i++;
@@ -717,6 +1201,8 @@ void CDlgImportWellInfo::OnBnClickedOk()
 				m_pView->m_wndGrid.DeleteRow(i);
 			}
 			m_pView->m_wndGrid.Invalidate();
+			m_pView->GetDocument()->SetModifiedFlag(TRUE);
+			m_pView->GetDocument()->DoFileSave();
 		}
 		if( m_iFileType == 3 ) // 从Access数据库中加载
 		{
@@ -1035,7 +1521,12 @@ void CDlgImportWellInfo::OnBnClickedOk()
 		{
 			std::map<std::string, int> fieldIndex;
 			std::map<std::string, int>::const_iterator iIter;
-
+			
+			//CStdioFileEx cfex;
+			//if(cfex.IsFileUnicode(m_strLoadFileName))
+			//{
+			//	fileUNICODEtoANSI(m_strLoadFileName, m_strLoadFileName);
+			//}
 			CCSVFile txtFile(m_strLoadFileName);
 			if( m_bHeader )
 			{
@@ -1062,6 +1553,7 @@ void CDlgImportWellInfo::OnBnClickedOk()
 					CString strTmp = m_wndGridFields.GetItemText(i,2);
 					strTmp.TrimLeft();
 					strTmp.TrimRight();
+					
 					if( strTmp.IsEmpty() )
 						indexs.Add(-1);
 					else

@@ -107,7 +107,8 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
-			CharacterSet="2"
+			UseOfATL="0"
+			CharacterSet="0"
 			ManagedExtensions="0"
 			WholeProgramOptimization="1"
 			>

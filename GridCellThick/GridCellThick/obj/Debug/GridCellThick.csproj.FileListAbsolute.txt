@@ -37,3 +37,5 @@ G:\karas\工程\interlayer\GridCellThick\GridCellThick\obj\Debug\GridCellThick.G
 G:\karas\工程\interlayer\GridCellThick\GridCellThick\obj\Debug\GridCellThick.Properties.Resources.resources
 G:\karas\工程\interlayer\GridCellThick\GridCellThick\obj\Debug\GridCellThick.TrackingBar.resources
 G:\karas\工程\interlayer\GridCellThick\GridCellThick\obj\Debug\GridCellThick.csproj.GenerateResource.Cache
+G:\karas\project\interlayer\GridCellThick\GridCellThick\obj\Debug\ResolveAssemblyReference.cache
+G:\karas\project\interlayer\GridCellThick\GridCellThick\obj\Debug\GridCellThick.csproj.GenerateResource.Cache

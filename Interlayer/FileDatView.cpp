@@ -5,7 +5,7 @@
 #include "Interlayer.h"
 #include "FileDatView.h"
 #include "FileDatDoc.h"
-
+#include "MainFrm.h"
 // CFileDatView
 
 IMPLEMENT_DYNCREATE(CFileDatView, CResizableFormView)
@@ -238,6 +238,7 @@ void CFileDatView::OnBtnDelRow()
 
 	CFileDatDoc *pDoc = GetDocument();
 	pDoc->SetModifiedFlag(TRUE);
+	pDoc->DoFileSave();
 }
 
 void CFileDatView::OnBtnImport() 

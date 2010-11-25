@@ -62,5 +62,13 @@ namespace EclipseGridIO
                 return false;
             }
         }
+        public string ConvertUTF8toASCII(string text)
+        {
+            return System.Text.Encoding.ASCII.GetString(Encoding.UTF8.GetBytes(text));
+        }
+        public string ConvertUTF16toASCII(string text)
+        {
+            return System.Text.Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
+        }
     }
 }

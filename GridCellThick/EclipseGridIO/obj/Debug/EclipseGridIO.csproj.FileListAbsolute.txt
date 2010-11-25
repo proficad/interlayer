@@ -10,3 +10,9 @@ G:\karas\工程\interlayer\GridCellThick\EclipseGridIO\bin\Debug\EclipseGridIO.p
 G:\karas\工程\interlayer\GridCellThick\EclipseGridIO\obj\Debug\ResolveAssemblyReference.cache
 G:\karas\工程\interlayer\GridCellThick\EclipseGridIO\obj\Debug\EclipseGridIO.dll
 G:\karas\工程\interlayer\GridCellThick\EclipseGridIO\obj\Debug\EclipseGridIO.pdb
+G:\karas\project\interlayer\GridCellThick\EclipseGridIO\obj\Debug\ResolveAssemblyReference.cache
+G:\karas\project\interlayer\GridCellThick\EclipseGridIO\bin\Debug\Key.xml
+G:\karas\project\interlayer\GridCellThick\EclipseGridIO\bin\Debug\EclipseGridIO.dll
+G:\karas\project\interlayer\GridCellThick\EclipseGridIO\bin\Debug\EclipseGridIO.pdb
+G:\karas\project\interlayer\GridCellThick\EclipseGridIO\obj\Debug\EclipseGridIO.dll
+G:\karas\project\interlayer\GridCellThick\EclipseGridIO\obj\Debug\EclipseGridIO.pdb

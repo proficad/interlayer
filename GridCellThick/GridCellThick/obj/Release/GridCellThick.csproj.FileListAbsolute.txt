@@ -56,3 +56,5 @@ G:\karas\工程\interlayer\GridCellThick\GridCellThick\obj\Release\GridCellThick
 G:\karas\工程\interlayer\GridCellThick\GridCellThick\obj\Release\GridCellThick.csproj.GenerateResource.Cache
 G:\karas\工程\interlayer\GridCellThick\GridCellThick\obj\Release\GridCellThick.exe
 G:\karas\工程\interlayer\GridCellThick\GridCellThick\obj\Release\GridCellThick.pdb
+G:\karas\project\interlayer\GridCellThick\GridCellThick\obj\Release\ResolveAssemblyReference.cache
+G:\karas\project\interlayer\GridCellThick\GridCellThick\obj\Release\GridCellThick.csproj.GenerateResource.Cache

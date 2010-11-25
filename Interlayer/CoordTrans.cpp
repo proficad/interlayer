@@ -317,7 +317,13 @@ bool CCoordConverter::Prepare()
 ///ÐÂ×ø±ê×ª»»Æ÷
 CCoordConverterNew::CCoordConverterNew( void )
 {
-
+	for(int i=0; i<6; i++)
+	{
+		m_ground2screen[i] = 0;
+		m_screen2ground[i] = 0;
+	}
+	m_ground2screen[0] = 1;
+	m_screen2ground[3] = 1;
 }
 
 CCoordConverterNew::CCoordConverterNew(double *screen2ground, double *ground2screen )

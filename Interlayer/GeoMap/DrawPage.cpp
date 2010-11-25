@@ -40,11 +40,15 @@ CDrawPage::CDrawPage()
 	m_ptCoordOrig.x		= 0;
 	m_ptCoordOrig.x		= 0;
 	m_ptCoordOrig.m_dValue	= 0;
-	for(int i=0; i<6; i++)
+	for(int i=1; i<6; i++)
 	{
 		m_ground2screen[i] = 0;
 		m_screen2ground[i] = 0;
 	}
+	m_ground2screen[0] = 1;
+	m_ground2screen[3] = 1;
+	m_screen2ground[0] = 1;
+	m_screen2ground[3] = 1;
 	m_bParameter		= FALSE;
 }
 
@@ -72,11 +76,15 @@ CDrawPage::CDrawPage(CGeoMapDoc* pDocument)
 	m_ptCoordOrig.x		= 0;
 	m_ptCoordOrig.x		= 0;
 	m_ptCoordOrig.m_dValue	= 0;
-	for(int i=0; i<6; i++)
+	for(int i=1; i<6; i++)
 	{
 		m_ground2screen[i] = 0;
 		m_screen2ground[i] = 0;
 	}
+	m_ground2screen[0] = 1;
+	m_ground2screen[3] = 1;
+	m_screen2ground[0] = 1;
+	m_screen2ground[3] = 1;
 	m_bParameter		= FALSE;
 }
 

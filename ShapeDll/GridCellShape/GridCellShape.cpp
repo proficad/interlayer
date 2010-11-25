@@ -1,6 +1,7 @@
 #include <string>
 #include <Windows.h>
 #include <vcclr.h>
+#include <assert.h>
 using std::string;
 
 //#if _DEBUG

@@ -213,6 +213,7 @@ void CWellPathView::OnBtnDelRow()
 
 	CWellPathDoc *pDoc = GetDocument();
 	pDoc->SetModifiedFlag(TRUE);
+	pDoc->DoFileSave();
 }
 
 void CWellPathView::OnBtnImport() 

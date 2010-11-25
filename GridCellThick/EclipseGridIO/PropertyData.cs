@@ -9,6 +9,7 @@ namespace EclipseGridIO
     /// <summary>
     /// 属性数据
     /// </summary>
+    
     public class PropertyData
     {
         #region 变量声明
