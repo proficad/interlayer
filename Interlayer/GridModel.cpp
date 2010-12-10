@@ -1209,7 +1209,7 @@ void GridModel::CGridModel::FillGridCells()
 				}				
 
 				cell.CalcNormals();
-				cell.m_bIsGridRefinement = false;
+				cell.m_bIsGridRefinement = FALSE;
 				//m_gridCells->m_gridCells[i][j][k]._x = i;
 				//m_gridCells->m_gridCells[i][j][k]._y = j;
 				//m_gridCells->m_gridCells[i][j][k]._z = k;
@@ -1223,16 +1223,17 @@ void GridModel::CGridModel::FillGridCells()
 	int size = 0;
 	if(m_gridRedine.size()==0)
 		StatusSetProgress(1, 100);
+
 	for(vector<GridRefinement>::iterator it=m_gridRedine.begin(); it!=m_gridRedine.end(); ++it)
 	{
 		StatusSetProgress(1, 90+(size++)*10/m_gridRedine.size());
 		GridRefinement gr = (*it);
 	
-		for(int index_x=gr.m_X1;  index_x<=gr.m_X2;  index_x++)
+		for(int index_x=gr.m_X1-1;  index_x<=gr.m_X2-1;  index_x++)
 		{
-			for(int  index_y=gr.m_Y1;  index_y<=gr.m_Y2;  index_y++)
+			for(int  index_y=gr.m_Y1-1;  index_y<=gr.m_Y2-1;  index_y++)
 			{
-				for(int  index_z=gr.m_Z1;  index_z<=gr.m_Z2;  index_z++)
+				for(int  index_z=gr.m_Z1-1;  index_z<=gr.m_Z2-1;  index_z++)
 				{
 					//if(gr.m_DX!=0||gr.m_DY!=0||gr.m_DZ!=0)
 					{
@@ -1243,6 +1244,8 @@ void GridModel::CGridModel::FillGridCells()
 						int xxx = gr.m_DY/(gr.m_Y2-gr.m_Y1+1);
 
 						int size =  m_gridCells->m_gridCells[index_x][index_y][index_z]._x * m_gridCells->m_gridCells[index_x][index_y][index_z]._y * m_gridCells->m_gridCells[index_x][index_y][index_z]._z;
+						
+						m_gridCells->m_gridCells[index_x][index_y][index_z].m_bIsGridRefinement =true;
 
 						float XLength_1_0 = ( m_gridCells->m_gridCells[index_x][index_y][index_z].m_cornerPoint[1].x -  m_gridCells->m_gridCells[index_x][index_y][index_z].m_cornerPoint[0].x) /  m_gridCells->m_gridCells[index_x][index_y][index_z]._x;
 						float XLength_5_4 = ( m_gridCells->m_gridCells[index_x][index_y][index_z].m_cornerPoint[2].x -  m_gridCells->m_gridCells[index_x][index_y][index_z].m_cornerPoint[3].x) /  m_gridCells->m_gridCells[index_x][index_y][index_z]._x;
@@ -1262,6 +1265,7 @@ void GridModel::CGridModel::FillGridCells()
 						for (int i = 0; i < size; i++)
 						{
 							tagGridModelCellNew subcell;
+							subcell.m_bIsGridRefinement = False;
 							int x = (i % ( m_gridCells->m_gridCells[index_x][index_y][index_z]._x *  m_gridCells->m_gridCells[index_x][index_y][index_z]._y) %  m_gridCells->m_gridCells[index_x][index_y][index_z]._x);
 							int y = (i % ( m_gridCells->m_gridCells[index_x][index_y][index_z]._x *  m_gridCells->m_gridCells[index_x][index_y][index_z]._y) /  m_gridCells->m_gridCells[index_x][index_y][index_z]._x) - m_gridCells->m_gridCells[index_x][index_y][index_z]._y;
 							int z = i / ( m_gridCells->m_gridCells[index_x][index_y][index_z]._x *  m_gridCells->m_gridCells[index_x][index_y][index_z]._y) - m_gridCells->m_gridCells[index_x][index_y][index_z]._z;

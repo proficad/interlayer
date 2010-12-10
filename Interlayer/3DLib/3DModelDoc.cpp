@@ -626,6 +626,7 @@ void C3DModelDoc::AddWellPath(HTREEITEM hItem)
 				strMQJB = pInfo->m_strWellType;
 				if( strMQJB == _T("²ÉÓÍ¾®")
 					|| strMQJB == _T("O")
+					|| strMQJB == _T("o")
 					|| strMQJB == _T("11"))
 				{
 					pPipe->SetColor(255,0,0);

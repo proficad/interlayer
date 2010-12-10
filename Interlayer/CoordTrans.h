@@ -49,8 +49,8 @@ public:
 	CPoint2D Ground2Screen(const CPoint2D& ground);
 	CPoint2D Screen2Ground(const CPoint2D& screen);
 
-	double GetG2SParameter(int index) { return m_ground2screen[index]; }
-	double GetS2GParameter(int index) { return m_screen2ground[index]; }
+	double GetG2SParameter(int index) { return m_ground2screen[index]; }		//获得第n个参数 ground大地 到 screen屏幕
+	double GetS2GParameter(int index) { return m_screen2ground[index]; }		//获得第n个参数 screen屏幕 到 ground大地
 protected:
 	void hdai(double a[][6],double *b, double *m_bhcsh);//回代求解 
 	void lzyxq(double a[][6],double *b);//高斯变换

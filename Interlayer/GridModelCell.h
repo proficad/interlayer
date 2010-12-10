@@ -205,11 +205,7 @@ public:
 			m_cornerPoint[i].Serialize(ar);
 		for (int i = 0; i <6; i++)
 			m_faceNormals[i].Serialize(ar);
-		for(vector<tagGridModelCellNew>::iterator it=m_subCells.begin(); it!=m_subCells.end(); ++it)
-		{
-			tagGridModelCellNew cell = (*it);
-			cell.Serialize(ar);
-		}
+
 		if (ar.IsStoring())
 		{
 			ar << m_bIsGridRefinement;
@@ -219,6 +215,16 @@ public:
 			for(int i=0; i<8; i++)
 			{
 				ar << m_itsColor[i];
+			}
+			int size = m_subCells.size();
+			ar << size;
+			if(m_bIsGridRefinement)
+			{
+				for(vector<tagGridModelCellNew>::iterator it=m_subCells.begin(); it!=m_subCells.end(); ++it)
+				{
+					tagGridModelCellNew cell = (*it);
+					cell.Serialize(ar);
+				}
 			}
 		}
 		else
@@ -230,6 +236,17 @@ public:
 			for(int i=0; i<8; i++)
 			{
 				ar >>m_itsColor[i];
+			}
+			int size;
+			ar >> size;
+			if(m_bIsGridRefinement)
+			{
+				for(int i=0; i<size; i++)
+				{
+					tagGridModelCellNew cell;
+					cell.Serialize(ar);
+					m_subCells.push_back(cell);
+				}
 			}
 		}
 	}

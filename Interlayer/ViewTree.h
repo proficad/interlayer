@@ -75,9 +75,9 @@ public:
 
 	CString m_strFileName;	// 文件名
 
-	CString m_strFileName2;	//第二文件名
+	CString m_strFileName2;	///第二文件名,用于曲面文件，第一文件名保存顶底曲线和法线，第二曲面保存插值得到的曲面三角形网格顶点索引
 
-	CString m_strGUIDName;
+	CString m_strGUIDName;	///保存一个GUID字符串，用于查找树
 
 	CObject *m_pNodeDat;	// 结点数据
 
