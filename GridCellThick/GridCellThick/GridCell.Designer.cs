@@ -41,8 +41,6 @@
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -116,8 +114,6 @@
             this.toolStripButton3,
             this.toolStripButton4,
             this.toolStripSeparator4,
-            this.toolStripButton5,
-            this.toolStripSeparator5,
             this.toolStripLabel1,
             this.toolStripComboBox1,
             this.toolStripSeparator6,
@@ -131,7 +127,7 @@
             this.toolStrip1.Margin = new System.Windows.Forms.Padding(5);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(592, 30);
+            this.toolStrip1.Size = new System.Drawing.Size(547, 30);
             this.toolStrip1.TabIndex = 0;
             // 
             // toolStripSeparator1
@@ -160,7 +156,7 @@
             this.toolStripButton6.Margin = new System.Windows.Forms.Padding(5);
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(23, 20);
-            this.toolStripButton6.Text = "刷新";
+            this.toolStripButton6.Text = "拖拽";
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // toolStripButton7
@@ -206,25 +202,10 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 30);
             // 
-            // toolStripButton5
-            // 
-            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Margin = new System.Windows.Forms.Padding(5);
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(23, 20);
-            this.toolStripButton5.Text = "设置加密";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 30);
-            // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(44, 27);
+            this.toolStripLabel1.Size = new System.Drawing.Size(41, 27);
             this.toolStripLabel1.Text = "层位：";
             // 
             // toolStripComboBox1
@@ -242,7 +223,7 @@
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(68, 27);
+            this.toolStripLabel2.Size = new System.Drawing.Size(65, 27);
             this.toolStripLabel2.Text = "网格加密：";
             // 
             // toolStripComboBox2
@@ -327,9 +308,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripButton toolStripButton5;
         private System.Windows.Forms.ToolStripButton toolStripButton6;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;

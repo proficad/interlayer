@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CDlgExportGridData, CDialog)
 	ON_NOTIFY(NM_CLICK, IDC_TREE1, &CDlgExportGridData::OnNMClickTree1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDlgExportGridData::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_CHECK5, &CDlgExportGridData::OnBnClickedCheck5)
+	ON_BN_CLICKED(IDOK, &CDlgExportGridData::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -252,12 +253,19 @@ void CDlgExportGridData::SaveExport()
 {
 	CExportManager::Instance()->ClearProNames();
 	CExportManager::Instance()->ClearTrackNames();
+
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+	CString strFileName = pMF->GetProjectDatPath();
+	strFileName += _T("\\models\\");
+
 	CString outfile = m_strFilePath;
 	if(m_bCoordinate)
 	{
 		CExportManager::Instance()->SetWriteProperty(m_bProperty);
 		CExportManager::Instance()->SetRedefine(m__bRedefine);
 		CExportManager::Instance()->SetRedefineProperty(m_bProperty);
+		CExportManager::Instance()->SetTransRate(m_bTransRate);
+
 		if(m_bProperty)
 		{
 			for(int i=0; i<m_strProperty.size(); i++)
@@ -266,12 +274,13 @@ void CDlgExportGridData::SaveExport()
 					CExportManager::Instance()->AddProName(m_strProperty[i].GetBuffer());
 			}
 		}
-		
+
 		if(m_bTransRate)
 		{
 			for (int i=0; i<m_strGridLayer.size(); i++)
 			{
-				CExportManager::Instance()->AddTrackName(m_strGridLayer[i].GetBuffer());
+				CString tmp = strFileName + m_strGridLayer[i].GetBuffer();
+				CExportManager::Instance()->AddTrackName(tmp.GetBuffer());
 			}
 		}
 		CExportManager::Instance()->WriteExport(outfile.GetBuffer());
@@ -283,10 +292,19 @@ void CDlgExportGridData::SaveExport()
 			CString newFileName;
 			newFileName.Format("%d",i);
 			newFileName = outfile + newFileName;
-			CExportManager::Instance()->WriteCenterPoints(m_strGridLayer[i].GetBuffer(), newFileName.GetBuffer(), m__bRedefine, i);
+
+			CString tmpold = strFileName + m_strGridLayer[i].GetBuffer();
+
+			CExportManager::Instance()->WriteCenterPoints(tmpold.GetBuffer(), newFileName.GetBuffer(), m__bRedefine, i);
 		}
 	}
 	CExportManager::Instance()->ClearProNames();
 	CExportManager::Instance()->ClearTrackNames();
 }
 
+
+void CDlgExportGridData::OnBnClickedOk()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	OnOK();
+}

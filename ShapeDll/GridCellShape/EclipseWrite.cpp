@@ -67,6 +67,18 @@ extern "C" _declspec(dllexport) bool SetRedefinePropertyNet(bool isWrite)
 	return rl;
 };
 
+extern "C" _declspec(dllexport) bool SetTransRateNet(bool isWrite)
+{
+	bool rl = true;
+	GlobalObjects *op = new GlobalObjects;
+	if(isWrite)
+	{
+		op->eclipseWriter->WriteMultEnable();
+	}
+	else
+		op->eclipseWriter->WriteMultDisable();
+	return rl;
+}
 // Ù–‘
 extern "C" _declspec(dllexport) bool	AddPropertyFileNameNet( const std::string& filename )
 {

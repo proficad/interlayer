@@ -485,12 +485,15 @@ namespace EclipseGridIO
                 {
                     WriteGrid(sw, gd);
                 }
+
                 if (_IsWriteProperty)//属性
                 {
                     WritePropertyData(sw);
                 }
+
                 if (_IsWriteMult)//面
                 {
+                    
                     WriteMultData(sw);
                 }
                 if (_IsWriteCarfin)//局部网格加密
@@ -701,6 +704,7 @@ namespace EclipseGridIO
             {
                 if (TrackFileNameList != null && TrackFileNameList.Count > 0)
                 {
+
                     int GridX = 0;
                     int GridY = 0;
                     int GridZ = 0;
@@ -719,14 +723,19 @@ namespace EclipseGridIO
                         GridZ = br.ReadInt32();
                         int Count = br.ReadInt32();
 
-                        List<int> XList = new List<int>();
-                        List<int> YList = new List<int>();
-                        List<int> ZList = new List<int>();
+                        //List<int> XList = new List<int>();
+                        //List<int> YList = new List<int>();
+                        //List<int> ZList = new List<int>();
+                        List<int> GridCellList = new List<int>();
                         for (int j = 0; j < Count; j++)
                         {
-                            XList.Add(br.ReadInt32());
-                            YList.Add(br.ReadInt32());
-                            ZList.Add(br.ReadInt32());
+                            //XList.Add(br.ReadInt32());
+                            //YList.Add(br.ReadInt32());
+                            //ZList.Add(br.ReadInt32());
+                            int I = br.ReadInt32();
+                            int J = br.ReadInt32();
+                            int K = br.ReadInt32();
+                            GridCellList.Add(K * GridX * GridY +J* GridX + I);
                             //跳跃坐标点
                             fs.Seek(4 * 3 * 8, SeekOrigin.Current);
                             int ChildrenCount = br.ReadInt32();
@@ -737,12 +746,12 @@ namespace EclipseGridIO
                         }
                         br.Close();
 
-                        GetMultItem(ref MultX, XList, GridX, GridY, GridZ, "X");
-                        GetMultItem(ref MultY, YList, GridX, GridY, GridZ, "Y");
-                        GetMultItem(ref MultZ, ZList, GridX, GridY, GridZ, "Z");
-                        GetMultItem(ref MultX0, XList, GridX, GridY, GridZ, "X-");
-                        GetMultItem(ref MultY0, YList, GridX, GridY, GridZ, "Y-");
-                        GetMultItem(ref MultZ0, ZList, GridX, GridY, GridZ, "Z-");
+                        GetMultItem(ref MultX, GridCellList, GridX, GridY, GridZ, "X");
+                        GetMultItem(ref MultY, GridCellList, GridX, GridY, GridZ, "Y");
+                        GetMultItem(ref MultZ, GridCellList, GridX, GridY, GridZ, "Z");
+                        GetMultItem(ref MultX0, GridCellList, GridX, GridY, GridZ, "X-");
+                        GetMultItem(ref MultY0, GridCellList, GridX, GridY, GridZ, "Y-");
+                        GetMultItem(ref MultZ0, GridCellList, GridX, GridY, GridZ, "Z-");
                     }
                     WriteMult(sw, GridX * GridY * GridZ, MultX, "MultX");
                     WriteMult(sw, GridX * GridY * GridZ, MultX0, "MultX-");
@@ -871,11 +880,11 @@ namespace EclipseGridIO
                 }
                 if (MultValue.Contains(i))
                 {
-                    sw.Write("1\t");
+                    sw.Write("0\t");
                 }
                 else
                 {
-                    sw.Write("0\t");
+                    sw.Write("1\t");
                 }
                 
             }

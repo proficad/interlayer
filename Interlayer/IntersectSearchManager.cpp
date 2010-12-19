@@ -322,6 +322,13 @@ bool CExportManager::SetRedefine( bool isRedefine )
 	return IsTrue;
 }
 
+bool CExportManager::SetTransRate(bool isWrite)
+{
+	bool IsTrue = false;
+	IsTrue = SetTransRateNet(isWrite);
+	return IsTrue;
+}
+
 bool CExportManager::SetWriteProperty( bool isWrite )
 {
 	bool IsTrue = false;

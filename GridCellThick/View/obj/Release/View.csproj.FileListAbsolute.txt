@@ -56,3 +56,12 @@ G:\karas\project\interlayer\GridCellThick\View\obj\Release\View.csproj.GenerateR
 G:\karas\project\interlayer\GridCellThick\View\obj\Release\View.dll.licenses
 G:\karas\project\interlayer\GridCellThick\View\obj\Release\View.dll
 G:\karas\project\interlayer\GridCellThick\View\obj\Release\View.pdb
+G:\interlayer\GridCellThick\View\bin\Release\View.dll
+G:\interlayer\GridCellThick\View\bin\Release\View.pdb
+G:\interlayer\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
+G:\interlayer\GridCellThick\View\obj\Release\View.D3D.Display.resources
+G:\interlayer\GridCellThick\View\obj\Release\View.Draw.resources
+G:\interlayer\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
+G:\interlayer\GridCellThick\View\obj\Release\View.dll.licenses
+G:\interlayer\GridCellThick\View\obj\Release\View.dll
+G:\interlayer\GridCellThick\View\obj\Release\View.pdb

@@ -93,6 +93,8 @@ public:
 	int	GetTrackNameNums();
 	bool	RemoveTrackNameAt(int index);
 
+	bool SetTransRate(bool isWrite);
+
 	bool	WriteExport(const std::string& filename);
 	bool WriteCenterPoints(const std::string& filename, const std::string& saveFileName, bool isWriteTick, int number);
 

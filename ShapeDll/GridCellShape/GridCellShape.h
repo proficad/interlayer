@@ -27,6 +27,8 @@ extern "C" _declspec(dllexport) bool	ClearTrackFileNameNet( );
 extern "C" _declspec(dllexport) bool	TrackFileNameRemoveAtNet(int index);
 extern "C" _declspec(dllexport) int		GetTrackFileNameCountNet();
 
+extern "C" _declspec(dllexport) bool SetTransRateNet(bool isWrite);
+
 extern "C" _declspec(dllexport) bool	WriteNet(const std::string& filename);
 
 extern "C" _declspec(dllexport) bool	WriteCenterPointNet(const std::string& filename, const std::string& saveFileName, bool isWriteTick, int number );

@@ -20,3 +20,8 @@ G:\karas\project\interlayer\GridCellThick\Octree\bin\Release\octc.pdb
 G:\karas\project\interlayer\GridCellThick\Octree\obj\Release\ResolveAssemblyReference.cache
 G:\karas\project\interlayer\GridCellThick\Octree\obj\Release\octc.dll
 G:\karas\project\interlayer\GridCellThick\Octree\obj\Release\octc.pdb
+G:\interlayer\GridCellThick\Octree\bin\Release\octc.dll
+G:\interlayer\GridCellThick\Octree\bin\Release\octc.pdb
+G:\interlayer\GridCellThick\Octree\obj\Release\ResolveAssemblyReference.cache
+G:\interlayer\GridCellThick\Octree\obj\Release\octc.dll
+G:\interlayer\GridCellThick\Octree\obj\Release\octc.pdb
