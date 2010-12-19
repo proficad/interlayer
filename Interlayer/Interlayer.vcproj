@@ -1333,10 +1333,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\DlgReplaceInterlayerPro.h"
-					>
-				</File>
-				<File
 					RelativePath=".\DlgRuler.h"
 					>
 				</File>
@@ -1597,11 +1593,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\RgnClipping.h"
+					RelativePath=".\GeoMap\RgnClipping.h"
 					>
 				</File>
 				<File
-					RelativePath=".\GeoMap\RgnClipping.h"
+					RelativePath=".\RgnClipping.h"
 					>
 				</File>
 				<File
@@ -1880,10 +1876,6 @@
 				</File>
 				<File
 					RelativePath=".\GeoMap\DlgRectSet.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\DlgReplaceInterlayerPro.cpp"
 					>
 				</File>
 				<File
