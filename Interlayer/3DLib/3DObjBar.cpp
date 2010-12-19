@@ -49,9 +49,9 @@ BEGIN_MESSAGE_MAP(C3DObjBar, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_MATERIAL_SET, OnUpdateSetMaterial)
 	ON_COMMAND(ID_COLOR_SET, OnSetColor)
 	ON_UPDATE_COMMAND_UI(ID_COLOR_SET, OnUpdateSetColor)
+
 	ON_COMMAND(ID_EDIT_ADDPRT, OnAddPhyPara)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_ADDPRT, OnUpdateAddPhyPara)
-
 	ON_COMMAND(ID_EDIT_CALCPRT, OnCalcPhyPara)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_CALCPRT, OnUpdateCalcPhyPara)
 	ON_COMMAND(ID_EDIT_ADJPRT, OnAdjPhyPara)
@@ -995,7 +995,6 @@ void C3DObjBar::OnUpdateCalcPhyPara( CCmdUI *pCmdUI )
 
 void C3DObjBar::OnAdjPhyPara()
 {
-	//CIntersectSearchManager::Instance()->RunCommond(_T("f:\\release\\WindowsFormsApplication5.exe ≤‚ ‘") );
 	HTREEITEM hItem = m_wndTree.GetSelectedItem();
 
 	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();

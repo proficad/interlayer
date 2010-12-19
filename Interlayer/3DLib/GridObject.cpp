@@ -1848,6 +1848,9 @@ void InterLayerGridObject::LoadLayer( const std::string& filename )
 			cell.m_bIsGridRefinement = true;
 		for (int j = 0; j < size_t; j++)
 		{
+			int tmpSize;
+			art >> tmpSize;
+
 			tagGridModelCellNew subcell;
 			
 			for (int k = 0; k < 8; k++)

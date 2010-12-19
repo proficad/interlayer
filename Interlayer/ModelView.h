@@ -83,6 +83,8 @@ public:
 	afx_msg void OnUpdateImportModel(CCmdUI *pCmdUI);
 	afx_msg void OnEditRedefine();
 	afx_msg void OnUpdateEditRedefine(CCmdUI *pCmdUI);
+	afx_msg void OnReplacePro();
+	afx_msg void OnUpdateReplacePro(CCmdUI *pCmdUI);
 
 	afx_msg void OnSearchModel();
 	afx_msg void OnUpdateSearchModel(CCmdUI *pCmdUI);
@@ -101,5 +103,12 @@ public:
 	afx_msg void OnUpdateEditCut(CCmdUI *pCmdUI);
 	afx_msg void OnEditPaste();
 	afx_msg void OnUpdateEditPaste(CCmdUI *pCmdUI);
+
+	afx_msg void OnAddPhyPara();
+	afx_msg void OnUpdateAddPhyPara(CCmdUI *pCmdUI);
+	afx_msg void OnCalcPhyPara();
+	afx_msg void OnUpdateCalcPhyPara(CCmdUI *pCmdUI);
+	afx_msg void OnAdjPhyPara();
+	afx_msg void OnUpdateAdjPhyPara(CCmdUI *pCmdUI);
 };
 

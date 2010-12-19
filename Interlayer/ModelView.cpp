@@ -72,12 +72,22 @@ BEGIN_MESSAGE_MAP(CModelView, CDockablePane)
 	ON_UPDATE_COMMAND_UI(ID_ADD_CHILD, &CModelView::OnUpdateAddChild)
 	ON_COMMAND(ID_EDIT_RENAME, &CModelView::OnEditRename)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_RENAME, &CModelView::OnUpdateEditRename)
+
 	ON_COMMAND(ID_IMPORT_MODEL, &CModelView::OnImportModel)
 	ON_UPDATE_COMMAND_UI(ID_IMPORT_MODEL, &CModelView::OnUpdateImportModel)
 	ON_COMMAND(ID_SEARCH_MODEL, &CModelView::OnSearchModel)
 	ON_UPDATE_COMMAND_UI(ID_SEARCH_MODEL, &CModelView::OnUpdateSearchModel)
 	ON_COMMAND(ID_EDIT_GRID_REDEFINE, &CModelView::OnEditRedefine)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_GRID_REDEFINE, &CModelView::OnUpdateEditRedefine)
+	ON_COMMAND(ID_EDIT_GRID_REPLACEMENT, &CModelView::OnReplacePro)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_GRID_REPLACEMENT, &CModelView::OnUpdateReplacePro)
+
+	//ON_COMMAND(ID_EDIT_ADDPRT, OnImportField)
+	//ON_UPDATE_COMMAND_UI(ID_EDIT_ADDPRT, OnUpdateImportField)
+	//ON_COMMAND(ID_EDIT_CALCPRT, OnCalcPhyPara)
+	//ON_UPDATE_COMMAND_UI(ID_EDIT_CALCPRT, OnUpdateCalcPhyPara)
+	//ON_COMMAND(ID_EDIT_ADJPRT, OnAdjPhyPara)
+	//ON_UPDATE_COMMAND_UI(ID_EDIT_ADJPRT, OnUpdateAdjPhyPara)
 	
 	//ID_SEARCH_MODEL
 	ON_COMMAND(ID_IMPORT_FIELD, &CModelView::OnImportField)
@@ -2621,3 +2631,93 @@ void CModelView::OnUpdateEditRedefine( CCmdUI *pCmdUI )
 			pCmdUI->Enable(FALSE);
 	}
 }
+
+void CModelView::OnReplacePro()
+{
+
+}
+
+void CModelView::OnUpdateReplacePro( CCmdUI *pCmdUI )
+{
+	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+
+	if( pMF->m_strPrjFileName.IsEmpty() )
+		pCmdUI->Enable(FALSE);
+	else
+	{
+		HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+
+		if( hItem != NULL)
+		{
+			CTreeNodeDat *pNote = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
+			if(pNote->m_nType == GRID_DAT)
+			{
+				pCmdUI->Enable(TRUE);
+			}
+			else
+				pCmdUI->Enable(FALSE);
+		}
+		else
+			pCmdUI->Enable(FALSE);
+	}
+}
+
+//void CModelView::OnCalcPhyPara()
+//{
+//
+//}
+//
+//void CModelView::OnUpdateCalcPhyPara( CCmdUI *pCmdUI )
+//{
+//	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+//
+//	if( pMF->m_strPrjFileName.IsEmpty() )
+//		pCmdUI->Enable(FALSE);
+//	else
+//	{
+//		HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+//
+//		if( hItem != NULL)
+//		{
+//			CTreeNodeDat *pNote = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
+//			if(pNote->m_nType == GRID_DAT)
+//			{
+//				pCmdUI->Enable(TRUE);
+//			}
+//			else
+//				pCmdUI->Enable(FALSE);
+//		}
+//		else
+//			pCmdUI->Enable(FALSE);
+//	}
+//}
+//
+//void CModelView::OnAdjPhyPara()
+//{
+//
+//}
+//
+//void CModelView::OnUpdateAdjPhyPara( CCmdUI *pCmdUI )
+//{
+//	CMainFrame *pMF = (CMainFrame*)AfxGetMainWnd();
+//
+//	if( pMF->m_strPrjFileName.IsEmpty() )
+//		pCmdUI->Enable(FALSE);
+//	else
+//	{
+//		HTREEITEM hItem = m_wndModelView.GetSelectedItem();
+//
+//		if( hItem != NULL)
+//		{
+//			CTreeNodeDat *pNote = (CTreeNodeDat *)m_wndModelView.GetItemData(hItem);
+//			if(pNote->m_nType == GRID_DAT)
+//			{
+//				pCmdUI->Enable(TRUE);
+//			}
+//			else
+//				pCmdUI->Enable(FALSE);
+//		}
+//		else
+//			pCmdUI->Enable(FALSE);
+//	}
+//}
