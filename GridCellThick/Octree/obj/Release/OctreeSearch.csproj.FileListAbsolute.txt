@@ -25,3 +25,8 @@ G:\interlayer\GridCellThick\Octree\bin\Release\octc.pdb
 G:\interlayer\GridCellThick\Octree\obj\Release\ResolveAssemblyReference.cache
 G:\interlayer\GridCellThick\Octree\obj\Release\octc.dll
 G:\interlayer\GridCellThick\Octree\obj\Release\octc.pdb
+F:\interlayer\GridCellThick\Octree\bin\Release\octc.dll
+F:\interlayer\GridCellThick\Octree\bin\Release\octc.pdb
+F:\interlayer\GridCellThick\Octree\obj\Release\ResolveAssemblyReference.cache
+F:\interlayer\GridCellThick\Octree\obj\Release\octc.dll
+F:\interlayer\GridCellThick\Octree\obj\Release\octc.pdb

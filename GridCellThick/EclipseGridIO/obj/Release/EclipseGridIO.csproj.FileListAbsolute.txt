@@ -28,3 +28,9 @@ G:\interlayer\GridCellThick\EclipseGridIO\bin\Release\EclipseGridIO.pdb
 G:\interlayer\GridCellThick\EclipseGridIO\obj\Release\ResolveAssemblyReference.cache
 G:\interlayer\GridCellThick\EclipseGridIO\obj\Release\EclipseGridIO.dll
 G:\interlayer\GridCellThick\EclipseGridIO\obj\Release\EclipseGridIO.pdb
+F:\interlayer\GridCellThick\EclipseGridIO\bin\Release\Key.xml
+F:\interlayer\GridCellThick\EclipseGridIO\bin\Release\EclipseGridIO.dll
+F:\interlayer\GridCellThick\EclipseGridIO\bin\Release\EclipseGridIO.pdb
+F:\interlayer\GridCellThick\EclipseGridIO\obj\Release\ResolveAssemblyReference.cache
+F:\interlayer\GridCellThick\EclipseGridIO\obj\Release\EclipseGridIO.dll
+F:\interlayer\GridCellThick\EclipseGridIO\obj\Release\EclipseGridIO.pdb

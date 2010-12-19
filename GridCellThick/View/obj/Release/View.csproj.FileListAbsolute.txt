@@ -65,3 +65,12 @@ G:\interlayer\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
 G:\interlayer\GridCellThick\View\obj\Release\View.dll.licenses
 G:\interlayer\GridCellThick\View\obj\Release\View.dll
 G:\interlayer\GridCellThick\View\obj\Release\View.pdb
+F:\interlayer\GridCellThick\View\bin\Release\View.dll
+F:\interlayer\GridCellThick\View\bin\Release\View.pdb
+F:\interlayer\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
+F:\interlayer\GridCellThick\View\obj\Release\View.D3D.Display.resources
+F:\interlayer\GridCellThick\View\obj\Release\View.Draw.resources
+F:\interlayer\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
+F:\interlayer\GridCellThick\View\obj\Release\View.dll.licenses
+F:\interlayer\GridCellThick\View\obj\Release\View.dll
+F:\interlayer\GridCellThick\View\obj\Release\View.pdb
