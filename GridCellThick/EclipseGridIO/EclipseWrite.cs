@@ -19,6 +19,7 @@ namespace EclipseGridIO
         private List<string> PropertyFileNameList = new List<string>();//属性文件列表
         private bool _IsWriteCarfin = true;//是否写入局部网格加密信息数据
         private bool _IsWriteCarfinProperty = true;//是否写入局部网格加密属性数据
+        private bool _IsWriteCarfinMult = true;//是否写入局部网格加密传导率属性
         private bool _IsWriteMult = true;//是否写入追踪后面文件
         private List<string> TrackFileNameList = new List<string>();//追踪后网格文件
         
@@ -73,6 +74,14 @@ namespace EclipseGridIO
         {
             get { return _IsWriteMult; }
             set { _IsWriteMult = value; }
+        }
+        /// <summary>
+        /// 是否写入局部网格加密传导率
+        /// </summary>
+        public bool IsWriteCarfinMult
+        {
+            get { return _IsWriteCarfinMult; }
+            set { _IsWriteCarfinMult = value; }
         }
 
         #region c++调用c#属性方法
@@ -230,6 +239,38 @@ namespace EclipseGridIO
             try
             {
                 _IsWriteMult = false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 写入网格加密传导率
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public bool WriteCarfinMultEnable()
+        {
+            try
+            {
+                _IsWriteCarfinMult = false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 不写入网格加密传导率
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public bool WriteCarfinMultDisable()
+        {
+            try
+            {
+                _IsWriteCarfinMult = false;
                 return true;
             }
             catch
@@ -485,25 +526,23 @@ namespace EclipseGridIO
                 {
                     WriteGrid(sw, gd);
                 }
-
                 if (_IsWriteProperty)//属性
                 {
                     WritePropertyData(sw);
                 }
-
                 if (_IsWriteMult)//面
                 {
-                    
                     WriteMultData(sw);
+                    //WriteMultTest(sw);
                 }
-                if (_IsWriteCarfin)//局部网格加密
+                if (_IsWriteCarfin)//局部网格加密及网格加密属性、传导率
                 {
                     WriteCarfin(sw, gd);   
                 }
-                if (_IsWriteCarfinProperty)
-                { 
+                //if (_IsWriteCarfinProperty)
+                //{ 
                     
-                }
+                //}
                 sw.WriteLine("/");
                 sw.Close();
                 return true;
@@ -607,6 +646,18 @@ namespace EclipseGridIO
         /// <param name="gd">GridData</param>
         private void WriteCarfin(StreamWriter sw, GridData gd)
         {
+            List<PropertyData> PropertyDataList = new List<PropertyData>();//属性列表
+            if (_IsWriteCarfinProperty)
+            {
+                if (PropertyFileNameList != null && PropertyFileNameList.Count > 0)
+                {
+                    for (int i = 0; i < PropertyFileNameList.Count; i++)
+                    {
+                        PropertyDataList.Add(PropertyData.GetPropertyData(PropertyFileNameList[i]));
+                    }
+                }
+            }
+
             #region Carfin
 
             if (gd.DNameList != null && gd.DNameList.Count > 0)
@@ -622,6 +673,45 @@ namespace EclipseGridIO
                             + " " + gd.DGridDataList[gd.DNameList[i].ID[j]].Z2.ToString() + " " + gd.DGridDataList[gd.DNameList[i].ID[j]].DX.ToString()
                             + " " + gd.DGridDataList[gd.DNameList[i].ID[j]].DY.ToString() + " " + gd.DGridDataList[gd.DNameList[i].ID[j]].DZ.ToString()
                             + " " + gd.DGridDataList[gd.DNameList[i].ID[j]].NWMAX.ToString() + " " + gd.DGridDataList[gd.DNameList[i].ID[j]].GLOBAL);
+
+                        #region 网格加密属性
+
+                        if (_IsWriteCarfinProperty)//网格加密属性
+                        {
+                            for (int p = 0; p < PropertyDataList.Count; p++)
+                            {
+                                sw.WriteLine(PropertyDataList[i].PropertyName);//写属性名
+                                for (int z = gd.DGridDataList[gd.DNameList[i].ID[j]].Z1 - 1; z < gd.DGridDataList[gd.DNameList[i].ID[j]].Z2; z++)
+                                {
+                                    for (int y = gd.DGridDataList[gd.DNameList[i].ID[j]].Y1 - 1; y < gd.DGridDataList[gd.DNameList[i].ID[j]].Y2; y++)
+                                    {
+                                        for (int x = gd.DGridDataList[gd.DNameList[i].ID[j]].X1 - 1;x< gd.DGridDataList[gd.DNameList[i].ID[j]].X2; x++)
+                                        {
+                                            int Count = gd.DGridDataList[gd.DNameList[i].ID[j]].DZ / (gd.DGridDataList[gd.DNameList[i].ID[j]].Z2 - gd.DGridDataList[gd.DNameList[i].ID[j]].Z1);
+                                            Count = Count * gd.DGridDataList[gd.DNameList[i].ID[j]].DX / (gd.DGridDataList[gd.DNameList[i].ID[j]].X2 - gd.DGridDataList[gd.DNameList[i].ID[j]].X1);
+                                            Count = Count * gd.DGridDataList[gd.DNameList[i].ID[j]].DY / (gd.DGridDataList[gd.DNameList[i].ID[j]].Y2 - gd.DGridDataList[gd.DNameList[i].ID[j]].Y1);
+                                            for (int t = 0; t < Count; t++)
+                                            { 
+                                                if (t % 6 == 0)
+                                                {
+                                                    sw.Write("\n");
+                                                    sw.Write(PropertyDataList[p].PropertyValue[PropertyDataList[p].PropertyX * PropertyDataList[p].PropertyY * z + PropertyDataList[p].PropertyX * y + x].ToString("#0.000000") + " ");
+                                                }
+                                                else
+                                                {
+                                                    sw.Write(PropertyDataList[p].PropertyValue[PropertyDataList[p].PropertyX * PropertyDataList[p].PropertyY * z + PropertyDataList[p].PropertyX * y + x].ToString("#0.000000") + " ");
+                                                }
+                                            }
+                                            sw.Write("\n");
+                                        }
+                                    }
+                                }
+                                sw.WriteLine("/");
+                            }
+
+                        #endregion
+
+                        }
                         sw.WriteLine("ENDFIN");
                     }
                 }
@@ -704,7 +794,6 @@ namespace EclipseGridIO
             {
                 if (TrackFileNameList != null && TrackFileNameList.Count > 0)
                 {
-
                     int GridX = 0;
                     int GridY = 0;
                     int GridZ = 0;
@@ -723,19 +812,13 @@ namespace EclipseGridIO
                         GridZ = br.ReadInt32();
                         int Count = br.ReadInt32();
 
-                        //List<int> XList = new List<int>();
-                        //List<int> YList = new List<int>();
-                        //List<int> ZList = new List<int>();
                         List<int> GridCellList = new List<int>();
                         for (int j = 0; j < Count; j++)
                         {
-                            //XList.Add(br.ReadInt32());
-                            //YList.Add(br.ReadInt32());
-                            //ZList.Add(br.ReadInt32());
                             int I = br.ReadInt32();
                             int J = br.ReadInt32();
                             int K = br.ReadInt32();
-                            GridCellList.Add(K * GridX * GridY +J* GridX + I);
+                            GridCellList.Add(K * GridX * GridY + J * GridX + I);
                             //跳跃坐标点
                             fs.Seek(4 * 3 * 8, SeekOrigin.Current);
                             int ChildrenCount = br.ReadInt32();
@@ -797,14 +880,93 @@ namespace EclipseGridIO
                         for (int k = 0; k < GridX; k++)
                         {
                             int Value = -1;
+                            int AddValue = -1;
+                            bool IsAddDownItem = false;
+                            int Count = 0;
                             for (int j = 0; j < GridY; j++)
                             {
                                 if (XYZList.Contains(i * GridX * GridY + j * GridX + k))
                                 {
-                                    Value = j;
+                                    if (Value == -1)
+                                    {
+                                        if (j != 0)
+                                        { 
+                                            AddValue = j;
+                                            Count++;
+                                            Value = j;
+                                            MultValue.Add(i * GridX * GridY + (Value - 1) * GridX + k);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Value = j;
+                                    }
+                                }
+                                else
+                                {
+
+                                    if (Value != -1)
+                                    {
+                                        if (Value == AddValue)
+                                        {
+                                            MultValue.Add(i * GridX * GridY + Value * GridX + k);
+                                        }
+                                        else
+                                        {
+                                            if (j != GridY - 1)
+                                            {
+                                                bool falg = false;
+                                                for (int t = AddValue; t <= Value; t++)
+                                                {
+                                                    if (XYZList.Contains(i * GridX * GridY + t * GridX + k + 1))
+                                                    {
+                                                        falg = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (!falg)
+                                                {
+                                                    MultValue.Add(i * GridX * GridY + Value * GridX + k);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                MultValue.Add(i * GridX * GridY + Value * GridX + k);
+                                            }
+                                        }
+                                        Value = AddValue = -1;
+                                    }
+
+                                    //if (IsAddDownItem)
+                                    //{
+                                    //    continue;
+                                    //}
+                                    //if (Value != -1 && Value > AddValue)
+                                    //{
+                                    //    IsAddDownItem = true;
+                                    //    if (j != GridY - 1)
+                                    //    {
+                                    //        bool falg = false;
+                                    //        for (int t = AddValue; t < Value; t++)
+                                    //        {
+                                    //            if (XYZList.Contains(i * GridX * GridY + t * GridX + k + 1))
+                                    //            {
+                                    //                falg = true;
+                                    //            }
+                                    //        }
+                                    //        if (!falg)
+                                    //        {
+                                    //            MultValue.Add(i * GridX * GridY + Value * GridX + k);
+                                    //        }
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        MultValue.Add(i * GridX * GridY + Value * GridX + k);
+                                    //    }
+                                    //}
                                 }
                             }
-                            if (Value != -1 && Value != 0)
+                            if (AddValue != -1 && AddValue != 0 && Count > 1)
                             {
                                 MultValue.Add(i * GridX * GridY + Value * GridX + k);
                             }
@@ -817,17 +979,73 @@ namespace EclipseGridIO
                         for (int j = 0; j < GridY; j++)
                         {
                             int Value = -1;
+                            int AddValue = -1;
+                            int Count = 0;
                             for (int i = 0; i < GridZ; i++)
                             {
                                 if (XYZList.Contains(i * GridX * GridY + j * GridX + k))
                                 {
-                                    Value = i;
+                                    if (Value == -1)
+                                    {
+                                        if (i != 0)
+                                        {
+                                            AddValue = i;
+                                            Count++;
+                                            Value = i;
+                                            MultValue.Add((Value - 1) * GridX * GridY + j * GridX + k);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Value = i;
+                                    }
+                                }
+                                else
+                                {
+                                    if (Value != -1)
+                                    {
+                                        if (Value == AddValue)
+                                        {
+                                            MultValue.Add(Value * GridX * GridY + j * GridX + k);
+                                        }
+                                        else
+                                        {
+                                            if (i != GridZ - 1)
+                                            {
+                                                bool falg = false;
+                                                for (int t = AddValue; t <= Value; t++)
+                                                {
+                                                    if (XYZList.Contains(t * GridX * GridY + j * GridX + k + 1))
+                                                    {
+                                                        falg = true;
+                                                    }
+                                                }
+                                                if (!falg)
+                                                {
+                                                    MultValue.Add(Value * GridX * GridY + j * GridX + k);
+                                                }
+                                            }
+                                        }
+                                        Value = AddValue = -1;
+                                    }
                                 }
                             }
-                            if (Value != -1 && Value != 0)
+                            if (AddValue != -1 && AddValue != 0 && Count > 1)
                             {
                                 MultValue.Add(Value * GridX * GridY + j * GridX + k);
                             }
+                            //int Value = -1;
+                            //for (int i = 0; i < GridZ; i++)
+                            //{
+                            //    if (XYZList.Contains(i * GridX * GridY + j * GridX + k))
+                            //    {
+                            //        Value = i;
+                            //    }
+                            //}
+                            //if (Value != -1 && Value != 0)
+                            //{
+                            //    MultValue.Add(Value * GridX * GridY + j * GridX + k);
+                            //}
                         }
                     }
                     break;
@@ -886,12 +1104,75 @@ namespace EclipseGridIO
                 {
                     sw.Write("1\t");
                 }
-                
             }
             sw.Write("\n");
             sw.WriteLine("/");
         }
+        private void WriteMultTest(StreamWriter sw)
+        {
+            try
+            {
+                if (TrackFileNameList != null && TrackFileNameList.Count > 0)
+                {
+                    List<int> GridCellList = new List<int>();
+                    int CellCount = 0;
+                    int GridX = 0;
+                    int GridY = 0;
+                    int GridZ = 0;
+                    for (int i = 0; i < TrackFileNameList.Count; i++)
+                    {
+                        FileStream fs = new FileStream(TrackFileNameList[i], FileMode.Open);
+                        BinaryReader br = new BinaryReader(fs, Encoding.Unicode);
+                        GridX = br.ReadInt32();
+                        GridY = br.ReadInt32();
+                        GridZ = br.ReadInt32();
+                        CellCount = GridX * GridY * GridZ;
+                        int Count = br.ReadInt32();
 
+                        for (int j = 0; j < Count; j++)
+                        {
+                            int I = br.ReadInt32();
+                            int J = br.ReadInt32();
+                            int K = br.ReadInt32();
+                            GridCellList.Add(K * GridX * GridY + J * GridX + I);
+                            //YList.Add();
+                            //ZList.Add();
+                            //跳跃坐标点
+                            fs.Seek(4 * 3 * 8, SeekOrigin.Current);
+                            int ChildrenCount = br.ReadInt32();
+                            if (ChildrenCount > 0)
+                            {
+                                fs.Seek(ChildrenCount * 4 * 3 * 8, SeekOrigin.Current);
+                            }
+                        }
+                        br.Close();
+                    }
+                    sw.WriteLine("PORO");
+                    for (int i = 0; i < CellCount; i++)
+                    {
+                        if (i % 6 == 0)
+                        {
+                            sw.Write("\n");
+                        }
+                        if (GridCellList.Contains(i))
+                        {
+                            sw.Write("0\t");
+                        }
+                        else
+                        {
+                            sw.Write("1\t");
+                        }
+                    }
+                    sw.Write("\n");
+                    sw.WriteLine("/");
+                }
+            }
+            catch (Exception ee)
+            {
+                throw ee;
+            }
+
+        }
         #endregion
 
         #region 输出追踪后的中心点

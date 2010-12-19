@@ -119,7 +119,7 @@ void CGLView::ReSize(int cx, int cy)
 	::glMatrixMode(GL_PROJECTION);
 	::glLoadIdentity();
 
-	gluPerspective(45.0, w/h, 1, 50);
+	gluPerspective(45.0, w/h, 0.001, 50);
 	// Ortho Viewing
 	//if (w <= h)
 	//	::glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
@@ -1007,7 +1007,7 @@ int CGLView::HitSliceXY(const int& xPos, const int& yPos, const int& sensitivity
 	int w = rect.Width();
 	int h = rect.Height();
 
-	gluPerspective(45.0, w/h, 1, 50);
+	gluPerspective(45.0, w/h, 0.001, 50);
 	// Ortho Viewing
 	//if (w <= h)
 	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
@@ -1121,7 +1121,7 @@ int CGLView::HitPoint(const int& xPos, const int& yPos, const int& sensitivity)
 	int w = rect.Width();
 	int h = rect.Height();
 
-	gluPerspective(45.0, w/h, 1, 50);
+	gluPerspective(45.0, w/h, 0.001, 50);
 	// Ortho Viewing
 	//if (w <= h)
 	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, 
@@ -1263,7 +1263,7 @@ CGLObject* CGLView::ProcessSelection(const int& xPos, const int& yPos, const int
 	int h = rect.Height();
 
 	// Perspective Viewing
-	gluPerspective(45.0, w/h, 1, 50);
+	gluPerspective(45.0, w/h, 0.001, 50);
 
 
 	// Draw the scene
@@ -1377,7 +1377,7 @@ int CGLView::ProcessSweepSelection(const CRect& swRect, unsigned long int* id)
 	int w = rect.Width();
 	int h = rect.Height();
 
-	gluPerspective(45.0, w/h, 1, 50);
+	gluPerspective(45.0, w/h, 0.001, 50);
 	// Ortho Viewing
 	//if (w <= h)
 	//	glOrtho(-m_pContext->m_dRange - m_pContext->m_xTrans, m_pContext->m_dRange - m_pContext->m_xTrans, 
@@ -1508,7 +1508,7 @@ int CGLView::ProcessEditAxisSelection( const int& x, const int& y, const int& se
 	int h = rect.Height();
 
 	// Perspective Viewing
-	gluPerspective(45.0, w/h, 1, 50);
+	gluPerspective(45.0, w/h, 0.001, 50);
 
 
 	// Draw the scene
