@@ -192,3 +192,53 @@ extern "C" _declspec(dllexport) bool RunTrack()
 	op->trackBar->ClearItem();
 	return rl;
 }
+
+extern "C" _declspec(dllexport) bool SetWriteChangePropertyNet(bool isWrite)
+{
+	bool rl = true;
+	GlobalObjects *op = new GlobalObjects;
+	if(isWrite)
+		op->eclipseWriter->WriteChangePropertyEnable();
+	else
+		op->eclipseWriter->WriteChangePropertyDisable();
+	return rl;
+}
+
+extern "C" _declspec(dllexport) bool SetWriteRedefineMultNet(bool isWrite)
+{
+	bool rl = true;
+	GlobalObjects *op = new GlobalObjects;
+	if(isWrite)
+		op->eclipseWriter->WriteCarfinMultEnable();
+	else
+		op->eclipseWriter->WriteCarfinMultDisable();
+	return rl;
+}
+
+extern "C" _declspec(dllexport) bool SetWriteRedefineChangePropertyNet(bool isWrite)
+{
+	bool rl = true;
+	GlobalObjects *op = new GlobalObjects;
+	if(isWrite)
+		op->eclipseWriter->WriteCarfinChangePropertyEnable();
+	else
+		op->eclipseWriter->WriteCarfinChangePropertyDisable();
+	return rl;
+}
+
+extern "C" _declspec(dllexport) bool SetChangePropertyValueNet(double mValue)
+{
+	bool rl = true;
+	GlobalObjects *op = new GlobalObjects;
+	op->eclipseWriter->ChangePropertyValue = mValue;
+	return rl;
+}
+
+extern "C" _declspec(dllexport) bool SetChangePropertyNameNet(const std::string& filename)
+{
+	bool rl = true;
+	String *file = new String(filename.c_str());
+	GlobalObjects *op = new GlobalObjects;
+	op->eclipseWriter->ChangePropertyName = file;
+	return rl;
+}

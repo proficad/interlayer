@@ -38,3 +38,9 @@ extern "C" _declspec(dllexport) bool RunExeDotNet(const std::string& filename);
 extern "C" _declspec(dllexport) bool RunTrack();
 extern "C" _declspec(dllexport) bool SetGridFileName(const std::string& filename);
 extern "C" _declspec(dllexport) bool AddItem(const std::string& facefile, const std::string& savefile);
+
+extern "C" _declspec(dllexport) bool SetWriteChangePropertyNet(bool isWrite);
+extern "C" _declspec(dllexport) bool SetWriteRedefineMultNet(bool isWrite);
+extern "C" _declspec(dllexport) bool SetWriteRedefineChangePropertyNet(bool isWrite);
+extern "C" _declspec(dllexport) bool SetChangePropertyValueNet(double mValue);
+extern "C" _declspec(dllexport) bool SetChangePropertyNameNet(const std::string& name);
