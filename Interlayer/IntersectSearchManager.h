@@ -98,6 +98,12 @@ public:
 	bool	WriteExport(const std::string& filename);
 	bool WriteCenterPoints(const std::string& filename, const std::string& saveFileName, bool isWriteTick, int number);
 
+	bool SetWriteChangeProperty(bool isWrite);
+	bool SetWriteRedefineMult(bool isWrite);
+	bool SetWriteRedefineChangeProperty(bool isWrite);
+	bool SetChangePropertyValue(double mValue);
+	bool SetChangePropertyName(const std::string& name);
+
 protected:
 	CExportManager(){}
 	~CExportManager(){}

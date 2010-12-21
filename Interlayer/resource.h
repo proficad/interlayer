@@ -458,6 +458,9 @@
 #define IDC_EDIT_GRIDMODEL_NAME         1172
 #define IDC_COMBO2                      1174
 #define IDC_BUTTON_REFRASH              1175
+#define IDC_RADIO1                      1182
+#define IDC_RADIO2                      1183
+#define IDC_CHECK7                      1184
 #define IDC_EDIT_NAME                   3016
 #define IDC_EDIT_SCALE                  3017
 #define IDC_EDIT_HPAGE                  3020
@@ -598,7 +601,7 @@
 #define ID_SEARCH_MODEL                 32988
 #define ID_EXPORT_MODEL                 32990
 #define ID_EDIT_GRID_REDEFINE           32991
-#define ID_EDIT_GRID_REPLACEMENT        32992
+
 #define ID_IMPORT_POINT                 32993
 #define ID_IMPORT_LINE                  32994
 #define ID_IMPORT_POLYGON               32995
@@ -796,7 +799,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        517
 #define _APS_NEXT_COMMAND_VALUE         33208
-#define _APS_NEXT_CONTROL_VALUE         1180
+#define _APS_NEXT_CONTROL_VALUE         1185
 #define _APS_NEXT_SYMED_VALUE           450
 #endif
 #endif

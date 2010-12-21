@@ -19,10 +19,21 @@ public:
 protected:
 	bool				m_bCoordinate;
 	bool				m__bRedefine;
-	bool				m_bRedefineProperty;
+
 	bool				m_bTransRate;
+	bool				m_bRedefineTransRate;
+	
 	bool				m_bCenterPoint;
+	
 	bool				m_bProperty;
+	bool				m_bRedefineProperty;
+
+	bool				m_bChangeProperty;
+	bool				m_bRedefineChangeProperty;
+
+	double			m_dChangePropertyValue;
+	CString			m_csChangePropertyName;
+
 	HTREEITEM	m_ModelItem;
 	std::vector<CString>	m_strProperty;
 	std::vector<CString> m_strGridLayer;
@@ -32,8 +43,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CString m_strFilePath;
+	double m_changeValue;
+	
 	CTreeCtrl m_ctrTree;
 	CEdit m_filenameEditCtr;
+	CComboBox m_Ctr_pro_comb;
+	CButton m_ctr_check5;
+
 	afx_msg void OnBnClickedCheck1();
 	afx_msg void OnBnClickedCheck2();
 	afx_msg void OnBnClickedCheck3();
@@ -50,4 +66,11 @@ public:
 
 	afx_msg void OnBnClickedCheck5();
 	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedCheck7();
+
+	afx_msg void OnBnClickedRadio1();
+	afx_msg void OnBnClickedRadio2();
+	afx_msg void OnBnClickedRadio3();
+	afx_msg void OnBnClickedRadio4();
+	afx_msg void OnCbnSelchangeCombo1();
 };

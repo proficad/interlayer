@@ -13,9 +13,13 @@ IMPLEMENT_DYNAMIC(CDlgExportGridData, CDialog)
 CDlgExportGridData::CDlgExportGridData(CWnd* pParent /*=NULL*/)
 	: CDialog(CDlgExportGridData::IDD, pParent)
 	, m_strFilePath(_T(""))
+	, m_changeValue(0)
 {
 	m_bCoordinate = true;
-	m__bRedefine = m_bRedefineProperty = m_bTransRate = m_bCenterPoint = m_bProperty = false;
+	m__bRedefine = m_bTransRate = m_bRedefineTransRate =
+		m_bCenterPoint = m_bProperty = m_bRedefineProperty = m_bChangeProperty = m_bRedefineChangeProperty = false;
+	m_dChangePropertyValue = 0.0;
+	m_csChangePropertyName = "";
 }
 
 CDlgExportGridData::~CDlgExportGridData()
@@ -28,6 +32,9 @@ void CDlgExportGridData::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1, m_strFilePath);
 	DDX_Control(pDX, IDC_TREE1, m_ctrTree);
 	DDX_Control(pDX, IDC_EDIT1, m_filenameEditCtr);
+	DDX_Control(pDX, IDC_COMBO1, m_Ctr_pro_comb);
+	DDX_Control(pDX, IDC_CHECK5, m_ctr_check5);
+	DDX_Text(pDX, IDC_EDIT2, m_changeValue);
 }
 
 
@@ -41,6 +48,12 @@ BEGIN_MESSAGE_MAP(CDlgExportGridData, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDlgExportGridData::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_CHECK5, &CDlgExportGridData::OnBnClickedCheck5)
 	ON_BN_CLICKED(IDOK, &CDlgExportGridData::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_CHECK7, &CDlgExportGridData::OnBnClickedCheck7)
+	ON_BN_CLICKED(IDC_RADIO1, &CDlgExportGridData::OnBnClickedRadio1)
+	ON_BN_CLICKED(IDC_RADIO2, &CDlgExportGridData::OnBnClickedRadio2)
+	ON_BN_CLICKED(IDC_RADIO3, &CDlgExportGridData::OnBnClickedRadio3)
+	ON_BN_CLICKED(IDC_RADIO4, &CDlgExportGridData::OnBnClickedRadio4)
+	ON_CBN_SELCHANGE(IDC_COMBO1, &CDlgExportGridData::OnCbnSelchangeCombo1)
 END_MESSAGE_MAP()
 
 
@@ -67,10 +80,25 @@ void CDlgExportGridData::OnBnClickedCheck2()
 	{
 		// 勾选
 		m__bRedefine = true;
+		if(BST_CHECKED == IsDlgButtonChecked(IDC_CHECK6))
+			GetDlgItem(IDC_CHECK5)->EnableWindow(TRUE);
+		else
+			GetDlgItem(IDC_CHECK5)->EnableWindow(FALSE);
+		if(BST_CHECKED == IsDlgButtonChecked(IDC_CHECK7))
+			GetDlgItem(IDC_RADIO2)->EnableWindow(TRUE);
+		else
+			GetDlgItem(IDC_RADIO2)->EnableWindow(FALSE);
+		if(BST_CHECKED == IsDlgButtonChecked(IDC_CHECK3))
+			GetDlgItem(IDC_RADIO4)->EnableWindow(TRUE);
+		else
+			GetDlgItem(IDC_RADIO4)->EnableWindow(FALSE);
 	}
 	else
 	{
 		m__bRedefine = false;
+		GetDlgItem(IDC_RADIO2)->EnableWindow(FALSE);
+		GetDlgItem(IDC_RADIO4)->EnableWindow(FALSE);
+		GetDlgItem(IDC_CHECK5)->EnableWindow(FALSE);
 	}
 }
 
@@ -81,10 +109,17 @@ void CDlgExportGridData::OnBnClickedCheck3()
 	{
 		// 勾选
 		m_bTransRate = true;
+		GetDlgItem(IDC_RADIO3)->EnableWindow(TRUE);
+		if(BST_CHECKED == IsDlgButtonChecked(IDC_CHECK2 ))
+			GetDlgItem(IDC_RADIO4)->EnableWindow(TRUE);
+		else
+			GetDlgItem(IDC_RADIO4)->EnableWindow(FALSE);
 	}
 	else
 	{
 		m_bTransRate = false;
+		GetDlgItem(IDC_RADIO3)->EnableWindow(FALSE);
+		GetDlgItem(IDC_RADIO4)->EnableWindow(FALSE);
 	}
 }
 
@@ -125,11 +160,16 @@ void CDlgExportGridData::OnBnClickedCheck6()
 		// 勾选
 		m_bProperty = true;
 		m_ctrTree.EnableWindow(TRUE);
+		if(BST_CHECKED == IsDlgButtonChecked( IDC_CHECK2))
+			m_ctr_check5.EnableWindow(TRUE);
+		else
+			m_ctr_check5.EnableWindow(FALSE);
 	}
 	else
 	{
 		m_bProperty = false;
 		m_ctrTree.EnableWindow(FALSE);
+		m_ctr_check5.EnableWindow(FALSE);
 	}
 }
 
@@ -141,6 +181,8 @@ BOOL CDlgExportGridData::OnInitDialog()
 	m_ctrTree.EnableWindow(FALSE);
 	m_bCoordinate = TRUE;
 	((CButton *)GetDlgItem(IDC_CHECK1))->SetCheck(TRUE);
+	((CButton *)GetDlgItem(IDC_RADIO1))->SetCheck(TRUE);
+	((CButton *)GetDlgItem(IDC_RADIO3))->SetCheck(TRUE);
 	((CButton *)GetDlgItem(IDC_CHECK1))->EnableWindow(FALSE);
 
 	FillProperty();
@@ -164,6 +206,7 @@ bool CDlgExportGridData::FillProperty()
 	HTREEITEM son = pTree->GetChildItem(m_ModelItem);
 	if(son==NULL)
 		return false;
+	int index = 0;
 	do 
 	{
 		CTreeNodeDat *lpNodeDat = (CTreeNodeDat *)(pTree->GetItemData)(son);
@@ -177,6 +220,8 @@ bool CDlgExportGridData::FillProperty()
 
 			m_strProperty.push_back(strFileName2);
 			m_bPropertyExport.push_back(FALSE);
+
+			m_Ctr_pro_comb.InsertString(index++, pTree->GetItemText(son));
 		}
 		else if(lpNodeDat->m_nType==GRID_LAYER)
 		{
@@ -185,6 +230,9 @@ bool CDlgExportGridData::FillProperty()
 		}
 		son = pTree->GetNextSiblingItem(son);
 	} while (son!=NULL);
+	if(m_strProperty.size()>0)
+		m_Ctr_pro_comb.SetCurSel(0);
+	GetDlgItem(IDC_EDIT2)->SetWindowText("0.0");
 	return true;
 }
 
@@ -266,6 +314,16 @@ void CDlgExportGridData::SaveExport()
 		CExportManager::Instance()->SetRedefineProperty(m_bProperty);
 		CExportManager::Instance()->SetTransRate(m_bTransRate);
 
+		CExportManager::Instance()->SetWriteChangeProperty(m_bChangeProperty);
+		CExportManager::Instance()->SetWriteRedefineChangeProperty(m_bRedefineChangeProperty);
+		CExportManager::Instance()->SetWriteRedefineMult(m_bRedefineTransRate);
+
+		if(m_bChangeProperty)
+		{
+			CExportManager::Instance()->SetChangePropertyValue(m_changeValue);
+			CExportManager::Instance()->SetChangePropertyName(m_csChangePropertyName.GetBuffer());
+		}
+
 		if(m_bProperty)
 		{
 			for(int i=0; i<m_strProperty.size(); i++)
@@ -275,14 +333,12 @@ void CDlgExportGridData::SaveExport()
 			}
 		}
 
-		if(m_bTransRate)
+		for (int i=0; i<m_strGridLayer.size(); i++)
 		{
-			for (int i=0; i<m_strGridLayer.size(); i++)
-			{
-				CString tmp = strFileName + m_strGridLayer[i].GetBuffer();
-				CExportManager::Instance()->AddTrackName(tmp.GetBuffer());
-			}
+			CString tmp = strFileName + m_strGridLayer[i].GetBuffer();
+			CExportManager::Instance()->AddTrackName(tmp.GetBuffer());
 		}
+
 		CExportManager::Instance()->WriteExport(outfile.GetBuffer());
 	}
 	if(m_bCenterPoint)
@@ -307,4 +363,64 @@ void CDlgExportGridData::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	OnOK();
+}
+
+void CDlgExportGridData::OnBnClickedCheck7()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if ( BST_CHECKED == IsDlgButtonChecked( IDC_CHECK7 ) )
+	{
+		GetDlgItem(IDC_COMBO1)->EnableWindow(TRUE);
+		GetDlgItem(IDC_RADIO1)->EnableWindow(TRUE);
+		if(BST_CHECKED==IsDlgButtonChecked(IDC_CHECK2))
+			GetDlgItem(IDC_RADIO2)->EnableWindow(TRUE);
+		else
+			GetDlgItem(IDC_RADIO2)->EnableWindow(FALSE);
+		GetDlgItem(IDC_EDIT2)->EnableWindow(TRUE);
+
+		int i = ((CComboBox*)GetDlgItem(IDC_COMBO1))->GetCurSel();
+		m_csChangePropertyName = m_strProperty[i];
+
+		m_bChangeProperty = true;
+	}
+	else
+	{
+		GetDlgItem(IDC_COMBO1)->EnableWindow(FALSE);
+		GetDlgItem(IDC_RADIO1)->EnableWindow(FALSE);
+		GetDlgItem(IDC_RADIO2)->EnableWindow(FALSE);
+		GetDlgItem(IDC_EDIT2)->EnableWindow(FALSE);
+
+		m_bChangeProperty = false;
+	}
+}
+
+void CDlgExportGridData::OnBnClickedRadio1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_bRedefineChangeProperty = false;
+}
+
+void CDlgExportGridData::OnBnClickedRadio2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_bRedefineChangeProperty = true;
+}
+
+void CDlgExportGridData::OnBnClickedRadio3()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_bRedefineTransRate = false;
+}
+
+void CDlgExportGridData::OnBnClickedRadio4()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_bRedefineTransRate = true;
+}
+
+void CDlgExportGridData::OnCbnSelchangeCombo1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	int i = ((CComboBox*)GetDlgItem(IDC_COMBO1))->GetCurSel();
+	m_csChangePropertyName = m_strProperty[i];
 }

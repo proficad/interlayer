@@ -342,3 +342,38 @@ bool CExportManager::SetRedefineProperty( bool isWrite )
 	IsTrue = SetRedefinePropertyNet(isWrite);
 	return IsTrue;
 }
+
+bool CExportManager::SetWriteChangeProperty( bool isWrite )
+{
+	bool IsTrue = false;
+	IsTrue = SetWriteChangePropertyNet(isWrite);
+	return IsTrue;
+}
+
+bool CExportManager::SetWriteRedefineMult( bool isWrite )
+{
+	bool IsTrue = false;
+	IsTrue = SetWriteRedefineMultNet(isWrite);
+	return IsTrue;
+}
+
+bool CExportManager::SetWriteRedefineChangeProperty( bool isWrite )
+{
+	bool IsTrue = false;
+	IsTrue = SetWriteRedefineChangePropertyNet(isWrite);
+	return IsTrue;
+}
+
+bool CExportManager::SetChangePropertyValue( double mValue )
+{
+	bool IsTrue = false;
+	IsTrue = SetChangePropertyValueNet(mValue);
+	return IsTrue;
+}
+
+bool CExportManager::SetChangePropertyName( const std::string& name )
+{
+	bool IsTrue = false;
+	IsTrue = SetChangePropertyNameNet(name);
+	return IsTrue;
+}
