@@ -70,6 +70,33 @@ namespace GridCellThick
         {
             try
             {
+                EclipseGridIO.EclipseWrite ew = new EclipseWrite();
+                ew.IsWriteMult = true;
+                ew.GridFileName = @"C:\Users\Whl\Desktop\测试\{DFBFDD6C-175D-4BE6-8EA5-9C89CB3527EE}.mod";
+
+                ew.AddTrackFileName(@"C:\Users\Whl\Desktop\测试\{3ABE3327-C8C4-4C9A-8FC8-4E2DE3DE5947}");
+
+                ew.AddTrackFileName(@"C:\Users\Whl\Desktop\测试\{32FD4FD7-ADE6-484C-97B4-1307C7F54399}");
+
+                ew.AddTrackFileName(@"C:\Users\Whl\Desktop\测试\{909E3693-6BED-4D58-9D88-746080FA2093}");
+
+                ew.AddTrackFileName(@"C:\Users\Whl\Desktop\测试\{C2855C04-C4A7-4ECE-A873-D3FA67BAAEB5}");
+
+                ew.AddPropertyFileName(@"C:\Users\Whl\Desktop\测试\{694632F1-88CD-41B0-8B28-AADBB09B0657}.grd");
+
+                ew.AddPropertyFileName(@"C:\Users\Whl\Desktop\测试\{D03C4F77-3373-406E-BDD8-EBFF77DBD4A9}.grd");
+
+                ew.AddPropertyFileName(@"C:\Users\Whl\Desktop\测试\{D3F4CB41-2B7C-49A3-B13F-FCA277960731}.grd");
+
+                ew.AddPropertyFileName(@"C:\Users\Whl\Desktop\测试\{FA81A763-23BB-49A6-BDC7-6B98D9E173B5}.grd");
+
+                ew.ChangePropertyName = @"C:\Users\Whl\Desktop\测试\{FA81A763-23BB-49A6-BDC7-6B98D9E173B5}.grd";
+                ew.IsWriteCarfinProperty = false;
+                ew.IsWriteProperty = false;
+                ew.IsWriteCarfinChangeProperty = false;
+                ew.ChangePropertyValue = 250;
+                ew.Write(@"C:\Users\Whl\Desktop\测试\123");
+
                 gd = gio.ReadGridDataFile(GridFileName);
                 if (gd != null)
                 {

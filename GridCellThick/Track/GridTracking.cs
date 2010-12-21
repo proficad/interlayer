@@ -1209,6 +1209,7 @@ namespace Track
                         ifgd.DX = 0;
                         ifgd.DY = 0;
                         ifgd.DZ = 0;
+                        ifgd.GridCellCount = i;
                         InFaceGridDataThick.ChildrenGridDataList.Add(ifgd);
                     }
                 //}

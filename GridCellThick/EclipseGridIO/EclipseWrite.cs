@@ -15,13 +15,21 @@ namespace EclipseGridIO
         private bool _IsWriteGrid = true;//是否写入网格坐标数据
         private string _GridFileName = "";//网格数据文件名
         private bool _IsWriteProperty = true;//是否写入属性数据
-        //private List<string> PropertyKeyList = new List<string>();//属性关键字
+        private bool _IsWriteChangeProperty = true;//是否写入套接网格修正属性
+
         private List<string> PropertyFileNameList = new List<string>();//属性文件列表
+
         private bool _IsWriteCarfin = true;//是否写入局部网格加密信息数据
         private bool _IsWriteCarfinProperty = true;//是否写入局部网格加密属性数据
         private bool _IsWriteCarfinMult = true;//是否写入局部网格加密传导率属性
+        private bool _IsWriteCarfinChangeProperty = true;//是否写入局部网格加密与套接网格修正属性
+
+        private double _ChangePropertyValue = 0;//值
+        private string _ChangePropertyName = "";//属性文件名
+
         private bool _IsWriteMult = true;//是否写入追踪后面文件
         private List<string> TrackFileNameList = new List<string>();//追踪后网格文件
+        
         
         #endregion
 
@@ -83,7 +91,38 @@ namespace EclipseGridIO
             get { return _IsWriteCarfinMult; }
             set { _IsWriteCarfinMult = value; }
         }
-
+        /// <summary>
+        /// 更改值
+        /// </summary>
+        public double ChangePropertyValue
+        {
+            get { return _ChangePropertyValue; }
+            set { _ChangePropertyValue = value; }
+        }
+        /// <summary>
+        /// 属性名
+        /// </summary>
+        public string ChangePropertyName
+        {
+            get { return _ChangePropertyName; }
+            set { _ChangePropertyName = value; }
+        }
+        /// <summary>
+        /// 加密网格套接更改属性
+        /// </summary>
+        public bool IsWriteCarfinChangeProperty
+        {
+            get { return _IsWriteCarfinChangeProperty; }
+            set { _IsWriteCarfinChangeProperty = value; }
+        }
+        /// <summary>
+        /// 网格套接更改属性
+        /// </summary>
+        public bool IsWriteChangeProperty
+        {
+            get { return _IsWriteChangeProperty; }
+            set { _IsWriteChangeProperty = value; }
+        }
         #region c++调用c#属性方法
 
         /// <summary>
@@ -271,6 +310,70 @@ namespace EclipseGridIO
             try
             {
                 _IsWriteCarfinMult = false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 写入局部网格加密与套接网格修正属性
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public bool WriteCarfinChangePropertyEnable()
+        {
+            try
+            {
+                _IsWriteCarfinChangeProperty = true;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 不写入局部网格加密与套接网格修正属性
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public bool WriteCarfinChangePropertyDisable()
+        {
+            try
+            {
+                _IsWriteCarfinChangeProperty = false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 写入更改属性
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public bool WriteChangePropertyEnable()
+        {
+            try
+            {
+                _IsWriteChangeProperty = true;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 不写入更改属性
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public bool WriteChangePropertyDisable()
+        {
+            try
+            {
+                _IsWriteChangeProperty = false;
                 return true;
             }
             catch
@@ -526,13 +629,25 @@ namespace EclipseGridIO
                 {
                     WriteGrid(sw, gd);
                 }
-                if (_IsWriteProperty)//属性
+                if (_IsWriteChangeProperty)//更改属性
                 {
-                    WritePropertyData(sw);
+                    WriteChangePropertyData(sw);
+                }
+                if (_IsWriteProperty )//属性
+                {
+                    WritePropertyData(sw);   
                 }
                 if (_IsWriteMult)//面
                 {
-                    WriteMultData(sw);
+                    if (!_IsWriteCarfinMult)
+                    {
+                        WriteMultData(sw, true);
+                    }
+                    else
+                    {
+                        WriteMultData(sw, false);
+                    }
+                    //WriteMultTest(sw);
                     //WriteMultTest(sw);
                 }
                 if (_IsWriteCarfin)//局部网格加密及网格加密属性、传导率
@@ -660,6 +775,12 @@ namespace EclipseGridIO
 
             #region Carfin
 
+            PropertyData pd=new PropertyData();
+            if (_ChangePropertyName != "")
+            {
+                pd = PropertyData.GetPropertyData(_ChangePropertyName);
+            }
+
             if (gd.DNameList != null && gd.DNameList.Count > 0)
             {
                 for (int i = 0; i < gd.DNameList.Count; i++)
@@ -675,23 +796,84 @@ namespace EclipseGridIO
                             + " " + gd.DGridDataList[gd.DNameList[i].ID[j]].NWMAX.ToString() + " " + gd.DGridDataList[gd.DNameList[i].ID[j]].GLOBAL);
 
                         #region 网格加密属性
+                        
+                        if ( _IsWriteCarfinChangeProperty)//网格加密属性,带更改属性的
+                        {
+                            List<TrackGrid> TrackGridList = new List<TrackGrid>();
+                            if (TrackFileNameList != null && TrackFileNameList.Count > 0)
+                            {
+                                for (int p = 0; p < TrackFileNameList.Count; p++)
+                                {
+                                    TrackGrid td = new TrackGrid();
+                                    TrackGridList.AddRange(TrackGrid.GetTrackGrid(TrackFileNameList[p]));
+                                    
+                                }
+                            }
+                            sw.WriteLine(pd.PropertyName);//写属性名
+                            for (int z = gd.DGridDataList[gd.DNameList[i].ID[j]].Z1 - 1; z < gd.DGridDataList[gd.DNameList[i].ID[j]].Z2; z++)
+                            {
+                                for (int y = gd.DGridDataList[gd.DNameList[i].ID[j]].Y1 - 1; y < gd.DGridDataList[gd.DNameList[i].ID[j]].Y2; y++)
+                                {
+                                    for (int x = gd.DGridDataList[gd.DNameList[i].ID[j]].X1 - 1; x < gd.DGridDataList[gd.DNameList[i].ID[j]].X2; x++)
+                                    {
+                                        int Count = gd.DGridDataList[gd.DNameList[i].ID[j]].DZ / (gd.DGridDataList[gd.DNameList[i].ID[j]].Z2 - gd.DGridDataList[gd.DNameList[i].ID[j]].Z1+1);
+                                        Count = Count * gd.DGridDataList[gd.DNameList[i].ID[j]].DX / (gd.DGridDataList[gd.DNameList[i].ID[j]].X2 - gd.DGridDataList[gd.DNameList[i].ID[j]].X1+1);
+                                        Count = Count * gd.DGridDataList[gd.DNameList[i].ID[j]].DY / (gd.DGridDataList[gd.DNameList[i].ID[j]].Y2 - gd.DGridDataList[gd.DNameList[i].ID[j]].Y1+1);
+                                        for (int t = 0; t < Count; t++)
+                                        {
+                                            float PropertyValue = pd.PropertyValue[pd.PropertyX * pd.PropertyY * z + pd.PropertyX * y + x];
+                                            for (int g = 0; g < TrackGridList.Count; g++)
+                                            {
+                                                for (int n = 0; n < TrackGridList[g].ChildrenGridDataList.Count; n++)
+                                                {
+                                                    if (TrackGridList[g].X == x && TrackGridList[g].Y == y && TrackGridList[g].Z == z)
+                                                    {
+                                                        if (t == TrackGridList[g].ChildrenGridDataList[n].GridCellCount)
+                                                        {
+                                                            PropertyValue = Convert.ToSingle(_ChangePropertyValue);
+                                                            goto Write;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        Write:
+                                            if (t % 6 == 0)
+                                            {
+                                                sw.Write("\n");
+                                                sw.Write(PropertyValue.ToString("#0.000000") + " ");
+                                            }
+                                            else
+                                            {
+                                                sw.Write(PropertyValue.ToString("#0.000000") + " ");
+                                            }
+                                        }
+                                        sw.Write("\n");
+                                    }
+                                }
+                            }
+                            sw.WriteLine("/");
+                        }
 
-                        if (_IsWriteCarfinProperty)//网格加密属性
+                        if (_IsWriteCarfinProperty)//网格加密属性,不带更改属性的
                         {
                             for (int p = 0; p < PropertyDataList.Count; p++)
                             {
-                                sw.WriteLine(PropertyDataList[i].PropertyName);//写属性名
+                                if (PropertyDataList[p].PropertyName == pd.PropertyName)
+                                {
+                                    continue;
+                                }
+                                sw.WriteLine(PropertyDataList[p].PropertyName);//写属性名
                                 for (int z = gd.DGridDataList[gd.DNameList[i].ID[j]].Z1 - 1; z < gd.DGridDataList[gd.DNameList[i].ID[j]].Z2; z++)
                                 {
                                     for (int y = gd.DGridDataList[gd.DNameList[i].ID[j]].Y1 - 1; y < gd.DGridDataList[gd.DNameList[i].ID[j]].Y2; y++)
                                     {
-                                        for (int x = gd.DGridDataList[gd.DNameList[i].ID[j]].X1 - 1;x< gd.DGridDataList[gd.DNameList[i].ID[j]].X2; x++)
+                                        for (int x = gd.DGridDataList[gd.DNameList[i].ID[j]].X1 - 1; x < gd.DGridDataList[gd.DNameList[i].ID[j]].X2; x++)
                                         {
-                                            int Count = gd.DGridDataList[gd.DNameList[i].ID[j]].DZ / (gd.DGridDataList[gd.DNameList[i].ID[j]].Z2 - gd.DGridDataList[gd.DNameList[i].ID[j]].Z1);
-                                            Count = Count * gd.DGridDataList[gd.DNameList[i].ID[j]].DX / (gd.DGridDataList[gd.DNameList[i].ID[j]].X2 - gd.DGridDataList[gd.DNameList[i].ID[j]].X1);
-                                            Count = Count * gd.DGridDataList[gd.DNameList[i].ID[j]].DY / (gd.DGridDataList[gd.DNameList[i].ID[j]].Y2 - gd.DGridDataList[gd.DNameList[i].ID[j]].Y1);
+                                            int Count = gd.DGridDataList[gd.DNameList[i].ID[j]].DZ / (gd.DGridDataList[gd.DNameList[i].ID[j]].Z2 - gd.DGridDataList[gd.DNameList[i].ID[j]].Z1+1);
+                                            Count = Count * gd.DGridDataList[gd.DNameList[i].ID[j]].DX / (gd.DGridDataList[gd.DNameList[i].ID[j]].X2 - gd.DGridDataList[gd.DNameList[i].ID[j]].X1+1);
+                                            Count = Count * gd.DGridDataList[gd.DNameList[i].ID[j]].DY / (gd.DGridDataList[gd.DNameList[i].ID[j]].Y2 - gd.DGridDataList[gd.DNameList[i].ID[j]].Y1+1);
                                             for (int t = 0; t < Count; t++)
-                                            { 
+                                            {
                                                 if (t % 6 == 0)
                                                 {
                                                     sw.Write("\n");
@@ -708,10 +890,23 @@ namespace EclipseGridIO
                                 }
                                 sw.WriteLine("/");
                             }
+                        }
+                        else
+                        {
+                           
+                        }
 
                         #endregion
 
+                        #region 网格加密传导率
+
+                        if (_IsWriteCarfinMult)
+                        { 
+                            
                         }
+
+                        #endregion
+
                         sw.WriteLine("ENDFIN");
                     }
                 }
@@ -753,12 +948,17 @@ namespace EclipseGridIO
         /// <param name="sw">StreamWriter</param>
         private void WritePropertyData(StreamWriter sw)
         {
+            PropertyData ChangePD = new PropertyData();
+            if (_ChangePropertyName != "")
+            {
+                ChangePD = PropertyData.GetPropertyData(_ChangePropertyName);
+            }
             if (PropertyFileNameList != null && PropertyFileNameList.Count > 0)
             {
                 for (int i = 0; i < PropertyFileNameList.Count; i++)
                 {
                     PropertyData pd = PropertyData.GetPropertyData(PropertyFileNameList[i]);
-                    if (pd != null)
+                    if (pd != null && pd.PropertyName != ChangePD.PropertyName)
                     {
                         sw.WriteLine(pd.PropertyName);//写属性名
                         for (int j = 0; j < pd.PropertyValue.Count; j++)
@@ -779,6 +979,83 @@ namespace EclipseGridIO
                 }
             }
         }
+        /// <summary>
+        /// 输出与网格套接联系的属性
+        /// </summary>
+        /// <param name="sw">StreamWriter</param>
+        private void WriteChangePropertyData(StreamWriter sw)
+        {
+            if (_ChangePropertyName != "")
+            {
+                List<int> GridCellList = new List<int>();
+                if (TrackFileNameList != null && TrackFileNameList.Count > 0)
+                {
+                    for (int i = 0; i < TrackFileNameList.Count; i++)
+                    {
+                        List<TrackGrid> TGList = new List<TrackGrid>();
+                        TGList = TrackGrid.GetTrackGrid(TrackFileNameList[i]);
+                        for (int j = 0; j < TGList.Count; j++)
+                        {
+                            if (_IsWriteCarfinChangeProperty)
+                            {
+                                if (TGList[j].ChildrenGridDataList.Count == 0)
+                                {
+                                    GridCellList.Add(TGList[j].Z * TGList[j].GridX * TGList[i].GridY + TGList[i].Y * TGList[i].GridX + TGList[i].X);
+                                }
+                                //if (tg.ChildrenGridDataList.Count == 0)
+                                //{
+                                //    GridCellList.Add(tg.Z[j] * tg.GridX * tg.GridY + tg.Y[j] * tg.GridX + tg.X[j]);
+                                //}
+                            }
+                            else
+                            {
+                                GridCellList.Add(TGList[j].Z * TGList[j].GridX * TGList[i].GridY + TGList[i].Y * TGList[i].GridX + TGList[i].X);
+                            }
+                        }
+                        //for (int j = 0; j < tg.X.Count; j++)
+                        //{
+                        //    if (_IsWriteCarfinChangeProperty)
+                        //    {
+                        //        if (tg.ChildrenGridDataList.Count == 0)
+                        //        {
+                        //            GridCellList.Add(tg.Z[j] * tg.GridX * tg.GridY + tg.Y[j] * tg.GridX + tg.X[j]);
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        GridCellList.Add(tg.Z[j] * tg.GridX * tg.GridY + tg.Y[j] * tg.GridX + tg.X[j]);
+                        //    }
+                        //}
+                    }
+                }
+                PropertyData pd = PropertyData.GetPropertyData(_ChangePropertyName);
+                if (pd != null)
+                {
+                    sw.WriteLine(pd.PropertyName);//写属性名
+                    for (int j = 0; j < pd.PropertyValue.Count; j++)
+                    {
+                        float PropertyValue = pd.PropertyValue[j];
+                        if (GridCellList.Contains(j))
+                        {
+
+                            PropertyValue = Convert.ToSingle(_ChangePropertyValue);
+                        }
+                        
+                        if (j % 6 == 0)
+                        {
+                            sw.Write("\n");
+                            sw.Write(PropertyValue.ToString("#0.000000") + " ");
+                        }
+                        else
+                        {
+                            sw.Write(PropertyValue.ToString("#0.000000") + " ");
+                        }
+                    }
+                    sw.Write("\n");
+                    sw.WriteLine("/");
+                }
+            }
+        }
 
         #endregion
 
@@ -788,7 +1065,8 @@ namespace EclipseGridIO
         /// 输出Eclipse面数据
         /// </summary>
         /// <param name="sw">StreamWriter</param>
-        private bool WriteMultData(StreamWriter sw)
+        /// <param name="IsCarfin">是否带加密</param>
+        private bool WriteMultData(StreamWriter sw,bool IsCarfin)
         {
             try
             {
@@ -824,7 +1102,7 @@ namespace EclipseGridIO
                             int ChildrenCount = br.ReadInt32();
                             if (ChildrenCount > 0)
                             {
-                                fs.Seek(ChildrenCount * 4 * 3 * 8, SeekOrigin.Current);
+                                fs.Seek(ChildrenCount * (4 * 3 * 8 + 4), SeekOrigin.Current);
                             }
                         }
                         br.Close();
@@ -836,12 +1114,12 @@ namespace EclipseGridIO
                         GetMultItem(ref MultY0, GridCellList, GridX, GridY, GridZ, "Y-");
                         GetMultItem(ref MultZ0, GridCellList, GridX, GridY, GridZ, "Z-");
                     }
-                    WriteMult(sw, GridX * GridY * GridZ, MultX, "MultX");
-                    WriteMult(sw, GridX * GridY * GridZ, MultX0, "MultX-");
-                    WriteMult(sw, GridX * GridY * GridZ, MultY, "MultY");
-                    WriteMult(sw, GridX * GridY * GridZ, MultY0, "MultY-");
-                    WriteMult(sw, GridX * GridY * GridZ, MultZ, "MultZ");
-                    WriteMult(sw, GridX * GridY * GridZ, MultZ0, "MultZ-");
+                    WriteMult(sw, GridX * GridY * GridZ, MultX, "MultX", IsCarfin);
+                    WriteMult(sw, GridX * GridY * GridZ, MultX0, "MultX-", IsCarfin);
+                    WriteMult(sw, GridX * GridY * GridZ, MultY, "MultY", IsCarfin);
+                    WriteMult(sw, GridX * GridY * GridZ, MultY0, "MultY-", IsCarfin);
+                    WriteMult(sw, GridX * GridY * GridZ, MultZ, "MultZ", IsCarfin);
+                    WriteMult(sw, GridX * GridY * GridZ, MultZ0, "MultZ-", IsCarfin);
                 }
                 return true;
             }
@@ -881,7 +1159,6 @@ namespace EclipseGridIO
                         {
                             int Value = -1;
                             int AddValue = -1;
-                            bool IsAddDownItem = false;
                             int Count = 0;
                             for (int j = 0; j < GridY; j++)
                             {
@@ -1087,8 +1364,20 @@ namespace EclipseGridIO
                     break;
             }
         }
-        private void WriteMult(StreamWriter sw,int Count,List<int> MultValue,string MultKey)
+        private void WriteMult(StreamWriter sw,int Count,List<int> MultValue,string MultKey,bool IsCarfin)
         {
+            List<TrackGrid> TrackGridList = new List<TrackGrid>();
+            if (IsCarfin)
+            {
+                if (TrackFileNameList != null && TrackFileNameList.Count > 0)
+                {
+                    for (int p = 0; p < TrackFileNameList.Count; p++)
+                    {
+                        TrackGrid td = new TrackGrid();
+                        TrackGridList.AddRange(TrackGrid.GetTrackGrid(TrackFileNameList[p]));
+                    }
+                }
+            }
             sw.WriteLine(MultKey);
             for (int i = 0; i < Count; i++)
             {
@@ -1098,7 +1387,32 @@ namespace EclipseGridIO
                 }
                 if (MultValue.Contains(i))
                 {
-                    sw.Write("0\t");
+                    if (IsCarfin)
+                    {
+                        bool falg = false;
+                        for (int j = 0; j < TrackGridList.Count; j++)
+                        {
+                            if (TrackGridList[j].Z * TrackGridList[j].GridX * TrackGridList[j].GridY + TrackGridList[j].Y * TrackGridList[j].GridX + TrackGridList[j].X == i)
+                            {
+                                if (TrackGridList[j].ChildrenGridDataList.Count > 0)
+                                {
+                                    sw.Write("1\t");
+                                    falg = true;
+                                    break;
+                                }
+                            }
+                            if (!falg)
+                            {
+                                sw.Write("0\t");
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        sw.Write("0\t");
+                    }
+                        
                 }
                 else
                 {
@@ -1108,71 +1422,7 @@ namespace EclipseGridIO
             sw.Write("\n");
             sw.WriteLine("/");
         }
-        private void WriteMultTest(StreamWriter sw)
-        {
-            try
-            {
-                if (TrackFileNameList != null && TrackFileNameList.Count > 0)
-                {
-                    List<int> GridCellList = new List<int>();
-                    int CellCount = 0;
-                    int GridX = 0;
-                    int GridY = 0;
-                    int GridZ = 0;
-                    for (int i = 0; i < TrackFileNameList.Count; i++)
-                    {
-                        FileStream fs = new FileStream(TrackFileNameList[i], FileMode.Open);
-                        BinaryReader br = new BinaryReader(fs, Encoding.Unicode);
-                        GridX = br.ReadInt32();
-                        GridY = br.ReadInt32();
-                        GridZ = br.ReadInt32();
-                        CellCount = GridX * GridY * GridZ;
-                        int Count = br.ReadInt32();
-
-                        for (int j = 0; j < Count; j++)
-                        {
-                            int I = br.ReadInt32();
-                            int J = br.ReadInt32();
-                            int K = br.ReadInt32();
-                            GridCellList.Add(K * GridX * GridY + J * GridX + I);
-                            //YList.Add();
-                            //ZList.Add();
-                            //跳跃坐标点
-                            fs.Seek(4 * 3 * 8, SeekOrigin.Current);
-                            int ChildrenCount = br.ReadInt32();
-                            if (ChildrenCount > 0)
-                            {
-                                fs.Seek(ChildrenCount * 4 * 3 * 8, SeekOrigin.Current);
-                            }
-                        }
-                        br.Close();
-                    }
-                    sw.WriteLine("PORO");
-                    for (int i = 0; i < CellCount; i++)
-                    {
-                        if (i % 6 == 0)
-                        {
-                            sw.Write("\n");
-                        }
-                        if (GridCellList.Contains(i))
-                        {
-                            sw.Write("0\t");
-                        }
-                        else
-                        {
-                            sw.Write("1\t");
-                        }
-                    }
-                    sw.Write("\n");
-                    sw.WriteLine("/");
-                }
-            }
-            catch (Exception ee)
-            {
-                throw ee;
-            }
-
-        }
+       
         #endregion
 
         #region 输出追踪后的中心点
@@ -1220,6 +1470,7 @@ namespace EclipseGridIO
                             int ChildrenCount = OpenFileBr.ReadInt32();
                             for (int j = 0; j < ChildrenCount; j++)
                             {
+                                OpenFileFs.Seek(4, SeekOrigin.Current);
                                 if (IsWriteThick)//是否写入加密网格坐标
                                 {
                                     PointX.Clear();
@@ -1237,7 +1488,7 @@ namespace EclipseGridIO
                                 }
                                 else
                                 {
-                                    OpenFileFs.Seek(12 * 8, SeekOrigin.Current);
+                                    OpenFileFs.Seek(12 * 8 + 4, SeekOrigin.Current);
                                 }
                             }
                         }
@@ -1302,6 +1553,7 @@ namespace EclipseGridIO
                             PointX.Clear();
                             PointY.Clear();
                             PointZ.Clear();
+                            OpenFileFs.Seek(4, SeekOrigin.Current);
                             for (int k = 0; k < 8; k++)
                             {
                                 PointX.Add(OpenFileBr.ReadSingle());
@@ -1314,7 +1566,7 @@ namespace EclipseGridIO
                         }
                         else
                         {
-                            OpenFileFs.Seek(12 * 8, SeekOrigin.Current);
+                            OpenFileFs.Seek(12 * 8+4, SeekOrigin.Current);
                         }
                     }
                 }

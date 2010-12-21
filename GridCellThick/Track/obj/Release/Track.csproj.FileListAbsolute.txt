@@ -10,18 +10,6 @@ C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\bin\Release\M
 C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\obj\Release\ResolveAssemblyReference.cache
 C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\obj\Release\Track.dll
 C:\Documents and Settings\Administrator\桌面\GridCellThick\Track\obj\Release\Track.pdb
-D:\研究院项目\GridCellThick\Track\bin\Release\Key.xml
-D:\研究院项目\GridCellThick\Track\bin\Release\Track.dll
-D:\研究院项目\GridCellThick\Track\bin\Release\Track.pdb
-D:\研究院项目\GridCellThick\Track\bin\Release\EclipseGridIO.dll
-D:\研究院项目\GridCellThick\Track\bin\Release\Microsoft.DirectX.dll
-D:\研究院项目\GridCellThick\Track\bin\Release\octc.dll
-D:\研究院项目\GridCellThick\Track\bin\Release\EclipseGridIO.pdb
-D:\研究院项目\GridCellThick\Track\bin\Release\octc.pdb
-D:\研究院项目\GridCellThick\Track\bin\Release\Microsoft.DirectX.xml
-D:\研究院项目\GridCellThick\Track\obj\Release\ResolveAssemblyReference.cache
-D:\研究院项目\GridCellThick\Track\obj\Release\Track.dll
-D:\研究院项目\GridCellThick\Track\obj\Release\Track.pdb
 G:\karas\工程\interlayer\GridCellThick\Track\bin\Release\Key.xml
 G:\karas\工程\interlayer\GridCellThick\Track\bin\Release\Track.dll
 G:\karas\工程\interlayer\GridCellThick\Track\bin\Release\Track.pdb
@@ -46,6 +34,18 @@ G:\karas\project\interlayer\GridCellThick\Track\bin\Release\Microsoft.DirectX.xm
 G:\karas\project\interlayer\GridCellThick\Track\obj\Release\ResolveAssemblyReference.cache
 G:\karas\project\interlayer\GridCellThick\Track\obj\Release\Track.dll
 G:\karas\project\interlayer\GridCellThick\Track\obj\Release\Track.pdb
+D:\研究院项目\GridCellThick\Track\bin\Release\Key.xml
+D:\研究院项目\GridCellThick\Track\bin\Release\Track.dll
+D:\研究院项目\GridCellThick\Track\bin\Release\Track.pdb
+D:\研究院项目\GridCellThick\Track\bin\Release\EclipseGridIO.dll
+D:\研究院项目\GridCellThick\Track\bin\Release\Microsoft.DirectX.dll
+D:\研究院项目\GridCellThick\Track\bin\Release\octc.dll
+D:\研究院项目\GridCellThick\Track\bin\Release\EclipseGridIO.pdb
+D:\研究院项目\GridCellThick\Track\bin\Release\octc.pdb
+D:\研究院项目\GridCellThick\Track\bin\Release\Microsoft.DirectX.xml
+D:\研究院项目\GridCellThick\Track\obj\Release\ResolveAssemblyReference.cache
+D:\研究院项目\GridCellThick\Track\obj\Release\Track.dll
+D:\研究院项目\GridCellThick\Track\obj\Release\Track.pdb
 G:\interlayer\GridCellThick\Track\bin\Release\Key.xml
 G:\interlayer\GridCellThick\Track\bin\Release\Track.dll
 G:\interlayer\GridCellThick\Track\bin\Release\Track.pdb
@@ -58,15 +58,3 @@ G:\interlayer\GridCellThick\Track\bin\Release\Microsoft.DirectX.xml
 G:\interlayer\GridCellThick\Track\obj\Release\ResolveAssemblyReference.cache
 G:\interlayer\GridCellThick\Track\obj\Release\Track.dll
 G:\interlayer\GridCellThick\Track\obj\Release\Track.pdb
-F:\interlayer\GridCellThick\Track\bin\Release\Key.xml
-F:\interlayer\GridCellThick\Track\bin\Release\Track.dll
-F:\interlayer\GridCellThick\Track\bin\Release\Track.pdb
-F:\interlayer\GridCellThick\Track\bin\Release\EclipseGridIO.dll
-F:\interlayer\GridCellThick\Track\bin\Release\Microsoft.DirectX.dll
-F:\interlayer\GridCellThick\Track\bin\Release\octc.dll
-F:\interlayer\GridCellThick\Track\bin\Release\EclipseGridIO.pdb
-F:\interlayer\GridCellThick\Track\bin\Release\octc.pdb
-F:\interlayer\GridCellThick\Track\bin\Release\Microsoft.DirectX.xml
-F:\interlayer\GridCellThick\Track\obj\Release\ResolveAssemblyReference.cache
-F:\interlayer\GridCellThick\Track\obj\Release\Track.dll
-F:\interlayer\GridCellThick\Track\obj\Release\Track.pdb

@@ -41,6 +41,7 @@ namespace Track
                 WriteValue(bw, InFaceDataList[i].ChildrenGridDataList.Count);
                 for (int j = 0; j < InFaceDataList[i].ChildrenGridDataList.Count; j++)
                 {
+                    WriteValue(bw, InFaceDataList[i].ChildrenGridDataList[j].GridCellCount);
                     for (int k = 0; k < 8; k++)
                     {
                         WriteValue(bw, InFaceDataList[i].ChildrenGridDataList[j].PointX[k]);
@@ -85,6 +86,7 @@ namespace Track
                 WriteValue(bw, InFaceDataList[InFaceDataIndexList[i]].ChildrenGridDataList.Count);
                 for (int j = 0; j < InFaceDataList[InFaceDataIndexList[i]].ChildrenGridDataList.Count; j++)
                 {
+                    WriteValue(bw, InFaceDataList[InFaceDataIndexList[i]].ChildrenGridDataList[j].GridCellCount);
                     for (int k = 0; k < 8; k++)
                     {
                         WriteValue(bw, InFaceDataList[InFaceDataIndexList[i]].ChildrenGridDataList[j].PointX[k]);

@@ -127,7 +127,7 @@
             this.toolStrip1.Margin = new System.Windows.Forms.Padding(5);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(547, 30);
+            this.toolStrip1.Size = new System.Drawing.Size(584, 30);
             this.toolStrip1.TabIndex = 0;
             // 
             // toolStripSeparator1
@@ -156,7 +156,7 @@
             this.toolStripButton6.Margin = new System.Windows.Forms.Padding(5);
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(23, 20);
-            this.toolStripButton6.Text = "拖拽";
+            this.toolStripButton6.Text = "拖动";
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // toolStripButton7
@@ -205,7 +205,7 @@
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(41, 27);
+            this.toolStripLabel1.Size = new System.Drawing.Size(44, 27);
             this.toolStripLabel1.Text = "层位：";
             // 
             // toolStripComboBox1
@@ -223,7 +223,7 @@
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(65, 27);
+            this.toolStripLabel2.Size = new System.Drawing.Size(68, 27);
             this.toolStripLabel2.Text = "网格加密：";
             // 
             // toolStripComboBox2

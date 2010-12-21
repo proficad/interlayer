@@ -215,7 +215,7 @@ namespace EclipseGridIO
                             int ChildrenCount = br.ReadInt32();
                             if (ChildrenCount > 0)
                             {
-                                fs.Seek(ChildrenCount * 4 * 3 * 8, SeekOrigin.Current);
+                                fs.Seek(ChildrenCount * (4 * 3 * 8+4), SeekOrigin.Current);
                             }
                         }
                         br.Close();

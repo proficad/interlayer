@@ -20,6 +20,8 @@ namespace Track
         private int _DX;//网格加密X方向个数
         private int _DY;//网格加密Y方向个数
         private int _DZ;//网格加密Z方向个数
+        
+        private int _GridCellCount;//第几个网格
 
         private List<InFaceGridData> _ChildrenGridDataList=new List<InFaceGridData>();//子节点列表
 
@@ -106,6 +108,14 @@ namespace Track
         {
             get { return _ChildrenGridDataList; }
             set { _ChildrenGridDataList = value; }
+        }
+        /// <summary>
+        /// 网格索引
+        /// </summary>
+        public int GridCellCount
+        {
+            get { return _GridCellCount; }
+            set { _GridCellCount = value; }
         }
         #endregion
     }

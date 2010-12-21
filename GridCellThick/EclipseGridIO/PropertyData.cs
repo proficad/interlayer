@@ -22,6 +22,7 @@ namespace EclipseGridIO
         float _Min = 99999999999;//最小值
         List<float> _PropertyValue = new List<float>();//属性值列表
         int _IsShow = 1;//是否显示
+
         #endregion
 
         #region 属性

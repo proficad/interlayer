@@ -25,19 +25,6 @@ C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\Vi
 C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.dll.licenses
 C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.dll
 C:\Documents and Settings\Administrator\桌面\GridCellThick\View\obj\Release\View.pdb
-D:\研究院项目\GridCellThick\View\bin\Release\View.dll
-D:\研究院项目\GridCellThick\View\bin\Release\View.pdb
-D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Shared.v8.2.dll
-D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Win.v8.2.dll
-D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Shared.v8.2.xml
-D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Win.v8.2.xml
-D:\研究院项目\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
-D:\研究院项目\GridCellThick\View\obj\Release\View.D3D.Display.resources
-D:\研究院项目\GridCellThick\View\obj\Release\View.Draw.resources
-D:\研究院项目\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
-D:\研究院项目\GridCellThick\View\obj\Release\View.dll.licenses
-D:\研究院项目\GridCellThick\View\obj\Release\View.dll
-D:\研究院项目\GridCellThick\View\obj\Release\View.pdb
 G:\karas\工程\interlayer\GridCellThick\View\bin\Release\View.dll
 G:\karas\工程\interlayer\GridCellThick\View\bin\Release\View.pdb
 G:\karas\工程\interlayer\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
@@ -56,6 +43,19 @@ G:\karas\project\interlayer\GridCellThick\View\obj\Release\View.csproj.GenerateR
 G:\karas\project\interlayer\GridCellThick\View\obj\Release\View.dll.licenses
 G:\karas\project\interlayer\GridCellThick\View\obj\Release\View.dll
 G:\karas\project\interlayer\GridCellThick\View\obj\Release\View.pdb
+D:\研究院项目\GridCellThick\View\bin\Release\View.dll
+D:\研究院项目\GridCellThick\View\bin\Release\View.pdb
+D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Shared.v8.2.dll
+D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Win.v8.2.dll
+D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Shared.v8.2.xml
+D:\研究院项目\GridCellThick\View\bin\Release\Infragistics2.Win.v8.2.xml
+D:\研究院项目\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
+D:\研究院项目\GridCellThick\View\obj\Release\View.D3D.Display.resources
+D:\研究院项目\GridCellThick\View\obj\Release\View.Draw.resources
+D:\研究院项目\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
+D:\研究院项目\GridCellThick\View\obj\Release\View.dll.licenses
+D:\研究院项目\GridCellThick\View\obj\Release\View.dll
+D:\研究院项目\GridCellThick\View\obj\Release\View.pdb
 G:\interlayer\GridCellThick\View\bin\Release\View.dll
 G:\interlayer\GridCellThick\View\bin\Release\View.pdb
 G:\interlayer\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
@@ -65,12 +65,3 @@ G:\interlayer\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
 G:\interlayer\GridCellThick\View\obj\Release\View.dll.licenses
 G:\interlayer\GridCellThick\View\obj\Release\View.dll
 G:\interlayer\GridCellThick\View\obj\Release\View.pdb
-F:\interlayer\GridCellThick\View\bin\Release\View.dll
-F:\interlayer\GridCellThick\View\bin\Release\View.pdb
-F:\interlayer\GridCellThick\View\obj\Release\ResolveAssemblyReference.cache
-F:\interlayer\GridCellThick\View\obj\Release\View.D3D.Display.resources
-F:\interlayer\GridCellThick\View\obj\Release\View.Draw.resources
-F:\interlayer\GridCellThick\View\obj\Release\View.csproj.GenerateResource.Cache
-F:\interlayer\GridCellThick\View\obj\Release\View.dll.licenses
-F:\interlayer\GridCellThick\View\obj\Release\View.dll
-F:\interlayer\GridCellThick\View\obj\Release\View.pdb
